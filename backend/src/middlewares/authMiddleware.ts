@@ -6,7 +6,7 @@
 
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-import type { ErrorResult } from "../types/errorResults.js";
+import type { ErrorResults } from "../types/errorResults.js";
 import type { AuthPayload } from "../types/authPayload.js";
 
 /**
@@ -33,7 +33,7 @@ import type { AuthPayload } from "../types/authPayload.js";
  */
 const authMiddleware = async (
   req: Request,
-  res: Response<ErrorResult>,
+  res: Response<ErrorResults>,
   next: NextFunction
 ): Promise<void> => {
   
@@ -65,9 +65,18 @@ const authMiddleware = async (
   try {
     // Verificación y decodificación del token
     const decoded = jwt.verify(token, secretKey) as AuthPayload;
+    // El método jwt.verify() hace dos cosas:
+    //1. Verifica que el token sea válido (firma correcta, no expirado)
+    //2. Decodifica y retorna el payload (los datos que guardaste al crear el token):>
+    // decoded = {id:"string" , name: "string", email "string", role "user|admin"} (el payload que cree en jwt.sign)
     
     // Adjuntar datos de usuario al request para uso posterior
     req.user = decoded;
+
+    // desde acá se puede: 
+    //req.user?.id
+    //req.user?.role
+
     
     // Continuar a siguiente middleware o controller
     next();

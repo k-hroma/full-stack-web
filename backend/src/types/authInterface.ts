@@ -2,7 +2,7 @@
  * @fileoverview Interfaces de dominio para el módulo de autenticación.
  * Define la estructura de datos de usuarios en el sistema.
  * @module types/authInterface
- */
+*/
 
 /**
  * Representa un usuario completo en la base de datos.
@@ -13,12 +13,16 @@
  * @property {string} email - Correo electrónico único (requerido)
  * @property {string} password - Contraseña hasheada con bcrypt (requerido)
  * @property {"admin" | "user"} role - Rol de permisos en el sistema
- */
+*/
+
+type UserRole = "admin" | "user";
+
+
 interface IUser {
   name: string;
   email: string;
   password: string;
-  role: "admin" | "user";
+  role: UserRole;
 }
 
 /**
@@ -32,11 +36,14 @@ interface IUser {
  * @property {string} email - Correo electrónico
  * @property {"admin" | "user"} role - Rol asignado
  */
+
+
 interface IRegisterUser {
   id: string;
   name: string;
   email: string;
-  role: "admin" | "user";
+  role: UserRole;
 }
 
-export type { IUser, IRegisterUser };
+
+export type { IUser, IRegisterUser, UserRole };

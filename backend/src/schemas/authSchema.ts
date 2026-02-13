@@ -81,9 +81,12 @@ const LoginUserSchema = z.object({
  */
 type loginUserBody = z.infer<typeof LoginUserSchema>;
 
-export type { 
+export { 
   RegisterUserSchema, 
+  LoginUserSchema 
+};
+
+export type { 
   registerUserBody, 
-  LoginUserSchema, 
   loginUserBody 
 };

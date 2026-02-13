@@ -15,10 +15,10 @@
  * @example
  * { success: false, message: "Invalid credentials", errorCode: 401 }
  */
-interface ErrorResult {
+interface ErrorResults {
   success: boolean;
   message: string;
   errorCode?: number | string;
 }
 
-export type { ErrorResult };
+export type { ErrorResults };

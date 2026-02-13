@@ -78,12 +78,6 @@ const userSchema = new Schema<IUser>(
 );
 
 /**
- * Índice compuesto para búsquedas frecuentes por email.
- * Mejora performance de login.
- */
-userSchema.index({ email: 1 });
-
-/**
  * Modelo Mongoose para la colección "users".
  * Proporciona métodos de query (find, findOne, create, etc.).
  * 

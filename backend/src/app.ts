@@ -8,6 +8,9 @@ import express from 'express';
 import type { Application } from 'express';
 import cors from 'cors';
 import { handleErrors } from './middlewares/handleErrors.js';
+import { bookRouter } from './routes/bookRouter.js';
+import { protectBooksRoutes } from './middlewares/protectBooksRoutes.js';
+import { authRouter } from './routes/authRouter.js';
 
 
 /**
@@ -43,6 +46,14 @@ app.use(express.json({ limit: "10kb" }));
  */
 app.use(cors());
 
+// Monta el router de libros con middleware de protección previa.
+// Todas las rutas que empiecen con "/books" pasarán primero por protectBooksRoutes (verifica JWT/token),
+// y luego por las rutas definidas en bookRouter.
+app.use("/books", protectBooksRoutes, bookRouter)
+
+// Monta el router de autenticación en la ruta base /auth.
+// Todas las rutas internas se accederán con el prefijo /auth (ej: /auth/login, /auth/register).
+app.use("/auth", authRouter)
 
 
 // ============================================================================
@@ -54,15 +65,6 @@ app.use(cors());
  * Captura cualquier error lanzado en rutas o middlewares anteriores.
  * 
  * @important Debe ser el último middleware registrado para capturar todo.
- */
-app.use(handleErrors);
-
-/**
- * Nota sobre rutas no encontradas (404):
- * No se implementa handler explícito porque handleErrors captura
- * errores de rutas inexistentes si se lanza NotFoundError.
- * Alternativa: añadir al final:
- * app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));
  */
 app.use(handleErrors);
 

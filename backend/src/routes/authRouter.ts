@@ -1,0 +1,64 @@
+/**
+ * @fileoverview Rutas de la API para el recurso Auth.
+ * Gestiona autenticación: registro, login y registro de administradores.
+ * @module routes/authRoutes
+ */
+
+import { Router } from "express";
+import {
+  registerUser,
+  loginUser,
+  registerAdmin,
+} from "../controllers/authControllers.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { requireRole } from "../middlewares/requireRole.js";
+
+/**
+ * Router de Express para rutas de autenticación.
+ * @constant {Router} authRouter
+ */
+const authRouter = Router();
+
+// ============================================================================
+// RUTAS PÚBLICAS (sin autenticación)
+// ============================================================================
+
+/**
+ * @route POST /auth/register
+ * @description Registro de nuevos usuarios (rol "user" por defecto)
+ * @access Public
+ * @body { name, email, password }
+ */
+authRouter.post("/register", registerUser);
+
+/**
+ * @route POST /auth/login
+ * @description Inicio de sesión y generación de JWT
+ * @access Public
+ * @body { email, password }
+ * @response { token, user }
+ */
+authRouter.post("/login", loginUser);
+
+// ============================================================================
+// RUTAS PROTEGIDAS (requieren autenticación + rol admin)
+// ============================================================================
+
+/**
+ * @route POST /auth/admin
+ * @description Registro de nuevos administradores
+ * @access Private (Admin only)
+ * @security Requiere que el requester sea admin para crear otro admin
+ * @body { name, email, password }
+ * 
+ * @important Este endpoint permite escalamiento de privilegios controlado.
+ * Solo usuarios autenticados con rol "admin" pueden crear más admins.
+ */
+authRouter.post(
+  "/admin",
+  authMiddleware,      // Verificar JWT válido
+  requireRole("admin"), // Verificar que sea admin
+  registerAdmin
+);
+
+export { authRouter };
