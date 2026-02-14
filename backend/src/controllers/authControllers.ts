@@ -222,16 +222,10 @@ const loginUser = async (
       return;
     }
 
-    // 4. Verificación de configuración JWT
+    // 4. Verificación de configuración JWT -> 
+    // // JWT_SECRET validado en startup, TypeScript lo sabe por el tipo global
     const secretKey = process.env.JWT_SECRET;
-    if (!secretKey) {
-      console.error("[LOGIN ERROR] JWT_SECRET not configured");
-      res.status(500).json({
-        success: false,
-        message: "Authentication service unavailable",
-      });
-      return;
-    }
+
 
     // 5. Generación de token JWT
     const payload = {
@@ -241,7 +235,7 @@ const loginUser = async (
       role: user.role,
     };
 
-    const token = jwt.sign(payload, secretKey);
+    const token = jwt.sign(payload, secretKey!, { expiresIn: "10m" });
 
     // 6. Respuesta exitosa
     res.status(200).json({
