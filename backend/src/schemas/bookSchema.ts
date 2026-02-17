@@ -71,8 +71,7 @@ const AddBookSchema = z
       .number()
       .int({ message: "Stock must be an integer" })
       .nonnegative({ message: "Stock must be 0 or more" })
-      .default(0)
-      .optional(),
+      .default(0),
 
     latestBook: z.boolean().default(false),
 
@@ -178,9 +177,8 @@ type SearchBookQuery = z.infer<typeof SearchBookQuerySchema>;
 
 export type { 
   AddBookBody, 
-  AddBookSchema, 
-  UpdateBookSchema, 
   UpdateBookBody, 
   SearchBookQuery, 
-  SearchBookQuerySchema 
 };
+
+export {AddBookSchema, UpdateBookSchema, SearchBookQuerySchema  }

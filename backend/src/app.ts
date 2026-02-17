@@ -9,7 +9,6 @@ import type { Application } from 'express';
 import cors from 'cors';
 import { handleErrors } from './middlewares/handleErrors.js';
 import { bookRouter } from './routes/bookRouter.js';
-import { protectBooksRoutes } from './middlewares/protectBooksRoutes.js';
 import { authRouter } from './routes/authRouter.js';
 
 
@@ -46,12 +45,11 @@ app.use(express.json({ limit: "10kb" }));
  */
 app.use(cors());
 
-// Monta el router de libros con middleware de protección previa.
-// Todas las rutas que empiecen con "/books" pasarán primero por protectBooksRoutes (verifica JWT/token),
-// y luego por las rutas definidas en bookRouter.
-app.use("/books", protectBooksRoutes, bookRouter)
+// Monta el router de autenticación en la ruta base /books.
+// Todas las rutas internas se accederán con el prefijo /books 
+app.use("/books", bookRouter)
 
-// Monta el router de autenticación en la ruta base /auth.
+// // Monta el router de libros en la ruta base /books.
 // Todas las rutas internas se accederán con el prefijo /auth (ej: /auth/login, /auth/register).
 app.use("/auth", authRouter)
 

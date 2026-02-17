@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx src/main.ts",
     "build": "tsc",
-    "start": "tsc & node dist/main.js"
+    "start": "tsc & node dist/main.js",
+    "seed:admin": "tsx src/scripts/seedFirstAdmin.ts"
   },
   "keywords": [],
   "author": "",

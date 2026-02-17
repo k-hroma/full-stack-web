@@ -117,10 +117,6 @@ bookSchema.index({ title: "text", firstName: "text", lastName: "text", editorial
  */
 bookSchema.index({ fanzine: 1, latestBook: 1 });
 
-/**
- * Índice único en ISBN ya definido en schema, pero reforzado aquí explícitamente.
- */
-bookSchema.index({ isbn: 1 }, { unique: true });
 
 /**
  * Virtual para nombre completo del autor.

@@ -6,7 +6,7 @@
 
 import type { Request, Response, NextFunction } from "express";
 import type { ErrorResults } from "../types/errorResults.js";
-import { UserRole } from "../types/authInterface.js";
+import type { UserRole } from "../types/authInterface.js";
 
 /**
  * Factory que crea middleware de autorización para roles específicos.

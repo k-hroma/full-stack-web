@@ -24,7 +24,7 @@ const startServer = async (): Promise<void> => {
   // Extraer variables de entorno a constantes locales
   // Esto permite narrowing de tipos (TypeScript sabe que no son undefined después)
   const jwtSecret = process.env.JWT_SECRET;
-  const mongoUri = process.env.MONGODB_URI;
+  const mongoUri = process.env.MONGO_URI;
   const portEnv = process.env.PORT;
 
   // Validar variables requeridas
