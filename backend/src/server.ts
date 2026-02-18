@@ -37,8 +37,8 @@ const startServer = async (): Promise<void> => {
 
   if (!mongoUri) {
     throw new Error(
-      'Missing required environment variable: MONGODB_URI\n' +
-      'Please set it in your .env file (e.g., MONGODB_URI=mongodb://localhost:27017/mydb)'
+      'Missing required environment variable: MONGO_URI\n' +
+      'Please set it in your .env file (e.g., MONGO_URI=mongodb://localhost:27017/mydb)'
     );
   }
 

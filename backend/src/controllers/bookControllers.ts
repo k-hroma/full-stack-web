@@ -10,7 +10,6 @@ import type { QueryResponse } from "../types/queryResponse.js";
 import type { 
   AddBookBody, 
   UpdateBookBody, 
-  SearchBookQuery 
 } from "../schemas/bookSchema.js";
 import { 
   AddBookSchema, 
@@ -18,6 +17,7 @@ import {
   SearchBookQuerySchema 
 } from "../schemas/bookSchema.js";
 import mongoose from "mongoose";
+import type { IBook } from "../types/bookInterface.js";
 
 /**
  * Obtiene todos los libros del catálogo.
@@ -47,7 +47,7 @@ const getBooks = async (
       filter.latestBook = req.query.latestBook === "true";
     }
 
-    const books = await Book.find(filter)
+    const books:IBook[] = await Book.find(filter)
       .sort({ createdAt: -1 }) // Más recientes primero
       .lean(); // Performance: objetos planos en lugar de documentos Mongoose
 
@@ -57,7 +57,7 @@ const getBooks = async (
       data: books,
     });
 
-  } catch (error) {
+  } catch (error:unknown) {
     next(error);
   }
 };
@@ -187,6 +187,7 @@ const addBook = async (
 
   } catch (error: unknown) {
     // Error de duplicado de MongoDB (índice único)
+    // doble verificacion
     if ((error as { code?: number }).code === 11000) {
       res.status(409).json({
         success: false,

@@ -9,6 +9,7 @@ import {
   registerUser,
   loginUser,
   registerAdmin,
+  refreshAccessToken
 } from "../controllers/authControllers.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { requireRole } from "../middlewares/requireRole.js";
@@ -39,6 +40,17 @@ authRouter.post("/register", registerUser);
  * @response { token, user }
  */
 authRouter.post("/login", loginUser);
+
+/**
+ * @route POST /auth/refresh
+ * @description Renueva el Access Token usando el Refresh Token de cookie
+ * @access Public (requiere cookie válida)
+ * @cookie {string} refreshToken
+ * @cookie {string} tokenFamily - Identificador de sesión
+ * @response { token: "nuevo JWT" }
+ * @important No requiere JWT en header. Las cookies son el "ticket" de acceso.
+ */
+authRouter.post("/refresh", refreshAccessToken);
 
 // ============================================================================
 // RUTAS PROTEGIDAS (requieren autenticación + rol admin)
