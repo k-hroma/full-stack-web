@@ -22,6 +22,9 @@ Sistema desarrollado para una **librería independiente** con comunidad activa e
 ### 🔐 Autenticación y Autorización
 
 - Registro/login con JWT (access tokens)
+- Refresh Tokens con rotación y detección de reutilización
+- Almacenamiento seguro de refresh tokens (hash + expiración)
+- Invalidación automática ante posible compromiso de seguridad
 - Sistema de roles: `admin` vs `user`
 - Middleware de protección de rutas RBAC
 - Password hashing con bcrypt (salt rounds: 10)
@@ -36,10 +39,22 @@ Sistema desarrollado para una **librería independiente** con comunidad activa e
 
 ### 🛡️ Seguridad y Validación
 
-- **Validación estricta** con Zod (type-safe)
+- Rotación de refresh tokens con detección de token reuse
+- Revocación automática de sesiones comprometidas
+- Cookies httpOnly para refresh tokens
+- Validación estricta con Zod (type-safe)
 - Sanitización de errores para producción
 - Rate limiting ready (estructura preparada)
 - `select: false` en campos sensibles (password)
+
+#### 🔁 Estrategia de Refresh Tokens
+
+Este proyecto implementa un sistema de refresh tokens inspirado en flujos OAuth 2.0 modernos:
+
+- Refresh tokens de un solo uso (one-time use)
+- Persistencia en servidor con comparación por hash
+- Rotación automática en cada solicitud de refresh
+- Detección de reutilización que invalida todas las sesiones
 
 ### 🏗️ Arquitectura
 
@@ -185,7 +200,6 @@ El frontend fue desarrollado en React + Vite con diseño profesional en Figma:
 
 🚧 Próximos Pasos (Roadmap)
 
-[ ] Implementar refresh tokens para mayor seguridad
 [ ] Agregar rate limiting con express-rate-limit
 [ ] Sistema de logs estructurados (Winston/Pino)
 [ ] Tests unitarios con Vitest

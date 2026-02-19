@@ -365,7 +365,7 @@ const refreshAccessToken = async (
       tokenFamily: tokenFamily,  // ← Búsqueda por índice (rápida)
       revokedAt: null,           // No revocado
       expiresAt: { $gt: new Date() },  // No expirado
-    });
+    }).sort({ createdAt: -1 }); //ordena el mas reciente primero
 
     if (!refreshTokenDoc) {
       res.status(401).json({
@@ -491,4 +491,119 @@ const refreshAccessToken = async (
   }
 };
 
-export { registerUser, registerAdmin, loginUser, refreshAccessToken };
+/**
+ * Cierra sesión revocando el refresh token y limpiando cookies.
+ * 
+ * @function logoutUser
+ * @async
+ * @route POST /auth/logout
+ * @access Public (requiere cookies válidas)
+ * @cookie {string} refreshToken - Token a revocar
+ * @cookie {string} tokenFamily - Identificador de sesión
+ * @returns {Promise<void>}
+ */
+const logoutUser = async (
+  req: Request,
+  res: Response<QueryResponse>,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // ==========================================
+    // 1. OBTENER COOKIES
+    // ==========================================
+    const refreshTokenPlain = req.cookies.refreshToken;
+    const tokenFamily = req.cookies.tokenFamily;
+
+    // ==========================================
+    // 2. REVOCAR TOKEN EN BD (si existe)
+    // ==========================================
+    if (refreshTokenPlain && tokenFamily) {
+      const refreshTokenDoc = await RefreshToken.findOne({
+        tokenFamily: tokenFamily,
+        revokedAt: null,
+      }).sort({ createdAt: -1 });
+
+      if (refreshTokenDoc) {
+        // Verificar que el hash coincida antes de revocar
+        const isTokenValid = await bcryptjs.compare(
+          refreshTokenPlain,
+          refreshTokenDoc.tokenHash
+        );
+
+        if (isTokenValid) {
+          refreshTokenDoc.revokedAt = new Date();
+          await refreshTokenDoc.save();
+          console.log(`[LOGOUT] Token revoked for user ${refreshTokenDoc.userId}`);
+        }
+      }
+    }
+
+    // ==========================================
+    // 3. LIMPIAR COOKIES (siempre, incluso si no había token)
+    // ==========================================
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/auth/refresh",
+    });
+
+    res.clearCookie("tokenFamily", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/auth/refresh",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+/**
+ * Cierra TODAS las sesiones de un usuario (logout global).
+ * 
+ * @function logoutAllDevices
+ * @async
+ * @route POST /auth/logout-all
+ * @access Private (propietario o admin)
+ */
+const logoutAllDevices = async (
+  req: Request,
+  res: Response<QueryResponse>,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // Solo puede hacerlo el propio usuario o un admin
+    const targetUserId = req.body.userId || req.user!.id;
+    
+    if (req.user!.role !== "admin" && targetUserId !== req.user!.id) {
+      res.status(403).json({
+        success: false,
+        message: "Can only logout your own sessions",
+      });
+      return;
+    }
+
+    // Revocar TODOS los tokens activos de este usuario
+    const result = await RefreshToken.updateMany(
+      { userId: targetUserId, revokedAt: null },
+      { revokedAt: new Date() }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Logged out from ${result.modifiedCount} device(s)`,
+    });
+
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export { registerUser, registerAdmin, loginUser, refreshAccessToken, logoutUser, logoutAllDevices };

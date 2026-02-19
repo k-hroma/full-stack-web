@@ -9,7 +9,9 @@ import {
   registerUser,
   loginUser,
   registerAdmin,
-  refreshAccessToken
+  refreshAccessToken, 
+  logoutUser, 
+  logoutAllDevices
 } from "../controllers/authControllers.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { requireRole } from "../middlewares/requireRole.js";
@@ -52,6 +54,16 @@ authRouter.post("/login", loginUser);
  */
 authRouter.post("/refresh", refreshAccessToken);
 
+/**
+ * @route POST /auth/logout
+ * @description Cierra sesión revocando el refresh token y limpiando cookies.
+ * @access Public (requiere cookie válida)
+ * @cookie {string} refreshToken -Token a revocar
+ * @cookie {string} tokenFamily - Identificador de sesión
+ * @returns {Promise<void>}
+ */
+authRouter.post("/logout", logoutUser);
+
 // ============================================================================
 // RUTAS PROTEGIDAS (requieren autenticación + rol admin)
 // ============================================================================
@@ -73,4 +85,5 @@ authRouter.post(
   registerAdmin
 );
 
+authRouter.post("/logout-all", authMiddleware, logoutAllDevices);
 export { authRouter };
