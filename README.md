@@ -74,16 +74,16 @@ src/
 
 ## 🚀 Tecnologías
 
-| Capa              | Tecnología     | Propósito                                                      |
-| ----------------- | -------------- | -------------------------------------------------------------- |
-| **Runtime**       | Node.js 20     | Entorno de ejecución                                           |
-| **Framework**     | Express 5      | API REST                                                       |
-| **Lenguaje**      | TypeScript 5.9 | Tipado estricto (`strict: true`, `exactOptionalPropertyTypes`) |
-| **Base de datos** | MongoDB Atlas  | Persistencia NoSQL                                             |
-| **ODM**           | Mongoose 9     | Modelado de datos + validaciones                               |
-| **Validación**    | Zod 4          | Runtime validation + type inference                            |
-| **Auth**          | JWT + bcrypt   | Tokens firmados + hashing seguro                               |
-| **DevOps**        | tsx            | Ejecución TypeScript sin compilado                             |
+| Capa              | Tecnología       | Propósito                                                      |
+| ----------------- | ---------------- | -------------------------------------------------------------- |
+| **Runtime**       | Node.js 20       | Entorno de ejecución                                           |
+| **Framework**     | Express 5.2.1    | API REST                                                       |
+| **Lenguaje**      | TypeScript 5.9.3 | Tipado estricto (`strict: true`, `exactOptionalPropertyTypes`) |
+| **Base de datos** | MongoDB Atlas    | Persistencia NoSQL                                             |
+| **ODM**           | Mongoose 9.2.0   | Modelado de datos + validaciones                               |
+| **Validación**    | Zod 4            | Runtime validation + type inference                            |
+| **Auth**          | JWT + bcrypt     | Tokens firmados + hashing seguro                               |
+| **DevOps**        | tsx              | Ejecución TypeScript sin compilado                             |
 
 ---
 
@@ -128,11 +128,15 @@ npm install
 ### 2. Configurar variables de entorno
 
 cp .env.example .env
-PORT=
-MONGO_URI=
-JWT_SECRET=
-FIRST_ADMIN_EMAIL=
-FIRST_ADMIN_PASSWORD=
+
+# Luego editar .env con tus valores:
+
+PORT=3000
+MONGO_URI=mongodb+srv://usuario:password@cluster.mongodb.net/libreria
+JWT_SECRET=tu_clave_secreta_de_al_menos_32_caracteres
+FIRST_ADMIN_EMAIL=admin@libreria.com
+FIRST_ADMIN_PASSWORD=TuPasswordSeguro123!
+FIRST_ADMIN_NAME=Administrador Principal
 
 ### 3. Crear primer administrador
 
@@ -204,6 +208,7 @@ El frontend fue desarrollado en React + Vite con diseño profesional en Figma:
 [ ] Sistema de logs estructurados (Winston/Pino)
 [ ] Tests unitarios con Vitest
 [ ] CI/CD con GitHub Actions
+[ ] Implementar paginación en listado de libros
 
 👨‍💻 Autor
 Croma - Full Stack Developer

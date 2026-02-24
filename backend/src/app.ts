@@ -60,7 +60,7 @@ app.use(cors());
 // Todas las rutas internas se accederán con el prefijo /books 
 app.use("/books", bookRouter)
 
-// // Monta el router de libros en la ruta base /books.
+// // Monta el router de libros en la ruta base /auth.
 // Todas las rutas internas se accederán con el prefijo /auth (ej: /auth/login, /auth/register).
 app.use("/auth", authRouter)
 
