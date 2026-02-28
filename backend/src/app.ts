@@ -22,6 +22,23 @@ import { authRouter } from './routes/authRouter.js';
 
 const app: Application = express();
 
+/**
+ * Habilitación de CORS para comunicación cross-origin.
+ * En producción, configurar con opciones específicas de origen:
+ * 
+ * @example Configuración restringida:
+ * app.use(cors({
+ *   origin: process.env.FRONTEND_URL,
+ *   credentials: true,
+ *   methods: ["GET", "POST", "PATCH", "DELETE"]
+ * }));
+ */
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // ============================================================================
 // MIDDLEWARES ESENCIALES (orden importante - se ejecutan secuencialmente)
 // ============================================================================
@@ -43,18 +60,7 @@ app.use(express.json({ limit: "10kb" }));
  */
 app.use(cookieParser());
 
-/**
- * Habilitación de CORS para comunicación cross-origin.
- * En producción, configurar con opciones específicas de origen:
- * 
- * @example Configuración restringida:
- * app.use(cors({
- *   origin: process.env.FRONTEND_URL,
- *   credentials: true,
- *   methods: ["GET", "POST", "PATCH", "DELETE"]
- * }));
- */
-app.use(cors());
+
 
 // Monta el router de autenticación en la ruta base /books.
 // Todas las rutas internas se accederán con el prefijo /books 
