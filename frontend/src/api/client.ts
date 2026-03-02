@@ -21,14 +21,14 @@ let isRefreshing = false;
 let refreshSubscribers: Array<(token: string) => void> = [];
 
 /**
- * Guarda el access token en memoria
+ * Guarda el access token en memoria(Login): Función que guarda el JWT en memoria
  */
 export const setAccessToken = (token: string): void => {
   accessToken = token;
 };
 
 /**
- * Limpia el access token (logout)
+ * Limpia el access token (logout): Función que borra el JWT de memoria
  */
 export const clearAccessToken = (): void => {
   accessToken = null;
@@ -61,7 +61,7 @@ const addRefreshSubscriber = (callback: (token: string) => void): void => {
 const refreshAccessToken = async (): Promise<string> => {
   const response = await fetch(`${API_URL}/auth/refresh`, {
     method: 'POST',
-    credentials: 'include', // ← Envia cookies httpOnly automáticamente
+    credentials: 'include', // ← Envia cookies httpOnly automáticamente. En backend: cookie-parser-> req.cookies
     headers: {
       'Content-Type': 'application/json',
     },
@@ -95,6 +95,7 @@ export async function httpClient<T>(
   // Headers por defecto
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    //¿Vino algún header en el segundo parámetro?
     ...((options.headers as Record<string, string>) || {}),
   };
 
@@ -106,7 +107,7 @@ export async function httpClient<T>(
   const config: RequestInit = {
     ...options,
     headers,
-    credentials: 'include', // ← Siempre incluir cookies
+    credentials: 'include', // ← Siempre que haya incluir cookies
   };
 
   try {
@@ -114,7 +115,7 @@ export async function httpClient<T>(
 
     // Si da 401, intentar refresh y reintentar
     if (response.status === 401 && accessToken) {
-      // Evitar múltiples refresh simultáneos
+      // Evitar múltiples refresh simultáneos (por default es false)
       if (!isRefreshing) {
         isRefreshing = true;
 

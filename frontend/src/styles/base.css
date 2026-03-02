@@ -103,8 +103,11 @@
 .header__cart {
   position: relative;
   color: var(--color-white);
-  text-decoration: none;
+  background: none;
+  border: none;
   font-size: var(--font-size-lg);
+  cursor: pointer;
+  padding: var(--space-xs);
 }
 
 .header__cart-badge {

@@ -17,9 +17,11 @@ import { lazy } from 'react';
 const HomePage = lazy(() => import('../pages/public/HomePage'));
 const CartPage = lazy(() => import('../pages/public/CartPage'));
 const LoginPage = lazy(() => import('../pages/public/LoginPage'));
-
+const RegisterPage = lazy(() => import('../pages/public/RegisterPage'));
+const CatalogPage = lazy(() => import('../pages/public/CatalogPage'));
 // Páginas admin (lazy loading)
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
+const AdminRegisterPage = lazy(() => import('../pages/admin/AdminRegisterPage'));
 
 // Configuración de rutas 
 export const routes: RouteObject[] = [
@@ -45,10 +47,26 @@ export const routes: RouteObject[] = [
         ),
       },
       {
+        path: 'register',
+        element: (
+          <PageWrapper>
+            <RegisterPage />
+          </PageWrapper>
+        ),
+      },
+      {
         path: 'login',
         element: (
           <PageWrapper>
             <LoginPage />
+          </PageWrapper>
+        ),
+      },
+      {
+        path: 'catalog',
+        element: (
+          <PageWrapper>
+            <CatalogPage />
           </PageWrapper>
         ),
       },
@@ -66,6 +84,14 @@ export const routes: RouteObject[] = [
                 element: (
                   <PageWrapper>
                     <AdminDashboardPage />
+                  </PageWrapper>
+                ),
+              },
+              {
+                path: 'register-admin',
+                element: (
+                  <PageWrapper>
+                    <AdminRegisterPage />
                   </PageWrapper>
                 ),
               },

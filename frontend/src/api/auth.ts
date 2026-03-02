@@ -18,12 +18,16 @@ import type {
 export const login = async (
   credentials: LoginCredentials
 ): Promise<User> => {
+  //httpClient-> La función base para hacer requests HTTP(client.ts)
   const response = await httpClient<LoginResponse>('/auth/login', {
     method: 'POST',
     body: JSON.stringify(credentials),
   });
 
+  //Función que guarda el JWT en memoria (no en localStorage)
   setAccessToken(response.token);
+
+  //Devuelve los datos del usuario (id, name, email, role) que estan en la respuesta del backend
   return response.data;
 };
 
@@ -39,6 +43,21 @@ export const register = async (
   });
 
   setAccessToken(response.token);
+  return response.data;
+};
+
+/**
+ * Registro de nuevo administrador (solo admin)
+ * Requiere autenticación con rol admin
+ */
+export const registerAdmin = async (
+  credentials: RegisterCredentials
+): Promise<User> => {
+  const response = await httpClient<LoginResponse>('/auth/admin', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+
   return response.data;
 };
 

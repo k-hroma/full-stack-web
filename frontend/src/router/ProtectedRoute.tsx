@@ -4,7 +4,7 @@
  */
 
 import type { ReactElement } from 'react';
-import { Navigate, Outlet, type RouteObject } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, type RouteObject } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 /**
@@ -15,13 +15,14 @@ import { useAuth } from '../hooks/useAuth';
  */
 export function ProtectedRoute(): ReactElement {
   const { isAuthenticated, isAdmin, isLoading } = useAuth();
+  const location = useLocation()
 
   // Mientras verifica auth, mostrar estado de carga
   if (isLoading) {
     return <div aria-live="polite">Cargando...</div>;
   }
 
-  // No autenticado → redirigir a login
+  // No autenticado → redirigir a login pero guardar de dónde viene
   if (!isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }

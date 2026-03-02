@@ -5,6 +5,7 @@
 
 import { Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import '../../styles/layout/admin-layout.css'
 
 export function AdminLayout() {
   const { logout, user } = useAuth();
@@ -15,6 +16,7 @@ export function AdminLayout() {
         <div className="admin-brand">Panel Admin</div>
         <nav className="admin-nav">
           <Link to="/admin">Dashboard</Link>
+          <Link to="/admin/register-admin">Nuevo Admin</Link>
           <Link to="/admin/books">Gestión de Libros</Link>
           <Link to="/">← Volver a la tienda</Link>
         </nav>

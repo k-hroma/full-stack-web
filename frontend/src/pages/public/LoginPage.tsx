@@ -5,7 +5,7 @@
  * @module pages/public/LoginPage
  */
 
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useState, type SubmitEvent, type ChangeEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import type { LoginCredentials } from '../../types';
@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
 
   // Enviar formulario
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     setFormError(null);
 
@@ -47,9 +47,8 @@ export default function LoginPage() {
     }
 
     try {
-      // ACÁ SE CONECTA CON TU BACKEND:
-      // POST http://localhost:3000/auth/login
-      // Tu backend valida, setea cookies, devuelve JWT
+      // ACÁ ES DONDE LLAMOS AL BACKEND. 
+      //BE-> valida, setea cookies, devuelve JWT
       await login(credentials);
 
       // Redirigir: si venía de otra página, volver ahí. Si no, al home.
@@ -122,8 +121,9 @@ export default function LoginPage() {
 
         {/* Links */}
         <div className="login-page__links">
-          <Link to="/" className="login-page__link">
-            ← Volver a la tienda
+          <span>¿No tenés cuenta?</span>
+          <Link to="/register" className="login-page__link">
+            Crear cuenta
           </Link>
         </div>
       </div>

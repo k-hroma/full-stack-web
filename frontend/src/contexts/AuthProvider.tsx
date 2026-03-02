@@ -13,16 +13,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // useCallback para guardar en memoria la funcion una sola vez y no cada vez que el componente renderiza
   const login = useCallback(async (credentials: LoginCredentials) => {
     setIsLoading(true);
     setError(null);
 
     try {
+      //	LLAMADA AL BACKEND —../api/auth.ts
       const userData = await loginApi(credentials);
       setUser(userData);
     } catch (err) {
       const apiError = err as ApiError;
       setError(apiError.message || 'Error al iniciar sesión');
+      //Re-lanza el error para que LoginPage también lo capture
       throw err;
     } finally {
       setIsLoading(false);
