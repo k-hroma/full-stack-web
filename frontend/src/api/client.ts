@@ -17,7 +17,7 @@ let accessToken: string | null = null;
 /**
  * Cola de requests pendientes mientras se refresca el token
  */
-let isRefreshing = false;
+let isRefreshing = false; //bandera global: "ya estoy pidiendo nuevo token"
 let refreshSubscribers: Array<(token: string) => void> = [];
 
 /**
@@ -62,6 +62,7 @@ const refreshAccessToken = async (): Promise<string> => {
   const response = await fetch(`${API_URL}/auth/refresh`, {
     method: 'POST',
     credentials: 'include', // ← Envia cookies httpOnly automáticamente. En backend: cookie-parser-> req.cookies
+    //en el primer loguin no hay cookies
     headers: {
       'Content-Type': 'application/json',
     },

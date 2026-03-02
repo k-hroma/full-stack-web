@@ -1,0 +1,146 @@
+/* Header */
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header__user-name {
+  font-size: var(--font-size-sm);
+}
+
+.header__admin-link,
+.header__login {
+  color: var(--color-white);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-white);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.header__admin-link:hover,
+.header__login:hover {
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+.header__logout {
+  background: transparent;
+  color: black;
+  border: 1px solid var(--color-white);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all 0.2s;
+}
+
+.header__logout:hover {
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+
+
+.nav-bar-container {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 100%; 
+}
+
+.left-nav {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 8;
+  padding-left: 2rem;
+  padding-top: 3.5rem;
+  @media (max-width: 795px) {
+  padding-left: 1rem;
+  }
+}
+
+.center-nav {
+  display: flex;
+  position: fixed;
+  top: -1rem;
+  z-index: 8;
+  padding-top: 3.5rem;
+   @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.right-nav {
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  gap: .5rem;
+  z-index: 8;
+  padding-right: 2rem;
+  padding-top: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 795px) {
+
+  padding-right: 1rem;
+  }
+}
+
+.btn-home-menu {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  align-self: center;
+
+}
+
+.icon-user {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+  align-self: baseline;
+
+}
+
+.header__cart {
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  padding: var(--space-xs);
+}
+
+.header__cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.user-auth {
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="layout" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.08 15.98">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #954300;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" width="27.08" height="1.33"/>
+  <rect class="cls-1" y="9.77" width="27.08" height="1.33"/>
+  <rect class="cls-1" y="14.65" width="27.08" height="1.33"/>
+  <rect class="cls-1" y="4.88" width="27.08" height="1.33"/>
+</svg>

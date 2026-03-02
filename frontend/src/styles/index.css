@@ -1,0 +1,47 @@
+/**
+ * Estilos base de la aplicación
+ * @module styles/base
+ */
+
+/* Reset básico */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+
+  /*Fonts Sizes*/
+  --very-small-font-size: .875rem;
+  --small-font-size: 1.5rem;
+  --large-font-size: 3rem;
+  --super-large-font-size:5rem;
+
+
+  /*Colors*/
+  --brown: #954300;
+  --ligth-brown: #C3762A;
+  --pink: #FF76DC;
+  --orange: #F7560F;
+  --beige: #E2E2E2;
+  --dark-beige: #DBD0C1;
+  --light-violet:#CDB0EA;   
+  
+}
+
+#root{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: 'Neue Montreal Regular';
+}
