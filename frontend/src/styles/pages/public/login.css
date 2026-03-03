@@ -1,109 +1,207 @@
 /**
- * Estilos de LoginPage
+ * LoginPage Styles - Minimalista, Apaisado & Sutil
  * @module styles/pages/login
  */
 
 .login-page {
-  min-height: calc(100vh - var(--header-height) - 100px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-lg);
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--beige);
+  padding: 1.5rem;
 }
 
+/* Más ancho como el registro */
 .login-page__container {
   width: 100%;
-  max-width: 400px;
-  background: var(--color-white);
-  padding: var(--space-xl);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 520px;
+  background-color: var(--dark-beige);
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
 }
 
+/* Título sutil, thin uppercase */
 .login-page__title {
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-lg);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1.5rem;
+  color: var(--brown);
   text-align: center;
-  color: var(--color-primary);
+  margin-bottom: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
+/* Error compacto */
 .login-page__error {
-  background: #fee;
-  color: var(--color-accent);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 4px;
-  margin-bottom: var(--space-md);
-  font-size: var(--font-size-sm);
+  background-color: rgba(255, 118, 220, 0.1);
+  color: var(--brown);
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.8125rem;
+  text-align: center;
+  border-left: 1px solid var(--pink);
 }
 
 .login-page__form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 1.25rem;
 }
 
 .login-page__field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 0.25rem;
 }
 
+/* Labels más pequeños */
 .login-page__label {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--color-text);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  color: var(--ligth-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
+/* Inputs transparentes - SIEMPRE transparentes */
 .login-page__input {
-  padding: var(--space-sm) var(--space-md);
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
-  transition: border-color 0.2s;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--brown);
+  background-color: transparent !important; /* Forzar transparente */
+  border: none;
+  border-bottom: 1px solid var(--ligth-brown);
+  border-radius: 0;
+  padding: 0.625rem 0;
+  transition: border-color 0.3s ease;
+  outline: none;
+  /* Eliminar fondo blanco del autofill y focus */
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  caret-color: var(--orange); /* Cursor naranja */
+}
+
+/* Placeholder más sutil */
+.login-page__input::placeholder {
+  color: var(--ligth-brown);
+  opacity: 0.4;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.9375rem;
+}
+
+/* Hover y focus solo cambian el borde, nunca el fondo */
+.login-page__input:hover {
+  border-bottom-color: var(--brown);
 }
 
 .login-page__input:focus {
-  outline: none;
-  border-color: var(--color-primary);
+  border-bottom-color: var(--orange);
+  border-bottom-width: 1.5px;
+  margin-bottom: -0.5px;
+  background-color: transparent !important;
+}
+
+/* Autofill - mantener transparente */
+.login-page__input:-webkit-autofill,
+.login-page__input:-webkit-autofill:hover,
+.login-page__input:-webkit-autofill:focus,
+.login-page__input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--dark-beige) inset !important;
+  box-shadow: 0 0 0 1000px var(--dark-beige) inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .login-page__input:disabled {
-  background: var(--color-secondary);
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.login-page__submit {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--space-sm) var(--space-md);
-  border: none;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
+/* Botón más sutil */
+.login-page__button {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+  background-color: transparent;
+  border: 1px solid var(--ligth-brown);
+  border-radius: 50px;
+  padding: 0.875rem 2rem;
+  margin-top: 0.75rem;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-top: var(--space-sm);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  align-self: center;
+  min-width: 140px;
 }
 
-.login-page__submit:hover:not(:disabled) {
-  background: #333;
+.login-page__button:hover:not(:disabled) {
+  border-color: var(--brown);
+  background-color: var(--brown);
+  color: var(--beige);
 }
 
-.login-page__submit:disabled {
-  opacity: 0.6;
+.login-page__button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.login-page__button:disabled {
+  opacity: 0.35;
+  border-color: var(--ligth-brown);
+  color: var(--ligth-brown);
   cursor: not-allowed;
 }
 
-.login-page__links {
-  margin-top: var(--space-lg);
-  text-align: center;
+/* Footer compacto */
+.login-page__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(149, 67, 0, 0.08);
+}
+
+.login-page__footer-text {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--ligth-brown);
 }
 
 .login-page__link {
-  color: var(--color-text-light);
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--brown);
   text-decoration: none;
-  font-size: var(--font-size-sm);
+  transition: opacity 0.2s ease;
 }
 
 .login-page__link:hover {
-  color: var(--color-primary);
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-page {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 4rem;
+  }
+
+  .login-page__container {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+
+  .login-page__title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
 }

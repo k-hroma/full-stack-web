@@ -9,7 +9,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { getBooks } from '../../api';
 import { useCart } from '../../hooks/useCart';
 import type { Book } from '../../types';
-import '../../styles/pages/public/catalog.css'
 
 export default function CatalogPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -30,8 +29,6 @@ export default function CatalogPage() {
       setError(null);
 
       try {
-        // ACÁ SE CONECTA CON TU BACKEND:
-        // GET /books?fanzine=true o GET /books?latestBook=true o GET /books
         const filters = {
           ...(isFanzine && { fanzine: true }),
           ...(isLatest && { latestBook: true }),
@@ -40,7 +37,7 @@ export default function CatalogPage() {
         const data = await getBooks(filters);
         setBooks(data);
       } catch (err) {
-        console.log(err)
+        console.log(err);
         setError('Error al cargar los libros');
       } finally {
         setIsLoading(false);
@@ -57,17 +54,17 @@ export default function CatalogPage() {
     return 'Catálogo';
   };
 
-  if (isLoading) return <div className="catalog-page__loading">Cargando...</div>;
-  if (error) return <div className="catalog-page__error">{error}</div>;
+  if (isLoading) return <div>Cargando...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <div className="catalog-page">
-      <h1 className="catalog-page__title">{getTitle()}</h1>
+    <div>
+      <h1>{getTitle()}</h1>
       
       {books.length === 0 ? (
-        <p className="catalog-page__empty">No hay libros disponibles.</p>
+        <p>No hay libros disponibles.</p>
       ) : (
-        <div className="catalog-page__grid">
+        <div>
           {books.map(book => (
             <BookCard 
               key={book._id} 
@@ -91,23 +88,22 @@ interface BookCardProps {
 
 function BookCard({ book, isInCart, onAddToCart }: BookCardProps) {
   return (
-    <article className="book-card">
-      <Link to={`/book/${book._id}`} className="book-card__link">
+    <article>
+      <Link to={`/book/${book._id}`}>
         <img 
           src={book.img} 
-          alt={book.title} 
-          className="book-card__image"
+          alt={book.title}
           loading="lazy"
         />
-        <div className="book-card__info">
-          <h3 className="book-card__title">{book.title}</h3>
-          <p className="book-card__author">
+        <div>
+          <h3>{book.title}</h3>
+          <p>
             {book.firstName} {book.lastName}
           </p>
-          <p className="book-card__editorial">{book.editorial}</p>
-          <p className="book-card__price">${book.price}</p>
+          <p>{book.editorial}</p>
+          <p>${book.price}</p>
           {book.stock === 0 && (
-            <span className="book-card__out-of-stock">Sin stock</span>
+            <span>Sin stock</span>
           )}
         </div>
       </Link>
@@ -115,7 +111,6 @@ function BookCard({ book, isInCart, onAddToCart }: BookCardProps) {
       <button
         onClick={onAddToCart}
         disabled={isInCart || book.stock === 0}
-        className={`book-card__button ${isInCart ? 'book-card__button--in-cart' : ''}`}
       >
         {isInCart ? 'En carrito' : book.stock === 0 ? 'Sin stock' : 'Agregar'}
       </button>

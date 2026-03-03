@@ -26,12 +26,12 @@
 
 @font-face {
   font-family: 'Neue Montreal Thin';
-  src: url('../assets/fonts2/PPNeueMontreal-Thin.woff2') format('woff2');
+  src: url('../assets/fonts/PPNeueMontreal-Thin.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Neue Montreal Thin Italic';
-  src: url('../assets/fonts2/PPNeueMontreal-Italic.woff2') format('woff2');
+  src: url('../assets/fonts/PPNeueMontreal-Italic.woff2') format('woff2');
 }
 
 @font-face {

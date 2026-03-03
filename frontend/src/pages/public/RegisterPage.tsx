@@ -4,10 +4,11 @@
  * @module pages/public/RegisterPage
  */
 
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useState, type SubmitEvent, type ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../../api';
 import type { RegisterCredentials } from '../../types';
+import '../../styles/pages/public/register.css'
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export default function RegisterPage() {
    * Maneja el envío del formulario
    * Valida todos los campos y registra el usuario
    */
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
@@ -106,116 +107,124 @@ export default function RegisterPage() {
   };
 
   return (
-    <div>
-      <div>
-        <h1>Crear Cuenta</h1>
+    <div className="register-page">
+  <div className="register-page__container">
+    <h1 className="register-page__title">Crear Cuenta</h1>
 
-        {error && (
-          <div role="alert">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="name">
-              Nombre completo
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={credentials.name}
-              onChange={handleChange}
-              disabled={isLoading}
-              placeholder="Juan Pérez"
-              autoComplete="name"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={credentials.email}
-              onChange={handleChange}
-              disabled={isLoading}
-              placeholder="tu@email.com"
-              autoComplete="email"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
-              disabled={isLoading}
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
-            
-            {credentials.password && (
-              <ul>
-                <li className={passwordErrors.includes('Mínimo 6 caracteres') ? 'invalid' : 'valid'}>
-                  Mínimo 6 caracteres
-                </li>
-                <li className={passwordErrors.includes('Una mayúscula') ? 'invalid' : 'valid'}>
-                  Una mayúscula
-                </li>
-                <li className={passwordErrors.includes('Un número') ? 'invalid' : 'valid'}>
-                  Un número
-                </li>
-                <li className={passwordErrors.includes('Un carácter especial') ? 'invalid' : 'valid'}>
-                  Un carácter especial (!@#$...)
-                </li>
-                <li className={passwordErrors.includes('Sin espacios') ? 'invalid' : 'valid'}>
-                  Sin espacios
-                </li>
-              </ul>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword">
-              Confirmar contraseña
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={handleChange}
-              disabled={isLoading}
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
-            {confirmPassword && confirmPassword !== credentials.password && (
-              <span>Las contraseñas no coinciden</span>
-            )}
-          </div>
-
-          <button type="submit" disabled={isLoading || passwordErrors.length > 0}>
-            {isLoading ? 'Creando cuenta...' : 'Crear cuenta'}
-          </button>
-        </form>
-
-        <div>
-          <span>¿Ya tenés cuenta?</span>
-          <Link to="/login">
-            Iniciá sesión
-          </Link>
-        </div>
+    {error && (
+      <div className="register-page__error" role="alert">
+        {error}
       </div>
+    )}
+
+    <form className="register-page__form" onSubmit={handleSubmit}>
+      <div className="register-page__field">
+        <label className="register-page__label" htmlFor="name">
+          Nombre completo
+        </label>
+        <input
+          className="register-page__input"
+          type="text"
+          id="name"
+          name="name"
+          value={credentials.name}
+          onChange={handleChange}
+          disabled={isLoading}
+          placeholder="Juan Pérez"
+          autoComplete="name"
+        />
+      </div>
+
+      <div className="register-page__field">
+        <label className="register-page__label" htmlFor="email">
+          Email
+        </label>
+        <input
+          className="register-page__input"
+          type="email"
+          id="email"
+          name="email"
+          value={credentials.email}
+          onChange={handleChange}
+          disabled={isLoading}
+          placeholder="tu@email.com"
+          autoComplete="email"
+        />
+      </div>
+
+      <div className="register-page__field">
+        <label className="register-page__label" htmlFor="password">
+          Contraseña
+        </label>
+        <input
+          className="register-page__input"
+          type="password"
+          id="password"
+          name="password"
+          value={credentials.password}
+          onChange={handleChange}
+          disabled={isLoading}
+          placeholder="••••••••"
+          autoComplete="new-password"
+        />
+        
+        {credentials.password && (
+          <ul className="register-page__password-requirements">
+            <li className={`register-page__requirement ${passwordErrors.includes('Mínimo 6 caracteres') ? 'register-page__requirement--invalid' : 'register-page__requirement--valid'}`}>
+              Mínimo 6 caracteres
+            </li>
+            <li className={`register-page__requirement ${passwordErrors.includes('Una mayúscula') ? 'register-page__requirement--invalid' : 'register-page__requirement--valid'}`}>
+              Una mayúscula
+            </li>
+            <li className={`register-page__requirement ${passwordErrors.includes('Un número') ? 'register-page__requirement--invalid' : 'register-page__requirement--valid'}`}>
+              Un número
+            </li>
+            <li className={`register-page__requirement ${passwordErrors.includes('Un carácter especial') ? 'register-page__requirement--invalid' : 'register-page__requirement--valid'}`}>
+              Un carácter especial (!@#$...)
+            </li>
+            <li className={`register-page__requirement ${passwordErrors.includes('Sin espacios') ? 'register-page__requirement--invalid' : 'register-page__requirement--valid'}`}>
+              Sin espacios
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div className="register-page__field">
+        <label className="register-page__label" htmlFor="confirmPassword">
+          Confirmar contraseña
+        </label>
+        <input
+          className="register-page__input"
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={handleChange}
+          disabled={isLoading}
+          placeholder="••••••••"
+          autoComplete="new-password"
+        />
+        {confirmPassword && confirmPassword !== credentials.password && (
+          <span className="register-page__match-error">Las contraseñas no coinciden</span>
+        )}
+      </div>
+
+      <button 
+        className="register-page__button" 
+        type="submit" 
+        disabled={isLoading || passwordErrors.length > 0}
+      >
+        {isLoading ? 'Creando cuenta...' : 'Crear cuenta'}
+      </button>
+    </form>
+
+    <div className="register-page__footer">
+      <span className="register-page__footer-text">¿Ya tenés cuenta?</span>
+      <Link className="register-page__link" to="/login">
+        Iniciá sesión
+      </Link>
     </div>
+  </div>
+</div>
   );
 }

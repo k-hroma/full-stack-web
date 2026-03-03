@@ -1,95 +1,223 @@
 /**
- * CartProvider - Estado del carrito con localStorage
+ * CartProvider - Estado del carrito con useReducer y localStorage por usuario
  * @module contexts/CartProvider
  */
 
-import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import { 
+  useReducer, 
+  useEffect, 
+  useCallback, 
+  type ReactNode 
+} from 'react';
 import { CartContext } from './CartContext';
 import type { CartItem } from '../types/cart';
 import type { Book } from '../types';
+import { useAuth } from '../hooks/useAuth';
 
-const STORAGE_KEY = 'libreria_cart';
+const STORAGE_KEY_BASE = 'libreria_cart';
+
+// ╔════════════════════════════════════════════════════════════╗
+// ║  TIPOS DE ACCIONES DEL REDUCER                             ║
+// ╚════════════════════════════════════════════════════════════╝
+
+type CartAction =
+  | { type: 'LOAD_CART'; payload: CartItem[] }
+  | { type: 'ADD_ITEM'; payload: Book }
+  | { type: 'REMOVE_ITEM'; payload: string }
+  | { type: 'UPDATE_QUANTITY'; payload: { bookId: string; quantity: number } }
+  | { type: 'CLEAR_CART' };
+
+interface CartState {
+  items: CartItem[];
+}
+
+// ╔════════════════════════════════════════════════════════════╗
+// ║  REDUCER: Función pura que maneja todas las transiciones   ║
+// ╚════════════════════════════════════════════════════════════╝
+
+function cartReducer(state: CartState, action: CartAction): CartState {
+  switch (action.type) {
+    case 'LOAD_CART': {
+      return {
+        ...state,
+        items: action.payload,
+      };
+    }
+
+    case 'ADD_ITEM': {
+      const book = action.payload;
+      const existing = state.items.find(item => item.book._id === book._id);
+
+      if (existing) {
+        if (book.stock && existing.quantity >= book.stock) {
+          return state;
+        }
+        return {
+          ...state,
+          items: state.items.map(item =>
+            item.book._id === book._id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          ),
+        };
+      }
+
+      return {
+        ...state,
+        items: [...state.items, { book, quantity: 1 }],
+      };
+    }
+
+    case 'REMOVE_ITEM': {
+      return {
+        ...state,
+        items: state.items.filter(item => item.book._id !== action.payload),
+      };
+    }
+
+    case 'UPDATE_QUANTITY': {
+      const { bookId, quantity } = action.payload;
+
+      if (quantity < 1) {
+        return {
+          ...state,
+          items: state.items.filter(item => item.book._id !== bookId),
+        };
+      }
+
+      return {
+        ...state,
+        items: state.items.map(item =>
+          item.book._id === bookId
+            ? { ...item, quantity }
+            : item
+        ),
+      };
+    }
+
+    case 'CLEAR_CART': {
+      return {
+        ...state,
+        items: [],
+      };
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+
+const initialState: CartState = {
+  items: [],
+};
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  // Inicializar desde localStorage (o vacío)
-  const [items, setItems] = useState<CartItem[]>(() => {
-    if (typeof window === 'undefined') return [];
+  const { user, isAuthenticated } = useAuth();
+
+  // ╔════════════════════════════════════════════════════════════╗
+  // ║  FUNCIÓN: Generar clave de localStorage por usuario        ║
+  // ╚════════════════════════════════════════════════════════════╝
+
+  const getStorageKey = useCallback((): string => {
+    if (!isAuthenticated || !user) {
+      return `${STORAGE_KEY_BASE}_guest`;
+    }
+    return `${STORAGE_KEY_BASE}_${user.id}`;
+  }, [user, isAuthenticated]);
+
+  // ╔════════════════════════════════════════════════════════════╗
+  // ║  REDUCER: useReducer con lazy initialization               ║
+  // ╚════════════════════════════════════════════════════════════╝
+
+  const [state, dispatch] = useReducer(cartReducer, initialState, () => {
+    if (typeof window === 'undefined') {
+      return initialState;
+    }
+
+    const key = getStorageKey();
+    const saved = localStorage.getItem(key);
     
-    const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        return { items: JSON.parse(saved) };
       } catch {
-        return [];
+        return initialState;
       }
-    }
-    return [];
-  });
-
-  // Guardar en localStorage cuando cambia
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
-
-  // Calcular totales
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (item.book.price * item.quantity), 0);
-
-  // Agregar libro al carrito
-  const addToCart = useCallback((book: Book) => {
-    setItems(current => {
-      const existing = current.find(item => item.book._id === book._id);
-      
-      if (existing) {
-        // Ya está, aumentar cantidad (si hay stock)
-        if (book.stock && existing.quantity >= book.stock) {
-          return current; // No hay más stock
-        }
-        return current.map(item =>
-          item.book._id === book._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      
-      // No está, agregar nuevo
-      return [...current, { book, quantity: 1 }];
-    });
-  }, []);
-
-  // Quitar libro del carrito
-  const removeFromCart = useCallback((bookId: string) => {
-    setItems(current => current.filter(item => item.book._id !== bookId));
-  }, []);
-
-  // Actualizar cantidad específica
-  const updateQuantity = useCallback((bookId: string, quantity: number) => {
-    if (quantity < 1) {
-      removeFromCart(bookId);
-      return;
     }
     
-    setItems(current =>
-      current.map(item =>
-        item.book._id === bookId
-          ? { ...item, quantity }
-          : item
-      )
-    );
-  }, [removeFromCart]);
+    return initialState;
+  });
 
-  // Vaciar carrito
-  const clearCart = useCallback(() => {
-    setItems([]);
+  // ╔════════════════════════════════════════════════════════════╗
+  // ║  EFECTO: Recargar carrito cuando cambia el usuario         ║
+  // ╚════════════════════════════════════════════════════════════╝
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const key = getStorageKey();
+    const saved = localStorage.getItem(key);
+    
+    dispatch({
+      type: 'LOAD_CART',
+      payload: saved ? JSON.parse(saved) : [],
+    });
+  }, [getStorageKey]);
+
+  // ╔════════════════════════════════════════════════════════════╗
+  // ║  EFECTO: Persistir en localStorage cuando cambia el estado ║
+  // ╚════════════════════════════════════════════════════════════╝
+
+  useEffect(() => {
+    const key = getStorageKey();
+    localStorage.setItem(key, JSON.stringify(state.items));
+  }, [state.items, getStorageKey]);
+
+  // ╔════════════════════════════════════════════════════════════════╗
+  // ║  COMPUTED: Totales calculados desde el estado (estado derivado)║
+  // ╚════════════════════════════════════════════════════════════════╝
+ 
+  const itemCount = state.items.reduce(
+    (sum: number, item: CartItem) => sum + item.quantity, 
+    0
+  );
+  
+  const totalPrice = state.items.reduce(
+    (sum: number, item: CartItem) => sum + item.book.price * item.quantity,
+    0
+  );
+
+  // ╔════════════════════════════════════════════════════════════╗
+  // ║  ACTION CREATORS: Funciones que disparan acciones          ║
+  // ╚════════════════════════════════════════════════════════════╝
+
+  const addToCart = useCallback((book: Book) => {
+    dispatch({ type: 'ADD_ITEM', payload: book });
   }, []);
 
-  // Verificar si un libro está en el carrito
+  const removeFromCart = useCallback((bookId: string) => {
+    dispatch({ type: 'REMOVE_ITEM', payload: bookId });
+  }, []);
+
+  const updateQuantity = useCallback((bookId: string, quantity: number) => {
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { bookId, quantity } });
+  }, []);
+
+  const clearCart = useCallback(() => {
+    dispatch({ type: 'CLEAR_CART' });
+  }, []);
+
   const isInCart = useCallback((bookId: string) => {
-    return items.some(item => item.book._id === bookId);
-  }, [items]);
+  return state.items.some((item: CartItem) => item.book._id === bookId);
+  }, [state.items]);
+  
+  // ╔════════════════════════════════════════════════════════════╗
+  // ║  VALUE: Objeto expuesto al contexto                        ║
+  // ╚════════════════════════════════════════════════════════════╝
 
   const value = {
-    items,
+    items: state.items,
     itemCount,
     totalPrice,
     addToCart,

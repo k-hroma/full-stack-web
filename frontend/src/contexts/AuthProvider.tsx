@@ -15,12 +15,12 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { 
-    user, 
-    status, 
+    user,  //datos del usuario (o null) {id, name}
+    status, // 'idle' | 'loading' | 'authenticated' | 'unauthenticated'
     error, 
-    refreshSession,
-    logoutLocally 
-  } = useAuthInit();
+    refreshSession, //refresca el token
+    logoutLocally  //limpia el estado local
+  } = useAuthInit(); //hook que se ejecuta inmediatamente cuando la app carga
 
   /**
    * Login manual (formulario)
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [logoutLocally]);
 
-  // Computed properties
+  // Computed properties :Estas variables derivan del status base *useAuthInit()
   const isAuthenticated = status === 'authenticated';
   const isAdmin = user?.role === 'admin';
   const isLoading = status === 'loading' || status === 'idle';
@@ -52,9 +52,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user,
     status,
     error,
-    isAuthenticated,
-    isAdmin,
-    isLoading,
+    isAuthenticated,  // ← true solo cuando status === 'authenticated'
+    isAdmin,  // ← true solo cuando user.role === 'admin'
+    isLoading,  // ← true mientras status sea 'loading' o 'idle'
     login,
     logout,
     refreshSession,

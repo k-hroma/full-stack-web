@@ -16,9 +16,10 @@ export function ProtectedRoute(): ReactElement {
 
   // Si estamos verificando la sesión inicial, mostramos spinner
   // Esto evita el "flash de login" al recargar estando autenticado
+  //(doRefresh está corriendo en el fondo) 
   if (isLoading) {
     return (
-      <div className="protected-route__loading" aria-live="polite">
+      <div>
         <span>Verificando sesión...</span>
       </div>
     );
@@ -30,12 +31,12 @@ export function ProtectedRoute(): ReactElement {
       <Navigate 
         to="/login" 
         replace 
-        state={{ from: location.pathname }} 
+        state={{ from: location.pathname }} //guarda de donde venia
       />
     );
   }
 
-  // Hay sesión pero no es admin
+  // Hay sesión pero no es admin: (usuario común intenta entrar a /admin)
   if (!isAdmin) {
     return <Navigate to="/" replace />;
   }

@@ -71,12 +71,22 @@ export const refreshAccessToken = async (): Promise<{ token: string; user: User 
   }
 
   const data: RefreshResponse = await response.json();
+  /*  res.status(200).json({
+      success: true,
+      message: "Token refreshed successfully",
+      token: newAccessToken,
+    }); */
   
   // Guardar el nuevo token en memoria
   setAccessToken(data.token);
   
-  // Decodificar payload del JWT para obtener usuario
-  const payload = JSON.parse(atob(data.token.split('.')[1]));
+  // Decodificar payload del JWT para obtener usuario //
+
+  // 1.Divide el JWT: .split: ["header", "payload", "signature"]
+  //2. Extrae el payload [1] = payload
+  //3. Decodifica base 64 -> //atob: Convierte Base64 → texto normal.
+  //4. Convierto el payload a string JSON:
+  const payload = JSON.parse(atob(data.token.split('.')[1]));   //
   const user: User = {
     id: payload.id,
     name: payload.name,

@@ -54,11 +54,11 @@ export function SearchBooks() {
           id="navSearch"
           name="navSearch"
           type="text"
+          autoComplete='off'
           className="search-input"
           placeholder="Título, autorx, editorial, ISBN"
           value={inputValue}
           onChange={handleSearchTerm}
-          aria-label="Buscar libro"
         />
         <button type="submit" className="icon-lupa">
           <Search fill="#954300" />

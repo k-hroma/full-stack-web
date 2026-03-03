@@ -1,157 +1,254 @@
 /**
- * Estilos de RegisterPage
+ * RegisterPage Styles - Minimalista, Apaisado & Sutil
  * @module styles/pages/register
  */
 
 .register-page {
-  min-height: calc(100vh - var(--header-height) - 100px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-lg);
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--beige);
+  padding: 1.5rem;
 }
 
+/* Más ancho y menos padding vertical */
 .register-page__container {
   width: 100%;
-  max-width: 420px;
-  background: var(--color-white);
-  padding: var(--space-xl);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 520px;
+  background-color: var(--dark-beige);
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
 }
 
+/* Título mucho más sutil */
 .register-page__title {
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-lg);
+  font-family: 'Neue Montreal Thin', sans-serif;
+  font-size: 1.75rem;
+  color: var(--brown);
   text-align: center;
-  color: var(--color-primary);
+  margin-bottom: 2rem;
+  font-weight: 100;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
+/* Error compacto */
 .register-page__error {
-  background: #fee;
-  color: var(--color-accent);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 4px;
-  margin-bottom: var(--space-md);
-  font-size: var(--font-size-sm);
+  background-color: rgba(255, 118, 220, 0.1);
+  color: var(--brown);
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.8125rem;
+  text-align: center;
+  border-left: 1px solid var(--pink);
 }
 
 .register-page__form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 1.25rem;
 }
 
 .register-page__field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 0.25rem;
 }
 
+/* Labels más pequeños y espaciados */
 .register-page__label {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--color-text);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  color: var(--ligth-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
+/* Inputs más compactos */
 .register-page__input {
-  padding: var(--space-sm) var(--space-md);
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
-  transition: border-color 0.2s;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--brown);
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ligth-brown);
+  border-radius: 0;
+  padding: 0.625rem 0;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.register-page__input::placeholder {
+  color: var(--ligth-brown);
+  opacity: 0.4;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.9375rem;
+}
+
+.register-page__input:hover {
+  border-bottom-color: var(--brown);
 }
 
 .register-page__input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.register-page__input--error {
-  border-color: var(--color-accent);
+  border-bottom-color: var(--orange);
+  border-bottom-width: 1.5px;
+  margin-bottom: -0.5px;
 }
 
 .register-page__input:disabled {
-  background: var(--color-secondary);
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* Requisitos de password */
-.register-page__requirements {
+/* Requisitos en grid de 2 columnas para aprovechar el ancho */
+.register-page__password-requirements {
   list-style: none;
-  font-size: var(--font-size-sm);
-  margin-top: var(--space-xs);
+  margin-top: 0.625rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem 1.5rem;
+}
+
+.register-page__requirement {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  color: var(--ligth-brown);
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 0.375rem;
+  transition: all 0.2s ease;
 }
 
-.register-page__requirements li {
-  padding-left: var(--space-md);
-  position: relative;
+.register-page__requirement::before {
+  content: '';
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: currentColor;
+  transition: all 0.2s ease;
 }
 
-.register-page__requirements li::before {
-  content: '○';
-  position: absolute;
-  left: 0;
-  font-size: 10px;
+.register-page__requirement--valid {
+  color: var(--brown);
 }
 
-.register-page__requirements li.valid {
-  color: #4a4;
+.register-page__requirement--valid::before {
+  width: 5px;
+  height: 5px;
+  background-color: var(--orange);
 }
 
-.register-page__requirements li.valid::before {
-  content: '●';
+.register-page__requirement--invalid {
+  color: var(--ligth-brown);
+  opacity: 0.5;
 }
 
-.register-page__requirements li.invalid {
-  color: var(--color-text-light);
+/* Error de match más sutil */
+.register-page__match-error {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  color: var(--pink);
+  margin-top: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.8;
 }
 
-.register-page__hint {
-  font-size: var(--font-size-sm);
-  color: var(--color-accent);
+.register-page__match-error::before {
+  content: '×';
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.875rem;
 }
 
-.register-page__submit {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--space-sm) var(--space-md);
-  border: none;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
+/* Botón más pequeño y sutil */
+.register-page__button {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+  background-color: transparent;
+  border: 1px solid var(--ligth-brown);
+  border-radius: 50px;
+  padding: 0.875rem 2rem;
+  margin-top: 0.75rem;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-top: var(--space-sm);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  align-self: center;
+  min-width: 160px;
 }
 
-.register-page__submit:hover:not(:disabled) {
-  background: #333;
+.register-page__button:hover:not(:disabled) {
+  border-color: var(--brown);
+  background-color: var(--brown);
+  color: var(--beige);
 }
 
-.register-page__submit:disabled {
-  opacity: 0.6;
+.register-page__button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.register-page__button:disabled {
+  opacity: 0.35;
+  border-color: var(--ligth-brown);
+  color: var(--ligth-brown);
   cursor: not-allowed;
 }
 
-.register-page__links {
-  margin-top: var(--space-lg);
-  text-align: center;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-light);
+/* Footer compacto */
+.register-page__footer {
   display: flex;
-  gap: var(--space-sm);
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(149, 67, 0, 0.08);
+}
+
+.register-page__footer-text {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--ligth-brown);
 }
 
 .register-page__link {
-  color: var(--color-primary);
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--brown);
   text-decoration: none;
-  font-weight: 500;
+  transition: opacity 0.2s ease;
 }
 
 .register-page__link:hover {
-  text-decoration: underline;
+  opacity: 0.5;
+}
+
+/* Responsive: vuelve a 1 columna en mobile */
+@media (max-width: 480px) {
+  .register-page {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .register-page__container {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+
+  .register-page__title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .register-page__password-requirements {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
 }
