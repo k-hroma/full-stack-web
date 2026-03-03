@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchBooks } from '../../api';
 import { useSearch } from '../../hooks/useSearch';
-import searchicon from '../../assets/icons/search-icon.svg';
+import { Search } from '@boxicons/react';
+
 import '../../styles/components/search.css'
 
-export function Search() {
+export function SearchBooks() {
   const navigate = useNavigate();
   const { setResults, setSearchTerm } = useSearch();
   const [inputValue, setInputValue] = useState('');
@@ -16,7 +17,7 @@ export function Search() {
     setErrorMsg('');
   };
 
-  const handleSearchSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (inputValue.trim() === '') {
@@ -60,7 +61,7 @@ export function Search() {
           aria-label="Buscar libro"
         />
         <button type="submit" className="icon-lupa">
-          <img src={searchicon} alt="Icono de búsqueda" width="16" height="17" />
+          <Search fill="#954300" />
         </button>
       </form>
 

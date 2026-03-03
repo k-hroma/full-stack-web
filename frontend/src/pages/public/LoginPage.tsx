@@ -1,15 +1,13 @@
-
 /**
  * LoginPage - Página de inicio de sesión
  * Conecta con POST /auth/login del backend
  * @module pages/public/LoginPage
  */
 
-import { useState, type SubmitEvent, type ChangeEvent } from 'react';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import type { LoginCredentials } from '../../types';
-import '../../styles/pages/public/login.css'
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -24,60 +22,55 @@ export default function LoginPage() {
 
   const [formError, setFormError] = useState<string | null>(null);
 
-  // Manejar cambios en inputs
+  /**
+   * Maneja cambios en los inputs del formulario
+   * Actualiza el estado de credenciales y limpia errores
+   */
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCredentials(prev => ({
       ...prev,
       [name]: value,
     }));
-    // Limpiar errores al escribir
     if (formError) setFormError(null);
   };
 
-  // Enviar formulario
-  const handleSubmit = async (e: SubmitEvent) => {
+  /**
+   * Maneja el envío del formulario
+   * Valida campos, llama a login y redirige al origen o home
+   */
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormError(null);
 
-    // Validación básica
     if (!credentials.email || !credentials.password) {
       setFormError('Completa todos los campos');
       return;
     }
 
     try {
-      // ACÁ ES DONDE LLAMOS AL BACKEND. 
-      //BE-> valida, setea cookies, devuelve JWT
       await login(credentials);
-
-      // Redirigir: si venía de otra página, volver ahí. Si no, al home.
       const from = (location.state as { from?: string })?.from || '/';
       navigate(from, { replace: true });
-
-    } catch (err) {
-      console.log(err)
-      // Error viene del backend (401, 400, etc.)
+    } catch {
       setFormError('Credenciales inválidas');
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-page__container">
-        <h1 className="login-page__title">Iniciar Sesión</h1>
+    <div>
+      <div>
+        <h1>Iniciar Sesión</h1>
 
-        {/* Errores */}
         {(formError || authError) && (
-          <div className="login-page__error" role="alert">
+          <div role="alert">
             {formError || authError}
           </div>
         )}
 
-        {/* Formulario */}
-        <form onSubmit={handleSubmit} className="login-page__form">
-          <div className="login-page__field">
-            <label htmlFor="email" className="login-page__label">
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email">
               Email
             </label>
             <input
@@ -87,14 +80,13 @@ export default function LoginPage() {
               value={credentials.email}
               onChange={handleChange}
               disabled={isLoading}
-              className="login-page__input"
               placeholder="tu@email.com"
               autoComplete="email"
             />
           </div>
 
-          <div className="login-page__field">
-            <label htmlFor="password" className="login-page__label">
+          <div>
+            <label htmlFor="password">
               Contraseña
             </label>
             <input
@@ -104,25 +96,19 @@ export default function LoginPage() {
               value={credentials.password}
               onChange={handleChange}
               disabled={isLoading}
-              className="login-page__input"
               placeholder="••••••••"
               autoComplete="current-password"
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="login-page__submit"
-          >
+          <button type="submit" disabled={isLoading}>
             {isLoading ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
 
-        {/* Links */}
-        <div className="login-page__links">
+        <div>
           <span>¿No tenés cuenta?</span>
-          <Link to="/register" className="login-page__link">
+          <Link to="/register">
             Crear cuenta
           </Link>
         </div>

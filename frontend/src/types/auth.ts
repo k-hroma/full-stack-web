@@ -57,3 +57,6 @@ export interface ApiError {
   errorCode?: number | string;
   error?: unknown;
 }
+
+// 🆕 NUEVO: Estado de inicialización del auth
+export type AuthStatus = 'idle' | 'loading' | 'authenticated' | 'unauthenticated';

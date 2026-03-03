@@ -3,39 +3,37 @@
  * @module api/client
  */
 
-import type { ApiError, RefreshResponse } from '../types';
+import type { ApiError, RefreshResponse, User } from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 /**
  * Estado global del token de acceso (en memoria, no localStorage)
- * Por seguridad: si el usuario abre en otra pestaña, no tiene sesión.
- * El refresh token en httpOnly cookie sí persiste entre pestañas.
  */
 let accessToken: string | null = null;
 
 /**
  * Cola de requests pendientes mientras se refresca el token
  */
-let isRefreshing = false; //bandera global: "ya estoy pidiendo nuevo token"
+let isRefreshing = false;
 let refreshSubscribers: Array<(token: string) => void> = [];
 
 /**
- * Guarda el access token en memoria(Login): Función que guarda el JWT en memoria
+ * Guarda el access token en memoria
  */
 export const setAccessToken = (token: string): void => {
   accessToken = token;
 };
 
 /**
- * Limpia el access token (logout): Función que borra el JWT de memoria
+ * Limpia el access token
  */
 export const clearAccessToken = (): void => {
   accessToken = null;
 };
 
 /**
- * Obtiene el token actual (para debugging)
+ * Obtiene el token actual
  */
 export const getAccessToken = (): string | null => accessToken;
 
@@ -56,36 +54,41 @@ const addRefreshSubscriber = (callback: (token: string) => void): void => {
 
 /**
  * Realiza el refresh token llamando a POST /auth/refresh
- * Las cookies httpOnly se envían automáticamente
+ * 🆕 Devuelve el token string y el usuario por separado
  */
-const refreshAccessToken = async (): Promise<string> => {
+export const refreshAccessToken = async (): Promise<{ token: string; user: User }> => {
   const response = await fetch(`${API_URL}/auth/refresh`, {
     method: 'POST',
-    credentials: 'include', // ← Envia cookies httpOnly automáticamente. En backend: cookie-parser-> req.cookies
-    //en el primer loguin no hay cookies
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
   });
 
   if (!response.ok) {
-    throw new Error('Refresh token inválido o expirado');
+    const error = await response.json().catch(() => ({ message: 'Error desconocido' }));
+    throw new Error(error.message || 'Refresh token inválido o expirado');
   }
 
   const data: RefreshResponse = await response.json();
-  return data.token;
+  
+  // Guardar el nuevo token en memoria
+  setAccessToken(data.token);
+  
+  // Decodificar payload del JWT para obtener usuario
+  const payload = JSON.parse(atob(data.token.split('.')[1]));
+  const user: User = {
+    id: payload.id,
+    name: payload.name,
+    email: payload.email,
+    role: payload.role,
+  };
+  
+  return { token: data.token, user };
 };
 
 /**
- * HTTP Client principal - Wrapper de fetch con interceptores
- * 
- * @param endpoint - Ruta relativa (ej: '/books', '/auth/login')
- * @param options - Opciones de fetch estándar
- * @returns Promise con la data tipada
- * 
- * @example
- * const books = await httpClient<BooksResponse>('/books');
- * const book = await httpClient<BookResponse>('/books/123');
+ * HTTP Client principal
  */
 export async function httpClient<T>(
   endpoint: string,
@@ -93,14 +96,11 @@ export async function httpClient<T>(
 ): Promise<T> {
   const url = `${API_URL}${endpoint}`;
 
-  // Headers por defecto
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    //¿Vino algún header en el segundo parámetro?
     ...((options.headers as Record<string, string>) || {}),
   };
 
-  // Agregar Authorization si tenemos token
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
@@ -108,7 +108,7 @@ export async function httpClient<T>(
   const config: RequestInit = {
     ...options,
     headers,
-    credentials: 'include', // ← Siempre que haya incluir cookies
+    credentials: 'include',
   };
 
   try {
@@ -116,16 +116,14 @@ export async function httpClient<T>(
 
     // Si da 401, intentar refresh y reintentar
     if (response.status === 401 && accessToken) {
-      // Evitar múltiples refresh simultáneos (por default es false)
       if (!isRefreshing) {
         isRefreshing = true;
 
         try {
-          const newToken = await refreshAccessToken();
-          setAccessToken(newToken);
+          // 🆕 FIX: Extraemos solo el token string del objeto retornado
+          const { token: newToken } = await refreshAccessToken();
           onTokenRefreshed(newToken);
         } catch (refreshError) {
-          // Refresh falló, limpiar todo
           clearAccessToken();
           throw refreshError;
         } finally {
@@ -138,7 +136,6 @@ export async function httpClient<T>(
         addRefreshSubscriber((token) => resolve(token));
       });
 
-      // Reintentar request original con nuevo token
       headers['Authorization'] = `Bearer ${newToken}`;
       response = await fetch(url, {
         ...config,
@@ -146,23 +143,19 @@ export async function httpClient<T>(
       });
     }
 
-    // Parsear respuesta
     const data = await response.json();
 
     if (!response.ok) {
-      // Error HTTP (4xx, 5xx) - devolver como ApiError
       throw data as ApiError;
     }
 
     return data as T;
 
   } catch (error) {
-    // Error de red o parseo
     if ((error as ApiError).success === false) {
-      throw error; // Ya es ApiError del backend
+      throw error;
     }
 
-    // Error de red genérico
     throw {
       success: false,
       message: error instanceof Error ? error.message : 'Error de conexión',

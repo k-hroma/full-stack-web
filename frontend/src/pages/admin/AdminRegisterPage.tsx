@@ -5,10 +5,9 @@
  * @module pages/admin/AdminRegisterPage
  */
 
-import { useState, type SubmitEvent, type ChangeEvent } from 'react';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { registerAdmin } from '../../api/auth';
-import '../../styles/pages/admin/admin-register.css'
 
 export default function AdminRegisterPage() {
   const [formData, setFormData] = useState({
@@ -22,6 +21,9 @@ export default function AdminRegisterPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Maneja cambios en los inputs del formulario
+   */
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -31,12 +33,15 @@ export default function AdminRegisterPage() {
     if (error) setError(null);
   };
 
-  const handleSubmit = async (e: SubmitEvent) => {
+  /**
+   * Maneja el envío del formulario
+   * Valida campos y crea nuevo administrador
+   */
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess(false);
 
-    // Validaciones
     if (!formData.name || !formData.email || !formData.password) {
       setError('Completa todos los campos');
       return;
@@ -50,8 +55,6 @@ export default function AdminRegisterPage() {
     setIsLoading(true);
 
     try {
-      // ACÁ SE CONECTA CON TU BACKEND:
-      // POST /auth/admin (requiere JWT de admin en header)
       await registerAdmin({
         name: formData.name,
         email: formData.email,
@@ -65,7 +68,6 @@ export default function AdminRegisterPage() {
         password: '',
         confirmPassword: '',
       });
-
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Error al crear administrador';
       setError(message);
@@ -76,14 +78,11 @@ export default function AdminRegisterPage() {
 
   if (success) {
     return (
-      <div className="admin-register-page">
-        <div className="admin-register-page__success">
+      <div>
+        <div>
           <h2>✓ Administrador creado</h2>
           <p>El nuevo admin puede iniciar sesión con su email y contraseña.</p>
-          <button 
-            onClick={() => setSuccess(false)}
-            className="admin-register-page__button"
-          >
+          <button onClick={() => setSuccess(false)}>
             Crear otro
           </button>
         </div>
@@ -92,23 +91,23 @@ export default function AdminRegisterPage() {
   }
 
   return (
-    <div className="admin-register-page">
-      <div className="admin-register-page__header">
-        <h1 className="admin-register-page__title">Nuevo Administrador</h1>
-        <Link to="/admin" className="admin-register-page__back">
+    <div>
+      <div>
+        <h1>Nuevo Administrador</h1>
+        <Link to="/admin">
           ← Volver al panel
         </Link>
       </div>
 
       {error && (
-        <div className="admin-register-page__error" role="alert">
+        <div role="alert">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="admin-register-page__form">
-        <div className="admin-register-page__field">
-          <label htmlFor="name" className="admin-register-page__label">
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">
             Nombre completo
           </label>
           <input
@@ -118,13 +117,12 @@ export default function AdminRegisterPage() {
             value={formData.name}
             onChange={handleChange}
             disabled={isLoading}
-            className="admin-register-page__input"
             placeholder="Nombre del administrador"
           />
         </div>
 
-        <div className="admin-register-page__field">
-          <label htmlFor="email" className="admin-register-page__label">
+        <div>
+          <label htmlFor="email">
             Email
           </label>
           <input
@@ -134,13 +132,12 @@ export default function AdminRegisterPage() {
             value={formData.email}
             onChange={handleChange}
             disabled={isLoading}
-            className="admin-register-page__input"
             placeholder="admin@ejemplo.com"
           />
         </div>
 
-        <div className="admin-register-page__field">
-          <label htmlFor="password" className="admin-register-page__label">
+        <div>
+          <label htmlFor="password">
             Contraseña
           </label>
           <input
@@ -150,13 +147,12 @@ export default function AdminRegisterPage() {
             value={formData.password}
             onChange={handleChange}
             disabled={isLoading}
-            className="admin-register-page__input"
             placeholder="Mínimo 6 caracteres, mayúscula, número, especial"
           />
         </div>
 
-        <div className="admin-register-page__field">
-          <label htmlFor="confirmPassword" className="admin-register-page__label">
+        <div>
+          <label htmlFor="confirmPassword">
             Confirmar contraseña
           </label>
           <input
@@ -166,16 +162,11 @@ export default function AdminRegisterPage() {
             value={formData.confirmPassword}
             onChange={handleChange}
             disabled={isLoading}
-            className="admin-register-page__input"
             placeholder="Repetir contraseña"
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="admin-register-page__submit"
-        >
+        <button type="submit" disabled={isLoading}>
           {isLoading ? 'Creando...' : 'Crear administrador'}
         </button>
       </form>

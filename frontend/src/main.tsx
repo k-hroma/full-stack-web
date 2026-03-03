@@ -9,6 +9,7 @@ import { AuthProvider } from './contexts/AuthProvider';
 import { CartProvider } from './contexts/CartProvider';
 import { SearchProvider } from './contexts/SearchProvider';
 import './styles/index.css'
+import './styles/fonts.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

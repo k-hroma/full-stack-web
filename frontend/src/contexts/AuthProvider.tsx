@@ -3,54 +3,61 @@
  * @module contexts/AuthProvider
  */
 
-import { useState, useCallback, type ReactNode } from 'react';
+import { useCallback, type ReactNode } from 'react';
 import { login as loginApi, logout as logoutApi } from '../api';
 import { AuthContext } from './AuthContext';
-import type { User, LoginCredentials, ApiError } from '../types';
+import { useAuthInit } from '../hooks/useAuthInit';
+import type { LoginCredentials } from '../types';
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
-  // useCallback para guardar en memoria la funcion una sola vez y no cada vez que el componente renderiza
-  const login = useCallback(async (credentials: LoginCredentials) => {
-    setIsLoading(true);
-    setError(null);
+export function AuthProvider({ children }: AuthProviderProps) {
+  const { 
+    user, 
+    status, 
+    error, 
+    refreshSession,
+    logoutLocally 
+  } = useAuthInit();
 
-    try {
-      //	LLAMADA AL BACKEND —../api/auth.ts
-      const userData = await loginApi(credentials);
-      setUser(userData);
-    } catch (err) {
-      const apiError = err as ApiError;
-      setError(apiError.message || 'Error al iniciar sesión');
-      //Re-lanza el error para que LoginPage también lo capture
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  /**
+   * Login manual (formulario)
+   */
+  const login = useCallback(async (credentials: LoginCredentials): Promise<void> => {
+    await loginApi(credentials);
+    await refreshSession();
+  }, [refreshSession]);
 
-  const logout = useCallback(async () => {
-    setIsLoading(true);
-    
+  /**
+   * Logout manual
+   */
+  const logout = useCallback(async (): Promise<void> => {
     try {
       await logoutApi();
-      setUser(null);
+    } catch {
+      // Ignorar errores del backend
     } finally {
-      setIsLoading(false);
+      logoutLocally();
     }
-  }, []);
+  }, [logoutLocally]);
+
+  // Computed properties
+  const isAuthenticated = status === 'authenticated';
+  const isAdmin = user?.role === 'admin';
+  const isLoading = status === 'loading' || status === 'idle';
 
   const value = {
     user,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin',
+    status,
+    error,
+    isAuthenticated,
+    isAdmin,
+    isLoading,
     login,
     logout,
-    isLoading,
-    error,
+    refreshSession,
   };
 
   return (

@@ -11,9 +11,11 @@ import { CartSidebar } from '../cart/CartSidebar';
 import { AnimatedNav } from '../navbar/AnimatedNav';
 import { HamburguerMenu } from '../navbar/HamburguerMenu';
 import HamburguerIcon from '../../assets/icons/hamburguer-menu-icon.svg'
+import { SearchBooks } from '../search/Search';
 import lpicon from '../../assets/icons/lapalacio-logo.svg'
 import usericon from '../../assets/icons/loguin-user.svg'
-import { Search } from '../search/Search';
+import lineicon from '../../assets/icons/line-nav-search.svg'
+import { Cart } from '@boxicons/react';
 import '../../styles/layout/header.css'
 
 export function Header() {
@@ -85,18 +87,19 @@ export function Header() {
                     <Link to="/login">
                       <img src={usericon} alt="usericon" width='25px' height='25px' />
                     </Link>
-                  </button>
+                </button>
             )}
+            <img className='user-auth' src={lineicon} alt="lineicon" height='25px' />
            
             {/*Search component*/}
-            <Search />
+            <SearchBooks />
             
              {/* Cart- open Sidebar */}
               <button
                 onClick={() => setIsCartOpen(true)}
                 className="header__cart"
                 aria-label={`Carrito con ${itemCount} items`}>
-                <span>🛒</span>
+                <span><Cart fill="#954300" /></span>
                 {itemCount > 0 && (
                 <span className="header__cart-badge">{itemCount}</span>)}
               </button>
