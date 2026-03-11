@@ -29,10 +29,11 @@ import type { IBook } from "../types/bookInterface.js";
  * @access Public
  * @query {boolean} [fanzine] - Filtrar solo fanzines
  * @query {boolean} [latestBook] - Filtrar solo novedades
+ * @query {boolean} [showInHome] - Mostrar en Home
  * @returns {Promise<void>}
  */
 const getBooks = async (
-  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string }>,
+  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome:string }>,
   res: Response<QueryResponse>,
   next: NextFunction
 ): Promise<void> => {
@@ -45,6 +46,10 @@ const getBooks = async (
     }
     if (req.query.latestBook !== undefined) {
       filter.latestBook = req.query.latestBook === "true";
+    }
+
+    if (req.query.showInHome !== undefined) {
+      filter.showInHome = req.query.showInHome === "true";
     }
 
     const books:IBook[] = await Book.find(filter)

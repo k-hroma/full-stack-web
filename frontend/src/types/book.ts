@@ -17,6 +17,8 @@ export interface Book {
   latestBook: boolean;  // Es novedad
   fanzine: boolean;     // Es fanzine
   url: string;          // Link externo (MercadoLibre)
+  showInHome?: boolean;
+  homeOrder?: number;
   createdAt: string;    // ISO date
   updatedAt: string;    // ISO date
 }
@@ -33,6 +35,8 @@ export interface CreateBookInput {
   stock?: number;
   latestBook?: boolean;
   fanzine?: boolean;
+  showInHome?: boolean;
+  homeOrder?: number;
   url: string;
 }
 
@@ -57,6 +61,7 @@ export interface BookResponse {
 export interface BookFilters {
   fanzine?: boolean;
   latestBook?: boolean;
+  showInHome?: boolean;
 }
 
 /** Query de búsqueda */

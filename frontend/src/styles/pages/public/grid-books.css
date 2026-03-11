@@ -1,0 +1,57 @@
+/**
+ * Estilos para todas las paginas con grilla de libros
+ * @module styles/pages/public
+ */
+
+ .books-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--beige);
+  padding-bottom: 8rem;
+  width: 100%;
+}
+
+.txt-section-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 6.5rem;
+  padding-bottom: 1.5rem;
+
+}
+
+.section-title, .link-return  {
+  font-family: "Neue Montreal Medium";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%;
+  color: var(--brown);
+}
+
+.link-return:hover {
+  color: var(--pink);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5rem;
+  justify-content: space-between;
+  padding: 0 2rem;
+    @media (max-width: 795px) {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  }
+  @media (max-width: 880px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 660px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 450px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

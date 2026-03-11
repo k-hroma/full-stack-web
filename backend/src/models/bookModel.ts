@@ -23,6 +23,8 @@ import type { IBook } from "../types/bookInterface.js";
  * @property {number} stock - Inventario disponible (default 0)
  * @property {boolean} latestBook - Indica novedad reciente (default false)
  * @property {boolean} fanzine - Categoría fanzine (default false)
+  * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal (default false)
+ * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal (del 1 al 8, default es null)
  * @property {string} url - URL externa de referencia (requerido)
  */
 const bookSchema = new Schema<IBook>(
@@ -91,6 +93,17 @@ const bookSchema = new Schema<IBook>(
       type: Boolean,
       default: false,
       required: true,
+    },
+    showInHome: {           
+      type: Boolean,
+      default: false,
+      index: true,          
+    },
+    homeOrder: {           
+      type: Number,
+      min: 1,
+      max: 8,
+      default: null,
     },
     url: {
       type: String,

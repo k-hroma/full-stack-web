@@ -19,6 +19,8 @@
  * @property {number} [stock=0] - Unidades disponibles en inventario (opcional)
  * @property {boolean} latestBook - Indica si es una novedad reciente
  * @property {boolean} fanzine - Indica si pertenece a la categoría fanzine
+ * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal
+ * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal
  * @property {string} url - URL externa de referencia (ej: MercadoLibre)
  */
 interface IBook {
@@ -32,6 +34,8 @@ interface IBook {
   stock?: number;
   latestBook: boolean;
   fanzine: boolean;
+  showInHome?: boolean; 
+  homeOrder?: number | null;
   url: string;
 }
 

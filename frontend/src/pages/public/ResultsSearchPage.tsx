@@ -1,25 +1,36 @@
 import { useSearch } from '../../hooks/useSearch';
+import { Link } from 'react-router-dom';
+import { useCart } from '../../hooks/useCart';
+import { BookCard } from '../../components/bookCard/BookCard'
+import '../../styles/pages/public/grid-books.css'
 
 export default function ResultadosPage() {
   const { results, searchTerm } = useSearch();
+  const { addToCart, isInCart } = useCart();
+
+
 
   return (
-    <div>
-      <h1>Resultados para "{searchTerm}"</h1>
-      
-      {results.length === 0 ? (
-        <p>No se encontraron libros</p>
-      ) : (
-        <ul>
-          {results.map((book) => (
-            <li key={book._id}>
-              <strong>{book.title}</strong> - {book.firstName} {book.lastName}
-              <br />
-              ${book.price}
-            </li>
-          ))}
-        </ul>
+    <section className='books-container'>
+      <div className="txt-section-container">
+        <h2 className="section-title">Resultados de búsqueda 🔍</h2>
+        <Link className="link-return" to='/'>Volver</Link>
+      </div>
+    <div className='grid-container'>      
+      {results.length === 0
+          ? (<p className='link-return'>No se encontraron resultados para "{searchTerm }"</p>)
+        : (
+          results.map((book, index) => (
+            <BookCard 
+                  key={book._id}
+                  index={index}
+                  book={book} 
+                  isInCart={isInCart(book._id)}
+                  onAddToCart={() => addToCart(book)}
+            />
+          ))
       )}
-    </div>
+      </div>
+      </section>
   );
 }

@@ -1,19 +1,18 @@
 /**
- * CatalogPage - Página de catálogo de libros
+ * Fanzines - Página de  de fanzines
  * Conecta con GET /books del backend
- * @module pages/public/CatalogPage
+ * @module pages/public/OnlyBooks
  */
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getBooks } from '../../api';
 import { useCart } from '../../hooks/useCart';
 import { BookCard } from '../../components/bookCard/BookCard'
 import type { Book } from '../../types/book';
 import '../../styles/pages/public/grid-books.css'
 
-
-
-const LatestBooks = () => {
+export default function OnlyBooks() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,15 +23,8 @@ const LatestBooks = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getBooks({ showInHome: true } );
-        const sortedBooks = data.sort((a, b) => {
-          if (a.homeOrder && b.homeOrder) return a.homeOrder - b.homeOrder;
-          if (a.homeOrder) return -1;
-          if (b.homeOrder) return 1;
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        });
-        const limitedBooks = sortedBooks.slice(0, 8);
-        setBooks(limitedBooks);
+        const data = await getBooks({fanzine: false });
+        setBooks(data);
       } catch (error) {
         const errMsg = error instanceof Error
           ? error.message
@@ -52,8 +44,8 @@ const LatestBooks = () => {
   return (
     <section className='books-container'>
       <div className="txt-section-container">
-        <h2 className="section-title">Novedades</h2>
-        
+        <h2 className="section-title">Libros</h2>
+        <Link className="link-return" to='/'>Volver</Link>
       </div>
       <div className="grid-container">
         {books.length === 0
@@ -74,4 +66,4 @@ const LatestBooks = () => {
   );
 }
 
-export { LatestBooks }
+

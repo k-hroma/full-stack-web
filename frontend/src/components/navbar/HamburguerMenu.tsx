@@ -24,10 +24,9 @@ const HamburguerMenu = ({onClose}:HamburguerMenuProps) => {
         </button>
 
         <div className="menu-links-wrapper">
-          <Link className='menu-link' to='/' onClick={onClose}>
+          <Link className='menu-link' to='/catalogo' onClick={onClose}>
             Impresos
           </Link>
-
           <div className='sub-menu-container'>
             <Link className='sub-menu-link' to='/novedades' onClick={onClose}>
               Novedades

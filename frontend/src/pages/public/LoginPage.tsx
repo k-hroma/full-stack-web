@@ -13,7 +13,7 @@ import '../../styles/pages/public/login.css'
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading, error: authError } = useAuth();
+  const { login, isLoading} = useAuth();
 
   // Estado del formulario
   const [credentials, setCredentials] = useState<LoginCredentials>({
@@ -53,15 +53,15 @@ export default function LoginPage() {
       await login(credentials);
       const from = (location.state as { from?: string })?.from || '/';
       navigate(from, { replace: true });
-    } catch {
-      console.log(authError)
-      setFormError('Credenciales inválidas');
+    } catch (err) {
+     const message = err instanceof Error ? err.message : 'Error al iniciar sesión';
+      setFormError(message);
     }
   };
 
   return (
     <div className="login-page">
-  <div className="login-page__container">
+    <div className="login-page__container">
     <h1 className="login-page__title">Iniciar Sesión</h1>
 
     {(formError) && (

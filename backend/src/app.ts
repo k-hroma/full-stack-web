@@ -61,13 +61,22 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
 
+// ============================================================================
+// RUTAS DE LA API
+// ============================================================================
 
-// Monta el router de autenticación en la ruta base /books.
-// Todas las rutas internas se accederán con el prefijo /books 
+/**
+ * Monta el router de libros en la ruta base /books.
+ * Todas las rutas internas se accederán con el prefijo /books
+ * (ej: GET /books, POST /books, PATCH /books/:id)
+ */
 app.use("/books", bookRouter)
 
-// // Monta el router de libros en la ruta base /auth.
-// Todas las rutas internas se accederán con el prefijo /auth (ej: /auth/login, /auth/register).
+/**
+ * Monta el router de autenticación en la ruta base /auth.
+ * Todas las rutas internas se accederán con el prefijo /auth
+ * (ej: /auth/login, /auth/register, /auth/refresh)
+ */
 app.use("/auth", authRouter)
 
 

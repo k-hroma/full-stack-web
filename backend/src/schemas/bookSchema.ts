@@ -77,6 +77,10 @@ const AddBookSchema = z
 
     fanzine: z.boolean().default(false),
 
+    showInHome: z.boolean().default(false),  
+    
+    homeOrder: z.number().min(1).max(8).optional().nullable().default(null),  
+
     url: z
       .url({ message: "Must be a valid URL" })
       .min(1, { message: "ML URL is required" }),
@@ -137,6 +141,10 @@ const UpdateBookSchema = z
     latestBook: z.boolean().optional(),
 
     fanzine: z.boolean().optional(),
+
+    showInHome: z.boolean().default(false),  
+    
+    homeOrder: z.number().min(1).max(8).optional().nullable().default(null),
 
     url: z.url({ message: "Must be a valid URL" }).optional(),
   })
