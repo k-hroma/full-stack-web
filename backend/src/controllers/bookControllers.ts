@@ -33,7 +33,8 @@ import type { IBook } from "../types/bookInterface.js";
  * @returns {Promise<void>}
  */
 const getBooks = async (
-  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome:string }>,
+  // Los query params siempre son texto, porque vienen de la URL. Se parsean a booleano dentro del controlador.
+  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome?: string; recomendedWriter?: string }>,
   res: Response<QueryResponse>,
   next: NextFunction
 ): Promise<void> => {
@@ -41,6 +42,7 @@ const getBooks = async (
     // Construir filtro dinámico
     const filter: Record<string, boolean> = {};
     
+    // aca parseo a booleano porque los query params vienen como string. Si el param existe, lo convierto a booleano.
     if (req.query.fanzine !== undefined) {
       filter.fanzine = req.query.fanzine === "true";
     }
@@ -50,6 +52,10 @@ const getBooks = async (
 
     if (req.query.showInHome !== undefined) {
       filter.showInHome = req.query.showInHome === "true";
+    }
+
+    if(req.query.recomendedWriter !== undefined) {
+      filter.recomendedWriter = req.query.recomendedWriter === "true";
     }
 
     const books:IBook[] = await Book.find(filter)

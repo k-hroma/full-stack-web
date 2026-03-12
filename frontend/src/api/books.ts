@@ -25,6 +25,13 @@ export const getBooks = async (filters?: BookFilters): Promise<Book[]> => {
   if (filters?.latestBook !== undefined) {
     params.append('latestBook', String(filters.latestBook));
   }
+  if (filters?.showInHome !== undefined) {
+    params.append('showInHome', String(filters.showInHome));
+  }
+  if (filters?.recomendedWriter !== undefined) {
+    params.append('recomendedWriter', String(filters.recomendedWriter));
+  } 
+  
 
   const query = params.toString() ? `?${params.toString()}` : '';
   const response = await httpClient<BooksResponse>(`/books${query}`);

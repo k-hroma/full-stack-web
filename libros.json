@@ -12,6 +12,7 @@
     "fanzine": false,
     "showInHome": true,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.sudamericana.com/libro/9788420412145/cien-anos-de-soledad/"
   },
   {
@@ -21,12 +22,13 @@
     "lastName": "García Márquez",
     "firstName": "Gabriel",
     "editorial": "Debolsillo",
-    "price": 18.50,
+    "price": 18.5,
     "stock": 32,
     "latestBook": false,
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 2,
+    "recomendedWriter": false,
     "url": "https://www.debolsillo.com/libro/9789877387394/"
   },
   {
@@ -36,12 +38,13 @@
     "lastName": "Martin",
     "firstName": "George R.R.",
     "editorial": "Plaza & Janés",
-    "price": 32.00,
+    "price": 32,
     "stock": 28,
     "latestBook": true,
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 3,
+    "recomendedWriter": false,
     "url": "https://www.plazayjanes.com/libro/fuego-y-sangre/"
   },
   {
@@ -57,6 +60,7 @@
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 4,
+    "recomendedWriter": false,
     "url": "https://www.gigamesh.com/libro/9788466346122/"
   },
   {
@@ -66,12 +70,13 @@
     "lastName": "Rothfuss",
     "firstName": "Patrick",
     "editorial": "Plaza & Janés",
-    "price": 24.90,
+    "price": 24.9,
     "stock": 50,
     "latestBook": false,
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 5,
+    "recomendedWriter": false,
     "url": "https://www.plazayjanes.com/libro/el-nombre-del-viento/"
   },
   {
@@ -81,12 +86,13 @@
     "lastName": "Rothfuss",
     "firstName": "Patrick",
     "editorial": "Plaza & Janés",
-    "price": 26.90,
+    "price": 26.9,
     "stock": 22,
     "latestBook": true,
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 6,
+    "recomendedWriter": false,
     "url": "https://www.plazayjanes.com/libro/el-temor-de-un-hombre-sabio/"
   },
   {
@@ -102,6 +108,7 @@
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 7,
+    "recomendedWriter": false,
     "url": "https://www.emece.com/libro/el-principito/"
   },
   {
@@ -111,12 +118,13 @@
     "lastName": "Orwell",
     "firstName": "George",
     "editorial": "Debolsillo",
-    "price": 16.50,
+    "price": 16.5,
     "stock": 67,
     "latestBook": false,
     "fanzine": false,
     "showInHome": true,
     "homeOrder": 8,
+    "recomendedWriter": false,
     "url": "https://www.debolsillo.com/libro/1984/"
   },
   {
@@ -126,12 +134,13 @@
     "lastName": "Orwell",
     "firstName": "George",
     "editorial": "Debolsillo",
-    "price": 15.00,
+    "price": 15,
     "stock": 0,
     "latestBook": false,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.debolsillo.com/libro/rebelion-en-la-granja/"
   },
   {
@@ -141,14 +150,16 @@
     "lastName": "Cortázar",
     "firstName": "Julio",
     "editorial": "Penguin Random House",
-    "price": 28.00,
+    "price": 28,
     "stock": 18,
     "latestBook": false,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.penguinrandomhouse.com/libro/rayuela/"
   },
+
   {
     "img": "https://i.ibb.co/prP4T1NK/02-herbritts.jpg",
     "isbn": "9789877251947",
@@ -156,12 +167,13 @@
     "lastName": "Cortázar",
     "firstName": "Julio",
     "editorial": "Minotauro",
-    "price": 21.50,
+    "price": 21.5,
     "stock": 12,
     "latestBook": true,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.minotauro.com/libro/bestiario/"
   },
   {
@@ -171,12 +183,13 @@
     "lastName": "Borges",
     "firstName": "Jorge Luis",
     "editorial": "Emecé",
-    "price": 19.90,
+    "price": 19.9,
     "stock": 33,
     "latestBook": false,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.emece.com/libro/ficciones/"
   },
   {
@@ -186,12 +199,13 @@
     "lastName": "Borges",
     "firstName": "Jorge Luis",
     "editorial": "Emecé",
-    "price": 20.00,
+    "price": 20,
     "stock": 25,
     "latestBook": false,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.emece.com/libro/el-aleph/"
   },
   {
@@ -201,12 +215,13 @@
     "lastName": "García Márquez",
     "firstName": "Gabriel",
     "editorial": "Debolsillo",
-    "price": 17.50,
+    "price": 17.5,
     "stock": 41,
     "latestBook": false,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.debolsillo.com/libro/cronica-de-una-muerte-anunciada/"
   },
   {
@@ -216,14 +231,16 @@
     "lastName": "García Márquez",
     "firstName": "Gabriel",
     "editorial": "Debolsillo",
-    "price": 16.00,
+    "price": 16,
     "stock": 29,
     "latestBook": false,
     "fanzine": false,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.debolsillo.com/libro/el-coronel-no-tiene-quien-le-escriba/"
   },
+
   {
     "img": "https://i.ibb.co/prP4T1NK/02-herbritts.jpg",
     "isbn": "9789876543210",
@@ -231,12 +248,13 @@
     "lastName": "Colectivo",
     "firstName": "Urbano",
     "editorial": "Autoedición",
-    "price": 8.50,
+    "price": 8.5,
     "stock": 15,
     "latestBook": true,
     "fanzine": true,
     "showInHome": true,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.mercadolibre.com.ar/zine-vol-1"
   },
   {
@@ -246,12 +264,13 @@
     "lastName": "Varios",
     "firstName": "Autores",
     "editorial": "DIY Records",
-    "price": 5.00,
+    "price": 5,
     "stock": 50,
     "latestBook": true,
     "fanzine": true,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.mercadolibre.com.ar/fanzine-punk"
   },
   {
@@ -261,12 +280,13 @@
     "lastName": "Gómez",
     "firstName": "Carlos",
     "editorial": "Tinta Fresca",
-    "price": 12.00,
+    "price": 12,
     "stock": 8,
     "latestBook": false,
     "fanzine": true,
     "showInHome": true,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.mercadolibre.com.ar/historieta-underground-5"
   },
   {
@@ -276,12 +296,13 @@
     "lastName": "Martínez",
     "firstName": "Lucía",
     "editorial": "Arte Propio",
-    "price": 10.00,
+    "price": 10,
     "stock": 20,
     "latestBook": true,
     "fanzine": true,
     "showInHome": false,
     "homeOrder": null,
+    "recomendedWriter": false,
     "url": "https://www.mercadolibre.com.ar/poesia-visual-zine"
   },
   {
@@ -291,12 +312,13 @@
     "lastName": "Sánchez",
     "firstName": "Pedro",
     "editorial": "Barrio Ediciones",
-    "price": 6.50,
+    "price": 6.5,
     "stock": 30,
     "latestBook": false,
     "fanzine": true,
     "showInHome": false,
     "homeOrder": 1,
+    "recomendedWriter": false,
     "url": "https://www.mercadolibre.com.ar/cronicas-del-barrio"
   }
 ]

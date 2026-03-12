@@ -1,0 +1,105 @@
+.writers-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--dark-beige);
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+  @media(max-width: 768px) {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  }
+}
+
+.txt-writers-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 1.5rem;
+  @media (max-width: 795px) {
+  padding-left: 1rem;
+
+  }
+}
+
+.txt-writers-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 2rem;
+  @media (max-width: 795px) {
+  padding-left: 1rem;
+
+  }
+}
+
+.txt-writers, .link-return-writers {
+  color: var(--ligth-brown);
+  font-family: 'Neue Montreal Medium';
+  font-weight: 400;
+  font-size: 0,875rem;
+  line-height: 130%;
+}
+
+.link-return-writers:hover {
+  color: var(--pink);
+}
+
+.link-writers-top {
+  color: var(--ligth-brown);
+  font-family: 'Neue Montreal Medium';
+  font-weight: 400;
+  font-size: 0,875rem;
+  line-height: 130%;
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.txt-writers-container-authors {
+  color: var(--pink);
+  font-family: 'Neue Montreal Regular';
+  font-size: clamp(2.4rem, calc(1.5rem + 3.93vw), 5rem);
+  line-height: 1.2;
+}
+
+.txt-writers-container p:hover {
+  color: var(--orange);
+  cursor: pointer;
+}
+
+.txt-gender-container {
+  color: var(--orange);
+  font-size: 1rem;
+  font-family: 'PPEditorialNew';
+  margin-right: 0.875rem ;
+  height: 100%;
+  align-self:flex-start;
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.txt-g-c-small {
+  color: var(--orange);
+  font-size: 1rem;
+  font-family: 'PPEditorialNew';
+  margin-right: 0.875rem ;
+  height: 100%;
+  align-self:flex-start;
+  @media (min-width: 769px) {
+    display: none;
+  }
+
+}
+
+.ver-mas-writers {
+  display: flex;
+  align-self: center;
+  margin-top: 3rem;
+  @media (min-width: 769px) {
+    display: none;
+}
+}

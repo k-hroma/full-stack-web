@@ -21,6 +21,7 @@
  * @property {boolean} fanzine - Indica si pertenece a la categoría fanzine
  * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal
  * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal
+ * @property {boolean} recomendedWriters - Indica si el libro es de un escritor recomendado
  * @property {string} url - URL externa de referencia (ej: MercadoLibre)
  */
 interface IBook {
@@ -36,6 +37,7 @@ interface IBook {
   fanzine: boolean;
   showInHome?: boolean; 
   homeOrder?: number | null;
+  recomendedWriter: boolean;
   url: string;
 }
 

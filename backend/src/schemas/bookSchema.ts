@@ -21,6 +21,9 @@ import { z } from "zod";
  * @property {number} [stock=0] - Stock disponible (entero ≥ 0)
  * @property {boolean} [latestBook=false] - Es novedad
  * @property {boolean} [fanzine=false] - Es fanzine
+ * @property {boolean} [showInHome=false] - Mostrar en Home
+ * @property {number} [homeOrder=null] - Orden en Home (1-8)
+ * @property {boolean} [recomendedWriters=false] - Es de escritor recomendado
  * @property {string} url - URL de referencia externa
  */
 
@@ -80,6 +83,8 @@ const AddBookSchema = z
     showInHome: z.boolean().default(false),  
     
     homeOrder: z.number().min(1).max(8).optional().nullable().default(null),  
+
+    recomendedWriter: z.boolean().default(false),
 
     url: z
       .url({ message: "Must be a valid URL" })
@@ -145,6 +150,8 @@ const UpdateBookSchema = z
     showInHome: z.boolean().default(false),  
     
     homeOrder: z.number().min(1).max(8).optional().nullable().default(null),
+
+    recomendedWriter: z.boolean().default(false),
 
     url: z.url({ message: "Must be a valid URL" }).optional(),
   })

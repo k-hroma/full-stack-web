@@ -23,6 +23,7 @@ const CartPage = lazy(() => import('../pages/public/CartPage'));
 const LoginPage = lazy(() => import('../pages/public/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/public/RegisterPage'));
 const OnlyBooks = lazy(() => import('../pages/public/OnlyBooks'));
+const AllWriters = lazy(() => import('../pages/public/AllWriters'));
 
 // Páginas admin (lazy loading)
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
@@ -74,36 +75,43 @@ export const routes: RouteObject[] = [
             <CatalogPage />
           </PageWrapper>
         ),
-      },{
+      }, {
         path: 'results',
         element: (
           <PageWrapper>
             <ResultsPage />
           </PageWrapper>
         ),
-      },{
+      }, {
         path: 'novedades',
         element: (
           <PageWrapper>
             <AllLatestBooks />
           </PageWrapper>
         ),
-      },{
+      }, {
         path: 'fanzines',
         element: (
           <PageWrapper>
             <Fanzines />
           </PageWrapper>
         ),
-      },{
+      }, {
         path: 'libros',
         element: (
           <PageWrapper>
             <OnlyBooks />
           </PageWrapper>
         ),
+      }, {
+        path: 'escritorxs',
+        element: (
+          <PageWrapper>
+            <AllWriters />
+          </PageWrapper>
+        ),
       },
-      
+
       // RUTAS PROTEGIDAS (ADMIN)
       {
         element: <ProtectedRoute />,

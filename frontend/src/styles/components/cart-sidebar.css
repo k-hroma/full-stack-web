@@ -1,5 +1,5 @@
 /**
- * Estilos de CartSidebar
+ * CartSidebar Styles - Minimalista/Editorial
  * @module styles/components/cart-sidebar
  */
 
@@ -7,22 +7,28 @@
 .cart-sidebar__overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(149, 67, 0, 0.2); /* Marrón muy transparente en vez de negro */
+  backdrop-filter: blur(4px);
   z-index: 200;
   display: flex;
   justify-content: flex-end;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Sidebar */
 .cart-sidebar {
   width: 100%;
   max-width: 420px;
-  background: var(--color-white);
+  background: var(--dark-beige);
   height: 100vh;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-  animation: slideIn 0.3s ease;
+  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes slideIn {
@@ -39,36 +45,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-md) var(--space-lg);
-  border-bottom: 1px solid #eee;
+  padding: 2rem;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.1);
 }
 
 .cart-sidebar__title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--color-primary);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brown);
 }
 
 .cart-sidebar__close {
   background: none;
   border: none;
-  font-size: 28px;
-  color: var(--color-text-light);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1.5rem;
+  color: var(--ligth-brown);
   cursor: pointer;
-  line-height: 1;
-  padding: 0;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  transition: all 0.2s;
+  border-radius: 50%;
+  transition: all 0.25s ease;
 }
 
 .cart-sidebar__close:hover {
-  background: var(--color-secondary);
-  color: var(--color-primary);
+  color: var(--brown);
+  background: rgba(149, 67, 0, 0.05);
 }
 
 /* Empty state */
@@ -78,198 +86,271 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-md);
-  padding: var(--space-xl);
-  color: var(--color-text-light);
+  gap: 1.5rem;
+  padding: 2rem;
+  color: var(--ligth-brown);
+}
+
+.cart-sidebar__empty p {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
 }
 
 .cart-sidebar__continue {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--space-sm) var(--space-md);
-  border: none;
-  border-radius: 4px;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+  background: transparent;
+  border: 1px solid var(--ligth-brown);
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
   cursor: pointer;
-  font-size: var(--font-size-base);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
-/* Items */
+.cart-sidebar__continue:hover {
+  border-color: var(--brown);
+  background: var(--brown);
+  color: var(--beige);
+}
+
+/* Items container */
 .cart-sidebar__items {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-md);
+  padding: 1.5rem 2rem;
 }
 
-/* Cart Item */
+/* Cart Item - Estilo editorial */
 .cart-item {
   display: flex;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  border-bottom: 1px solid #eee;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.08);
 }
 
 .cart-item__image {
-  width: 80px;
-  height: 100px;
+  width: 70px;
+  height: 90px;
   object-fit: cover;
   border-radius: 4px;
-  background: var(--color-secondary);
+  background: var(--beige);
 }
 
 .cart-item__details {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 0.25rem;
 }
 
 .cart-item__title {
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  color: var(--color-primary);
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--brown);
   line-height: 1.3;
+  margin: 0;
 }
 
 .cart-item__author {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-light);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--ligth-brown);
+  margin: 0;
 }
 
 .cart-item__price {
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  color: var(--color-primary);
+  font-family: 'PPEditorialNew', serif;
+  font-size: 1.125rem;
+  font-weight: 100;
+  color: var(--pink);
+  margin: 0.5rem 0 0 0;
+  letter-spacing: -0.02em;
 }
 
+/* Actions - Cantidad y eliminar */
 .cart-item__actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
+  padding-top: 0.75rem;
 }
 
 .cart-item__quantity {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 2px;
+  gap: 0.75rem;
 }
 
 .cart-item__quantity button {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: none;
+  background: transparent;
+  border: 1px solid var(--ligth-brown);
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 16px;
-  color: var(--color-text);
-  border-radius: 2px;
-  transition: background 0.2s;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--brown);
+  line-height: 1;
+  transition: all 0.2s ease;
 }
 
 .cart-item__quantity button:hover:not(:disabled) {
-  background: var(--color-secondary);
+  border-color: var(--brown);
+  background: rgba(149, 67, 0, 0.05);
 }
 
 .cart-item__quantity button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+  border-color: rgba(149, 67, 0, 0.2);
 }
 
 .cart-item__quantity span {
-  min-width: 24px;
+  min-width: 20px;
   text-align: center;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: 0.875rem;
+  color: var(--brown);
 }
 
 .cart-item__remove {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  padding: var(--space-xs);
-  opacity: 0.6;
-  transition: opacity 0.2s;
+  font-size: 1rem;
+  padding: 0.25rem;
+  opacity: 0.4;
+  transition: all 0.2s ease;
+  filter: grayscale(100%);
 }
 
 .cart-item__remove:hover {
-  opacity: 1;
+  opacity: 0.8;
+  transform: scale(1.1);
 }
 
 /* Footer */
 .cart-sidebar__footer {
-  padding: var(--space-md) var(--space-lg);
-  border-top: 1px solid #eee;
-  background: #fafafa;
+  padding: 2rem;
+  border-top: 1px solid rgba(149, 67, 0, 0.1);
+  background: transparent;
 }
 
 .cart-sidebar__total {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--color-primary);
-  margin-bottom: var(--space-md);
-  padding-bottom: var(--space-md);
-  border-bottom: 1px solid #eee;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.08);
 }
 
-/* Checkout buttons */
+.cart-sidebar__total span:first-child {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ligth-brown);
+}
+
+.cart-sidebar__total span:last-child {
+  font-family: 'PPEditorialNew', serif;
+  font-size: 1.5rem;
+  font-weight: 100;
+  color: var(--brown);
+  letter-spacing: -0.02em;
+}
+
+/* Checkout buttons - Estilo outline minimalista */
 .cart-sidebar__checkout {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-md);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .cart-sidebar__button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 4px;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 50px;
   text-decoration: none;
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  transition: transform 0.2s;
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1.5px solid var(--brown);
+  background: transparent;
+  color: var(--brown);
+  cursor: pointer;
 }
 
 .cart-sidebar__button:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  background: var(--brown);
+  color: var(--beige);
 }
 
-.cart-sidebar__button--whatsapp {
+/* Variantes sutiles para WhatsApp y Email - sin colores chillones */
+.cart-sidebar__button--whatsapp:hover {
+  border-color: #25d366;
   background: #25d366;
-  color: var(--color-white);
+  color: white;
 }
 
-.cart-sidebar__button--email {
-  background: #ea4335;
-  color: var(--color-white);
+.cart-sidebar__button--email:hover {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: white;
 }
 
-/* Clear button */
+/* Clear button - Muy sutil */
 .cart-sidebar__clear {
   width: 100%;
   background: none;
-  border: 1px solid #ddd;
-  color: var(--color-text-light);
-  padding: var(--space-sm);
-  border-radius: 4px;
+  border: none;
+  color: var(--ligth-brown);
+  padding: 0.75rem;
   cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: all 0.2s;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: all 0.2s ease;
+  opacity: 0.6;
 }
 
 .cart-sidebar__clear:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: var(--pink);
+  opacity: 1;
+}
+
+/* Scrollbar personalizada para el listado */
+.cart-sidebar__items::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cart-sidebar__items::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cart-sidebar__items::-webkit-scrollbar-thumb {
+  background: rgba(149, 67, 0, 0.2);
+  border-radius: 2px;
+}
+
+.cart-sidebar__items::-webkit-scrollbar-thumb:hover {
+  background: rgba(149, 67, 0, 0.4);
 }

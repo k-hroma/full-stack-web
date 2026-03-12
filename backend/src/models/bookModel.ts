@@ -6,6 +6,7 @@
 
 import { Schema, model } from "mongoose";
 import type { IBook } from "../types/bookInterface.js";
+import { required } from "zod/mini";
 
 /**
  * Schema de Mongoose para documentos de libros.
@@ -25,6 +26,7 @@ import type { IBook } from "../types/bookInterface.js";
  * @property {boolean} fanzine - Categoría fanzine (default false)
   * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal (default false)
  * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal (del 1 al 8, default es null)
+ * @property {boolean} recomendedWriters - Indica si el libro es de un escritor recomendado (default false)
  * @property {string} url - URL externa de referencia (requerido)
  */
 const bookSchema = new Schema<IBook>(
@@ -105,6 +107,12 @@ const bookSchema = new Schema<IBook>(
       max: 8,
       default: null,
     },
+    recomendedWriter: {
+      type: Boolean,
+      default: false,
+      index: true,
+      required: true,
+    },
     url: {
       type: String,
       required: [true, "External URL is required"],
@@ -128,7 +136,7 @@ bookSchema.index({ title: "text", firstName: "text", lastName: "text", editorial
 /**
  * Índice para filtrado por categorías comunes.
  */
-bookSchema.index({ fanzine: 1, latestBook: 1 });
+bookSchema.index({ fanzine: 1, latestBook: 1, recomendedWriter: 1 });
 
 
 /**
