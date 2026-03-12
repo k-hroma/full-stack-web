@@ -3,8 +3,10 @@
  * @module components/cart/CartSidebar
  */
 
+import { useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import type { Book } from '../../types';
+import emailjs from '@emailjs/browser';
 import '../../styles/components/cart-sidebar.css'
 
 interface CartSidebarProps {
@@ -12,42 +14,89 @@ interface CartSidebarProps {
   onClose: () => void;
 }
 
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '';
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
+
 export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
-  const { 
-    items, 
-    itemCount, 
-    totalPrice, 
-    removeFromCart, 
-    updateQuantity, 
-    clearCart 
+  const {
+    items,
+    itemCount,
+    totalPrice,
+    removeFromCart,
+    updateQuantity,
+    clearCart
   } = useCart();
 
-  // Cerrar con Escape
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [customerName, setCustomerName] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [showEmailForm, setShowEmailForm] = useState(false);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') onClose();
   };
 
-  // Generar mensaje para WhatsApp
-  const generateWhatsAppMessage = (): string => {
-    const lines = items.map(item => 
+  const generateOrderText = (): string => {
+    const lines = items.map(item =>
       `- ${item.book.title} (${item.quantity}x) - $${item.book.price * item.quantity}`
     );
-    const message = `Hola! Quiero comprar:\n\n${lines.join('\n')}\n\nTotal: $${totalPrice}`;
-    return encodeURIComponent(message);
+    return `Hola! Quiero comprar:\n\n${lines.join('\n')}\n\nTotal: $${totalPrice}`;
   };
 
-  // Generar mensaje para Email
-  const generateEmailBody = (): string => {
-    const lines = items.map(item => 
-      `- ${item.book.title} (${item.quantity}x) - $${item.book.price * item.quantity}`
-    );
-    return `Hola,%0D%0A%0D%0AQuiero comprar:%0D%0A%0D%0A${lines.join('%0D%0A')}%0D%0A%0D%0ATotal: $${totalPrice}`;
+  const generateWhatsAppMessage = (): string => {
+    return encodeURIComponent(generateOrderText());
   };
+
+  const sendEmail = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+
+    if (!customerName || !customerEmail) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: customerName,
+          from_email: customerEmail,
+          message: generateOrderText(),
+          total: `$${totalPrice}`,
+          item_count: itemCount,
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+
+      setSubmitStatus('success');
+      setTimeout(() => {
+        clearCart();
+        onClose();
+        setShowEmailForm(false);
+        setCustomerName('');
+        setCustomerEmail('');
+        setSubmitStatus('idle');
+      }, 2000);
+    } catch (error) {
+      console.error('Error al enviar:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const whatsappUrl = WHATSAPP_NUMBER
+    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${generateWhatsAppMessage()}`
+    : '#';
 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="cart-sidebar__overlay"
       onClick={onClose}
       onKeyDown={handleKeyDown}
@@ -55,16 +104,16 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
       aria-modal="true"
       aria-label="Carrito de compras"
     >
-      <aside 
+      <aside
         className="cart-sidebar"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="cart-sidebar__header">
           <h2 className="cart-sidebar__title">
-            Carrito ({itemCount})
+            Carrito de compras ({itemCount})
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="cart-sidebar__close"
             aria-label="Cerrar carrito"
@@ -81,12 +130,93 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               Seguir comprando
             </button>
           </div>
+        ) : showEmailForm ? (
+          /* FORMULARIO EMAIL */
+          <div className="cart-sidebar__form-container">
+            <p className="detalle-compra">
+              <h3>Detalle de la compra</h3>
+            </p>
+            {/*Agregar fecha*/}
+
+            <form onSubmit={sendEmail} className="cart-sidebar__form">
+              <div className="form-group">
+                <label htmlFor="name">Nombre completo *</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  required
+                  placeholder="Tu nombre"
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  required
+                  placeholder="tu@email.com"
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="cart-sidebar__order-summary">
+                <h4>Tu pedido:</h4>
+                <ul>
+                  {items.map(item => (
+                    <li key={item.book._id}>
+                      {item.book.title} ({item.quantity}x)
+                    </li>
+                  ))}
+                </ul>
+                <div>
+                  <p className='suma-total'>Total: <span className='number-total'>${totalPrice}</span></p>
+                </div>
+
+              </div>
+
+              {submitStatus === 'success' && (
+                <div className="alert alert--success">
+                  ✅ ¡Pedido enviado! Te contactaremos pronto.
+                </div>
+              )}
+
+              {submitStatus === 'error' && (
+                <div className="alert alert--error">
+                  ❌ Error al enviar. Intentá de nuevo o usá WhatsApp.
+                </div>
+              )}
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  onClick={() => setShowEmailForm(false)}
+                  className="btn btn--secondary"
+                  disabled={isSubmitting}
+                >
+                  Volver
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn--primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Enviando...' : 'Enviar pedido'}
+                </button>
+              </div>
+            </form>
+          </div>
         ) : (
           <>
             {/* Items */}
             <div className="cart-sidebar__items">
               {items.map(({ book, quantity }) => (
-                <CartItem 
+                <CartItem
                   key={book._id}
                   book={book}
                   quantity={quantity}
@@ -103,26 +233,31 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 <span>${totalPrice}</span>
               </div>
 
-              {/* Opciones de checkout */}
+              {/* Opciones de checkout - AMBAS */}
               <div className="cart-sidebar__checkout">
-                <a 
-                  href={`https://wa.me/?text=${generateWhatsAppMessage()}`}
+                {/* WhatsApp */}
+                <a
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="cart-sidebar__button cart-sidebar__button--whatsapp"
+                  style={!WHATSAPP_NUMBER ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
                 >
                   💬 WhatsApp
                 </a>
-                
-                <a 
-                  href={`mailto:?subject=Pedido de libros&body=${generateEmailBody()}`}
+
+                {/* Email - abre formulario */}
+                <button
+                  onClick={() => setShowEmailForm(true)}
                   className="cart-sidebar__button cart-sidebar__button--email"
+                  disabled={!EMAILJS_SERVICE_ID}
+                  style={!EMAILJS_SERVICE_ID ? { opacity: 0.5 } : undefined}
                 >
                   📧 Email
-                </a>
+                </button>
               </div>
 
-              <button 
+              <button
                 onClick={clearCart}
                 className="cart-sidebar__clear"
               >
@@ -147,20 +282,20 @@ interface CartItemProps {
 function CartItem({ book, quantity, onUpdateQuantity, onRemove }: CartItemProps) {
   return (
     <div className="cart-item">
-      <img 
-        src={book.img} 
-        alt={book.title} 
+      <img
+        src={book.img}
+        alt={book.title}
         className="cart-item__image"
       />
-      
+
       <div className="cart-item__details">
         <h3 className="cart-item__title">{book.title}</h3>
         <p className="cart-item__author">{book.firstName} {book.lastName}</p>
         <p className="cart-item__price">${book.price}</p>
-        
+
         <div className="cart-item__actions">
           <div className="cart-item__quantity">
-            <button 
+            <button
               onClick={() => onUpdateQuantity(quantity - 1)}
               disabled={quantity <= 1}
               aria-label="Disminuir cantidad"
@@ -168,7 +303,7 @@ function CartItem({ book, quantity, onUpdateQuantity, onRemove }: CartItemProps)
               −
             </button>
             <span>{quantity}</span>
-            <button 
+            <button
               onClick={() => onUpdateQuantity(quantity + 1)}
               disabled={book.stock ? quantity >= book.stock : false}
               aria-label="Aumentar cantidad"
@@ -176,8 +311,8 @@ function CartItem({ book, quantity, onUpdateQuantity, onRemove }: CartItemProps)
               +
             </button>
           </div>
-          
-          <button 
+
+          <button
             onClick={onRemove}
             className="cart-item__remove"
             aria-label="Eliminar del carrito"

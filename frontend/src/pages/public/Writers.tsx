@@ -16,7 +16,7 @@ export default function Writers() {
       try {
         const data = await getBooks({ recomendedWriter: true });
 
-        // Primero filtrar duplicados, luego ordenar (más eficiente y predecible)
+        // Primero filtrar duplicados por nombre y apellido (ignorando mayúsculas)
         const uniqueBooks = data.filter((book, index, self) =>
           index === self.findIndex((b) =>
             b.lastName.toLowerCase() === book.lastName.toLowerCase() &&
