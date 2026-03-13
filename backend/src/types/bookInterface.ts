@@ -16,13 +16,14 @@
  * @property {string} firstName - Nombre(s) del autor (requerido)
  * @property {string} editorial - Editorial que publicó el libro (requerido)
  * @property {number} price - Precio de venta en moneda local (requerido, ≥0)
- * @property {number} [stock=0] - Unidades disponibles en inventario (opcional)
+ * @property {number} [stock=0] - Unidades disponibles en inventario 
  * @property {boolean} latestBook - Indica si es una novedad reciente
  * @property {boolean} fanzine - Indica si pertenece a la categoría fanzine
  * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal
  * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal
- * @property {boolean} recomendedWriters - Indica si el libro es de un escritor recomendado
- * @property {string} url - URL externa de referencia (ej: MercadoLibre)
+ * @property {boolean} recomendedWriter - Indica si el libro es de un escritor recomendado
+ * @property {string} [description] - Descripción detallada del libro (opcional)
+ * @property {string} url - URL externa de referencia (ej: MercadoLibre)(opcional)
  */
 interface IBook {
   img: string;
@@ -32,12 +33,13 @@ interface IBook {
   firstName: string;
   editorial: string;
   price: number;
-  stock?: number;
+  stock: number;
   latestBook: boolean;
   fanzine: boolean;
-  showInHome?: boolean; 
-  homeOrder?: number | null;
+  showInHome: boolean; 
+  homeOrder: number | null;
   recomendedWriter: boolean;
+  description: string;
   url: string;
 }
 

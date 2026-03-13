@@ -22,7 +22,7 @@ export default function AboutUs() {
     },
     {
       name: 'Ro Fuks',
-      role: 'diseñadora gráfica (especializada en editorial, branding e ilustración). editora de @elhecho_editorial. Pueden ver algunos de sus proyectos en',
+      role: 'diseñadora gráfica (especializada en editorial, branding e ilustración). directora de @elhecho_editorial. Pueden ver algunos de sus proyectos en',
       ig: '@rofuks',
       link: 'https://www.instagram.com/rofuks/'
     }

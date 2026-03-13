@@ -23,10 +23,10 @@ import { z } from "zod";
  * @property {boolean} [fanzine=false] - Es fanzine
  * @property {boolean} [showInHome=false] - Mostrar en Home
  * @property {number} [homeOrder=null] - Orden en Home (1-8)
- * @property {boolean} [recomendedWriters=false] - Es de escritor recomendado
+ * @property {boolean} [recomendedWriter=false] - Es de escritor recomendado
+ * @proprty {string} [description] - Descripción del libro
  * @property {string} url - URL de referencia externa
  */
-
 
 /**
  * Schema para creación de nuevos libros.
@@ -86,6 +86,10 @@ const AddBookSchema = z
 
     recomendedWriter: z.boolean().default(false),
 
+    description: z.string()
+      .trim()
+      .min(1, { message: "Description is required" }),
+
     url: z
       .url({ message: "Must be a valid URL" })
       .min(1, { message: "ML URL is required" }),
@@ -111,49 +115,66 @@ type AddBookBody = z.infer<typeof AddBookSchema>;
  */
 const UpdateBookSchema = z
   .object({
-    img: z.url({ message: "Must be a valid URL" }).optional(),
+    img: z
+      .url({ message: "Image URL must be a valid URL" })
+      .min(1, { message: "Image URL is required" }),
 
     isbn: z
       .string()
+      .trim()
+      .min(1, { message: "ISBN is required" })
       .regex(/^(?:\d{9}[\dX]|\d{13})$/, {
-        message: "Invalid ISBN format",
-      })
-      .optional(),
+        message: "ISBN must be 10 or 13 digits",
+      }),
 
     title: z
       .string()
+      .trim()
       .min(1, { message: "Title is required" })
-      .max(200, { message: "Title too long" })
-      .optional(),
+      .max(200, { message: "Title too long (max 200 chars)" }),
 
-    lastName: z.string().min(1, { message: "Last name required" }).optional(),
+    lastName: z
+      .string()
+      .trim()
+      .min(1, { message: "Author last name is required" }),
 
-    firstName: z.string().min(1, { message: "First name required" }).optional(),
+    firstName: z
+      .string()
+      .trim()
+      .min(1, { message: "Author first name is required" }),
 
-    editorial: z.string().min(1, { message: "Editorial required" }).optional(),
+    editorial: z
+      .string()
+      .trim()
+      .min(1, { message: "Editorial is required" }),
 
     price: z
       .number()
-      .nonnegative({ message: "Price must be positive" })
-      .optional(),
+      .nonnegative({ message: "Price must be a positive number" }),
 
     stock: z
       .number()
-      .int({ message: "Stock must be integer" })
+      .int({ message: "Stock must be an integer" })
       .nonnegative({ message: "Stock must be 0 or more" })
-      .optional(),
+      .default(0),
 
-    latestBook: z.boolean().optional(),
+    latestBook: z.boolean().default(false),
 
-    fanzine: z.boolean().optional(),
+    fanzine: z.boolean().default(false),
 
     showInHome: z.boolean().default(false),  
     
-    homeOrder: z.number().min(1).max(8).optional().nullable().default(null),
+    homeOrder: z.number().min(1).max(8).optional().nullable().default(null),  
 
     recomendedWriter: z.boolean().default(false),
 
-    url: z.url({ message: "Must be a valid URL" }).optional(),
+    description: z.string()
+      .trim()
+      .min(1, { message: "Description is required" }),
+
+    url: z
+      .url({ message: "Must be a valid URL" })
+      .min(1, { message: "ML URL is required" }),
   })
   .strict()
   .partial();

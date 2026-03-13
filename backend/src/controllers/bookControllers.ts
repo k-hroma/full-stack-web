@@ -58,9 +58,9 @@ const getBooks = async (
       filter.recomendedWriter = req.query.recomendedWriter === "true";
     }
 
-    const books:IBook[] = await Book.find(filter)
+    const books = await Book.find(filter)
       .sort({ createdAt: -1 }) // Más recientes primero
-      .lean(); // Performance: objetos planos en lugar de documentos Mongoose
+      .lean<IBook[]>();; // Performance: objetos planos en lugar de documentos Mongoose
 
     res.status(200).json({
       success: true,
@@ -110,7 +110,7 @@ const searchBook = async (
     )
       .sort({ score: { $meta: "textScore" } }) // Ordenar por relevancia
       .limit(20) // Límite de resultados
-      .lean();
+      .lean<IBook[]>();
 
     // Fallback: si no hay índice de texto o no encuentra, buscar con regex
     let results = books;
@@ -127,7 +127,7 @@ const searchBook = async (
         ],
       })
         .limit(20)
-        .lean();
+        .lean<IBook[]>();
     }
 
     res.status(200).json({
@@ -177,7 +177,9 @@ const addBook = async (
     const bookData = parseResult.data;
 
     // Verificar duplicado por ISBN (race condition handling)
-    const existingBook = await Book.findOne({ isbn: bookData.isbn.toUpperCase() });
+    const existingBook = await Book
+      .findOne({ isbn: bookData.isbn.toUpperCase() })
+      .lean<IBook[]>();
     
     if (existingBook) {
       res.status(409).json({
@@ -188,11 +190,12 @@ const addBook = async (
     }
 
     const newBook = await Book.create(bookData);
+    const bookDTO = newBook.toObject();
 
     res.status(201).json({
       success: true,
       message: "Book created successfully",
-      data: newBook,
+      data: bookDTO,
     });
 
 
@@ -265,7 +268,7 @@ const updateBook = async (
       const existingBook = await Book.findOne({
         isbn: updateData.isbn.toUpperCase(),
         _id: { $ne: req.params.id }, // Excluir el libro actual
-      });
+      }).lean<IBook[]>();
 
       if (existingBook) {
         res.status(409).json({
@@ -295,10 +298,12 @@ const updateBook = async (
       return;
     }
 
+    const bookDTO = updatedBook.toObject();
+
     res.status(200).json({
       success: true,
       message: "Book updated successfully",
-      data: updatedBook,
+      data: bookDTO,
     });
 
     console.log(`[BOOK UPDATED] ${updatedBook.title}`);
@@ -353,7 +358,7 @@ const deleteBook = async (
 
     res.status(200).json({
       success: true,
-      message: `${deletedBook} deleted successfully`,
+      message: `${deletedBook.toObject()} deleted successfully`,
     });
 
     console.log(`[BOOK DELETED] ${deletedBook.title} (ID: ${deletedBook._id})`);
