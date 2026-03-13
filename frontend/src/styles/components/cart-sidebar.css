@@ -63,7 +63,7 @@
   border: none;
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 1.5rem;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   cursor: pointer;
   width: 32px;
   height: 32px;
@@ -88,7 +88,7 @@
   justify-content: center;
   gap: 1.5rem;
   padding: 2rem;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
 }
 
 .cart-sidebar__empty p {
@@ -102,7 +102,7 @@
   font-size: 0.75rem;
   color: var(--brown);
   background: transparent;
-  border: 1px solid var(--ligth-brown);
+  border: 1px solid var(--light-brown);
   border-radius: 50px;
   padding: 0.75rem 2rem;
   cursor: pointer;
@@ -158,7 +158,7 @@
 .cart-item__author {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.8125rem;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   margin: 0;
 }
 
@@ -193,7 +193,7 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1px solid var(--ligth-brown);
+  border: 1px solid var(--light-brown);
   border-radius: 50%;
   cursor: pointer;
   font-family: 'Neue Montreal Regular', sans-serif;
@@ -259,7 +259,7 @@
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
 }
 
 .cart-sidebar__total span:last-child {
@@ -321,7 +321,7 @@
   width: 100%;
   background: none;
   border: none;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   padding: 0.75rem;
   cursor: pointer;
   font-family: 'Neue Montreal Light', sans-serif;
@@ -367,18 +367,10 @@
   flex-direction: column;
 }
 
-.detalle-compra {
-  font-family: 'Neue Montreal Light', sans-serif;
-  font-size: 1rem;
-  color: var(--ligth-brown);
-  margin-bottom: 1rem;
-
-}
-
 .cart-sidebar__form-subtitle {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.875rem;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(149, 67, 0, 0.08);
@@ -419,7 +411,7 @@
 }
 
 .form-group input::placeholder {
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   opacity: 0.6;
 }
 
@@ -448,7 +440,7 @@
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   margin-bottom: 0.75rem;
 }
 
@@ -457,7 +449,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.3rem;
 }
 
 .cart-sidebar__order-summary li {
@@ -468,18 +460,18 @@
   border-bottom: 1px solid rgba(149, 67, 0, 0.06);
 }
 
-.suma-total {
-  font-family: 'Neue Montreal Medium', sans-serif;
-  font-size: 1rem;
+.cart-sidebar__order-summary-total span:first-child {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
 }
 
-.number-total {
+.cart-sidebar__order-summary-total span:last-child {
   font-family: 'PPEditorialNew', serif;
-
+  font-size: 1rem;
   font-weight: 100;
-  color: var(--ligth-brown);
+  color: var(--brown);
   letter-spacing: -0.02em;
 }
 

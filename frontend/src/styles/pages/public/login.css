@@ -63,7 +63,7 @@
 .login-page__label {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.6875rem;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -75,7 +75,7 @@
   color: var(--brown);
   background-color: transparent !important; /* Forzar transparente */
   border: none;
-  border-bottom: 1px solid var(--ligth-brown);
+  border-bottom: 1px solid var(--light-brown);
   border-radius: 0;
   padding: 0.625rem 0;
   transition: border-color 0.3s ease;
@@ -89,7 +89,7 @@
 
 /* Placeholder más sutil */
 .login-page__input::placeholder {
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   opacity: 0.4;
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.9375rem;
@@ -129,7 +129,7 @@
   font-size: 0.75rem;
   color: var(--brown);
   background-color: transparent;
-  border: 1px solid var(--ligth-brown);
+  border: 1px solid var(--light-brown);
   border-radius: 50px;
   padding: 0.875rem 2rem;
   margin-top: 0.75rem;
@@ -153,8 +153,8 @@
 
 .login-page__button:disabled {
   opacity: 0.35;
-  border-color: var(--ligth-brown);
-  color: var(--ligth-brown);
+  border-color: var(--light-brown);
+  color: var(--light-brown);
   cursor: not-allowed;
 }
 
@@ -172,7 +172,7 @@
 .login-page__footer-text {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.8125rem;
-  color: var(--ligth-brown);
+  color: var(--light-brown);
 }
 
 .login-page__link {
@@ -192,7 +192,7 @@
   .login-page {
     padding: 1rem;
     align-items: flex-start;
-    padding-top: 4rem;
+    padding-top: 8rem;
   }
 
   .login-page__container {
@@ -205,3 +205,4 @@
     margin-bottom: 1.5rem;
   }
 }
+

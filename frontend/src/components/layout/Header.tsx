@@ -22,15 +22,15 @@ export function Header() {
   const { isAuthenticated, isAdmin, user, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
-  
+
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpenNavMenu = () => { 
+  const handleOpenNavMenu = () => {
     setIsOpen(true);
   };
-  
-  const handleCloseNavMenu = () => { 
+
+  const handleCloseNavMenu = () => {
     setIsOpen(false);
   };
 
@@ -58,7 +58,7 @@ export function Header() {
               </button>
             )}
           </div>
-           {/* Centro: Logo */}
+          {/* Centro: Logo */}
           <div className='center-nav'>
             <button className='btn-home-menu' onClick={handleGoHome}>
               <img src={lpicon} alt="lp-icon" width='51px' height='56px' />
@@ -67,58 +67,58 @@ export function Header() {
           {/* Derecha: Auth + Búsqueda + Carrito */}
           <div className='right-nav'>
             {/* Acciones de usuario */}
-            
-          
-              {/* Auth */}
-              {isAuthenticated ? (
-                <div className="header__user">
-                  <span className="header__user-name">{user?.name}</span>
-                  {isAdmin && (
-                    <Link to="/admin" className="header__admin-link">
-                      Panel Admin
-                    </Link>
-                  )}
-                  <button onClick={handleLogout} className="header__logout">
-                    Salir
-                  </button>
-                </div>
-              ) : (
-                <button className='icon-user'>
-                    <Link to="/login">
-                      <img src={usericon} alt="usericon" width='25px' height='25px' />
-                    </Link>
+
+
+            {/* Auth */}
+            {isAuthenticated ? (
+              <div className="header__user">
+                <span className="header__user-name">{user?.name}</span>
+                {isAdmin && (
+                  <Link to="/admin" className="header__admin-link">
+                    Panel Admin
+                  </Link>
+                )}
+                <button onClick={handleLogout} className="header__logout">
+                  Salir
                 </button>
+              </div>
+            ) : (
+              <button className='icon-user'>
+                <Link to="/login">
+                  <img src={usericon} alt="usericon" width='25px' height='25px' />
+                </Link>
+              </button>
             )}
             <img className='user-auth' src={lineicon} alt="lineicon" height='25px' />
-           
+
             {/*Search component*/}
             <SearchBooks />
-            
-             {/* Cart- open Sidebar */}
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="header__cart"
-                aria-label={`Carrito con ${itemCount} items`}>
-                <span><Cart fill="#954300" /></span>
-                {itemCount > 0 && (
+
+            {/* Cart- open Sidebar */}
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="header__cart"
+              aria-label={`Carrito con ${itemCount} items`}>
+              <span><Cart fill="#954300" /></span>
+              {itemCount > 0 && (
                 <span className="header__cart-badge">{itemCount}</span>)}
-              </button>
-            
+            </button>
+
           </div>
 
         </section>
 
-        
-        
-        
-        
-        
+
+
+
+
+
       </header>
 
       {/* Cart Sidebar */}
-      <CartSidebar 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
+      <CartSidebar
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
       />
     </>
   );

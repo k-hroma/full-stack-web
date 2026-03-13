@@ -25,7 +25,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 0.375rem 0.875rem;
-  border: 1px solid var(--ligth-brown);
+  border: 1px solid var(--light-brown);
   border-radius: 50px;
   transition: all 0.3s ease;
   background-color: transparent;
@@ -108,8 +108,11 @@
   align-items: center;
   justify-content: center;
   @media (max-width: 795px) {
-
   padding-right: 1rem;
+  }
+  @media (max-width: 355px) {
+  padding-right: 0.9rem;
+  padding-top: 5.5rem;
   }
 }
 

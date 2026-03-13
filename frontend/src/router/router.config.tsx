@@ -24,6 +24,8 @@ const LoginPage = lazy(() => import('../pages/public/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/public/RegisterPage'));
 const OnlyBooks = lazy(() => import('../pages/public/OnlyBooks'));
 const AllWriters = lazy(() => import('../pages/public/AllWriters'));
+const ContactFormPage = lazy(() => import('../pages/public/ContactFormPage'));
+const AboutUs = lazy(() => import('../pages/public/AboutUs'));
 
 // Páginas admin (lazy loading)
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
@@ -108,6 +110,21 @@ export const routes: RouteObject[] = [
         element: (
           <PageWrapper>
             <AllWriters />
+          </PageWrapper>
+        ),
+      }, {
+        path: 'contacto',
+        element: (
+          <PageWrapper>
+            <ContactFormPage />
+          </PageWrapper>
+        ),
+      },
+      {
+        path: 'nosotrxs',
+        element: (
+          <PageWrapper>
+            <AboutUs />
           </PageWrapper>
         ),
       },

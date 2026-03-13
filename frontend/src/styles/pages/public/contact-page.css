@@ -1,0 +1,109 @@
+.about-us-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
+.bg-img-container {
+  background-image: url('../../../assets/img/bgAboutUs.svg');
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: auto;
+}
+
+.about-us-txt-container{
+  display: flex;
+  flex-direction: column;
+  padding: 8rem 0;
+  padding-left: 2rem;
+  color: var(--beige);
+  font-family: 'Neue Montreal Regular';
+  font-size: var(--large-font-size);
+
+   @media (max-width: 950px) {
+    font-size: 3rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+   @media (max-width: 795px) {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 425px) {
+    font-size: 1.8rem;
+
+  }
+
+}
+
+.contactanos {
+  color: var(--beige);
+  text-decoration: none;
+  padding-top: 7rem;
+  padding-bottom: 2rem;
+   @media (max-width: 768px) {
+    padding-top: 3.5rem;
+    padding-bottom: 1rem;
+    
+  }
+  @media (max-width: 425px) {
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.contacto {
+  color: var(--brown);
+  font-size: var(--super-large-font-size);
+  line-height: 100%;
+
+  @media (max-width: 950px) {
+    font-size: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+  
+  @media (max-width: 475px) {
+    font-size: 2.2rem;
+  }
+    @media (max-width: 360px) {
+    font-size: 2rem;
+  }
+}
+
+.contact-dot-com {
+  @media (max-width: 385px) {
+    display: none;
+    
+  }
+}
+
+.contact-com {
+  color: var(--brown);
+  font-size: 2.2rem;
+  line-height: 100%;
+    @media (min-width: 384px) {
+    display: none;
+    
+  }
+
+}
+
+.link-about-us{
+  color: white;
+  font-family: 'Neue Montreal Regular';
+  font-size: .875rem;
+  padding-top: .8rem;
+
+}

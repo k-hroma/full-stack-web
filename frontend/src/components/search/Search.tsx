@@ -17,7 +17,7 @@ export function SearchBooks() {
     setErrorMsg('');
   };
 
-  const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (inputValue.trim() === '') {

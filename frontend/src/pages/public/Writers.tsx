@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getBooks } from "../../api";
 import type { Book } from "../../types";
 import '../../styles/pages/public/writers.css'
@@ -53,7 +52,6 @@ export default function Writers() {
           <p className="txt-writers">
             Escritores recomendados
           </p>
-          <Link className="link-return-writers" to='/'>Volver</Link>
         </div>
         <div className="txt-writers-container">
           {books && books.map(book => (

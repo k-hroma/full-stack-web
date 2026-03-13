@@ -133,9 +133,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
         ) : showEmailForm ? (
           /* FORMULARIO EMAIL */
           <div className="cart-sidebar__form-container">
-            <p className="detalle-compra">
-              <h3>Detalle de la compra</h3>
-            </p>
+            <h3 className='cart-sidebar__form-subtitle'>Detalle de la compra</h3>
             {/*Agregar fecha*/}
 
             <form onSubmit={sendEmail} className="cart-sidebar__form">
@@ -149,6 +147,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   required
                   placeholder="Tu nombre"
                   disabled={isSubmitting}
+                  autoComplete="name"
                 />
               </div>
 
@@ -170,12 +169,14 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 <ul>
                   {items.map(item => (
                     <li key={item.book._id}>
-                      {item.book.title} ({item.quantity}x)
+                      {item.book.title} (x{item.quantity})
+                      <span> - ${item.book.price * item.quantity}</span>
                     </li>
                   ))}
                 </ul>
-                <div>
-                  <p className='suma-total'>Total: <span className='number-total'>${totalPrice}</span></p>
+                <div className='cart-sidebar__order-summary-total'>
+                  <span>Total: </span>
+                  <span>${totalPrice}</span>
                 </div>
 
               </div>

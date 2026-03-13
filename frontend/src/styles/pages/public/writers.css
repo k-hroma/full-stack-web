@@ -6,7 +6,6 @@
   padding-top: 8rem;
   padding-bottom: 8rem;
   @media(max-width: 768px) {
-  padding-top: 5rem;
   padding-bottom: 5rem;
   }
 }
@@ -36,7 +35,7 @@
 }
 
 .txt-writers, .link-return-writers {
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   font-family: 'Neue Montreal Medium';
   font-weight: 400;
   font-size: 0,875rem;
@@ -48,7 +47,7 @@
 }
 
 .link-writers-top {
-  color: var(--ligth-brown);
+  color: var(--light-brown);
   font-family: 'Neue Montreal Medium';
   font-weight: 400;
   font-size: 0,875rem;

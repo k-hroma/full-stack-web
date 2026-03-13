@@ -1,0 +1,222 @@
+/**
+ * Contact Form Styles - 
+ * @module styles/components/contact-form
+ */
+
+.contact-section {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--beige);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.contact-container {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Columna izquierda - Header */
+.contact-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-title {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: var(--large-font-size);
+  line-height: 1.1;
+  color: var(--brown);
+  font-weight: 300;
+  margin: 0;
+}
+
+.contact-subtitle {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: var(--very-small-font-size);
+  color: var(--brown);
+  margin: 0;
+  margin-top: 0.5rem;
+}
+
+.contact-note {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+  margin: 0;
+
+}
+
+/* Formulario */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.form-field {
+  position: relative;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--orange);
+  padding: 0.5rem 0;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: var(--very-small-font-size);
+  color: var(--brown);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: var(--pink);
+  opacity: 1;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-bottom-color: var(--orange);
+  color: var(--orange);
+
+}
+
+/* Campo consulta (textarea) */
+.form-field--full {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-label {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: var(--very-small-font-size);
+  color: var(--orange);
+}
+
+.form-field textarea {
+  border: 1px solid var(--orange);
+  padding: 1rem;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-field textarea:focus {
+  border-color: var(--orange);
+}
+
+/* Botón */
+.form-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.submit-btn {
+  background-color: var(--brown);
+  color: var(--beige);
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  padding: 0.75rem 2.5rem;
+  border: 2px solid var(--orange);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: var(--pink);
+  color: var(--brown);
+  border: 1px solid var(--brown);
+  opacity: 0.9;
+}
+
+/* ============================================
+   RESPONSIVE - Mobile
+   ============================================ */
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 8rem 1.5rem;
+    align-items: flex-start;
+    min-height: auto;
+  }
+
+  .contact-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-header {
+    gap: 0.25rem;
+  }
+
+  .contact-title {
+    font-size: var(--small-font-size);
+    line-height: 1.2;
+  }
+
+  .contact-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .contact-note {
+    font-size: 0.75rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .contact-form {
+    gap: 1.5rem;
+  }
+
+  .form-actions {
+    justify-content: flex-start;
+  }
+
+  .submit-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+/* Autocomplete transparente */
+.form-field input:-webkit-autofill,
+.form-field input:-webkit-autofill:hover,
+.form-field input:-webkit-autofill:focus,
+.form-field input:-webkit-autofill:active,
+.form-field textarea:-webkit-autofill,
+.form-field textarea:-webkit-autofill:hover,
+.form-field textarea:-webkit-autofill:focus,
+.form-field textarea:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--beige) inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: var(--brown);
+}
+
+/* Para Firefox */
+.form-field input:autofill,
+.form-field textarea:autofill {
+  background: var(--beige) !important;
+  color: var(--orange) !important;
+}

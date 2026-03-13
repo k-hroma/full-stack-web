@@ -11,11 +11,11 @@ export function Footer() {
   return (
     <footer className="footer-container">
       <div className="bg-footer" />
-      
+
       <div className="footer-content">
         {/* Columna izquierda - Links internos */}
         <nav className="left-content" aria-label="Navegación principal">
-          <Link to="/impresos" className="footer-main-txt">Impresos:</Link>
+          <Link to="/catalogo" className="footer-main-txt">Impresos:</Link>
           <Link to="/novedades" className="footer-main-txt">Novedades</Link>
           <Link to="/libros" className="footer-main-txt">Libros</Link>
           <Link to="/fanzines" className="footer-main-txt">Fanzines</Link>
