@@ -244,7 +244,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   className="cart-sidebar__button cart-sidebar__button--whatsapp"
                   style={!WHATSAPP_NUMBER ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
                 >
-                  💬 WhatsApp
+                  WhatsApp
                 </a>
 
                 {/* Email - abre formulario */}
@@ -254,7 +254,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   disabled={!EMAILJS_SERVICE_ID}
                   style={!EMAILJS_SERVICE_ID ? { opacity: 0.5 } : undefined}
                 >
-                  📧 Email
+                  Email
                 </button>
               </div>
 

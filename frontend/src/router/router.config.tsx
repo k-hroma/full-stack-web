@@ -31,6 +31,7 @@ const AboutUs = lazy(() => import('../pages/public/AboutUs'));
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
 const AdminRegisterPage = lazy(() => import('../pages/admin/AdminRegisterPage'));
 
+
 // Configuración de rutas 
 export const routes: RouteObject[] = [
   {
@@ -153,6 +154,7 @@ export const routes: RouteObject[] = [
                   </PageWrapper>
                 ),
               },
+
             ],
           },
         ],

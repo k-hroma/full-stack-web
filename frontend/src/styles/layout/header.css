@@ -7,8 +7,8 @@
 }
 
 .header__user-name {
-  font-family: 'Neue Montreal Light', sans-serif;
-  font-size: 0.8125rem;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
   color: var(--brown);
   letter-spacing: 0.02em;
   max-width: 120px;
@@ -40,9 +40,9 @@
 .header__logout {
   font-family: 'Neue Montreal Regular', sans-serif;
   font-size: 0.6875rem;
-  color: var(--orange);
+  color: var(--brown);
   background-color: transparent;
-  border: 1px solid var(--orange);
+  border: 1px solid var(--light-brown);
   border-radius: 50px;
   padding: 0.375rem 0.875rem;
   cursor: pointer;
@@ -52,8 +52,10 @@
 }
 
 .header__logout:hover {
-  background-color: var(--orange);
-  color: #fff;
+  border-color: var(--brown);
+  background-color: var(--brown);
+  color: var(--beige);
+
 }
 
 .header__logout:active {
@@ -149,8 +151,8 @@
   position: absolute;
   top: -4px;
   right: -4px;
-  background: var(--pink);
-  color: white;
+  background: var(--orange);
+  color: var(--beige);
   font-family: 'Neue Montreal Medium', sans-serif;
   font-size: 0.625rem;
   font-weight: 500;

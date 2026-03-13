@@ -8,6 +8,7 @@
   min-height: 100vh;
   background-color: var(--beige);
   padding: 6rem 2rem 4rem;
+  
 }
 
 .quienes-somos__container {
@@ -18,12 +19,12 @@
 
 /* Título principal */
 .quienes-somos__title {
-  font-family: 'PPEditorialNew', serif;
+  font-family: 'Neue Montreal Regular';
   font-size: var(--super-large-font-size);
   font-weight: 100;
   color: var(--pink);
   margin-bottom: 3rem;
-  letter-spacing: -0.02em;
+  margin-top: 4.43rem;
   line-height: 1;
 }
 
@@ -43,7 +44,7 @@
 }
 
 .team-title {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: 'Neue Montreal Regular';
   font-size: var(--small-font-size);
   color: var(--green);
   margin: 0;
@@ -79,7 +80,7 @@
 
 .member-link {
   color: var(--green);
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 2px;
   transition: opacity 0.2s ease;
 }
@@ -102,6 +103,7 @@
   color: var(--green);
   margin: 0;
   letter-spacing: -0.01em;
+  text-decoration: none;
 }
 
 .highlight {

@@ -3,30 +3,20 @@
  * @module components/layout/AdminLayout
  */
 
-import { Outlet, Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { Outlet } from 'react-router-dom';
 import '../../styles/layout/admin-layout.css'
+import AdminAside from './AdminAside';
+import ScrollToTop from '../common/ScrollToTop';
 
 export function AdminLayout() {
-  const { logout, user } = useAuth();
+
 
   return (
-    <div className="admin-layout">
-      <aside className="admin-sidebar">
-        <div className="admin-brand">Panel Admin</div>
-        <nav className="admin-nav">
-          <Link to="/admin">Dashboard</Link>
-          <Link to="/admin/register-admin">Nuevo Admin</Link>
-          <Link to="/admin/books">Gestión de Libros</Link>
-          <Link to="/">← Volver a la tienda</Link>
-        </nav>
-        <div className="admin-user">
-          <span>{user?.name}</span>
-          <button onClick={logout}>Cerrar sesión</button>
-        </div>
-      </aside>
+    <div className='admin-layout'>
+      <ScrollToTop />
+      <AdminAside />
       <main className="admin-main">
-        <Outlet />  {/* Acá se renderizan las páginas admin */}
+        <Outlet />
       </main>
     </div>
   );

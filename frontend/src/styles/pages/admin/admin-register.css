@@ -1,134 +1,296 @@
 /**
- * Estilos de AdminRegisterPage
- * @module styles/pages/admin-register
+ * AdminRegisterPage Styles - Registro de administradores
+ * @module styles/pages/admin/admin-register
  */
 
 .admin-register-page {
-  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--beige);
+  padding: 1.5rem;
 }
 
+.admin-register-page__container {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--dark-beige);
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
+}
+
+/* Header con título y link de volver */
 .admin-register-page__header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-md);
-  border-bottom: 1px solid #eee;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.08);
 }
 
 .admin-register-page__title {
-  font-size: var(--font-size-xl);
-  color: var(--color-primary);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1.5rem;
+  color: var(--brown);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .admin-register-page__back {
-  color: var(--color-text-light);
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--light-brown);
   text-decoration: none;
-  font-size: var(--font-size-sm);
+  transition: color 0.2s ease;
+  align-self: flex-start;
 }
 
 .admin-register-page__back:hover {
-  color: var(--color-primary);
+  color: var(--pink);
+}
+
+/* Estados de alerta */
+.admin-register-page__error {
+  background-color: rgba(255, 118, 220, 0.1);
+  color: var(--brown);
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.8125rem;
+  text-align: center;
+  border-left: 1px solid var(--pink);
 }
 
 .admin-register-page__success {
-  background: #efe;
-  border: 1px solid #4a4;
-  border-radius: 8px;
-  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 3rem 2rem;
   text-align: center;
 }
 
+.admin-register-page__success-icon {
+  font-size: 3rem;
+  color: var(--green);
+  line-height: 1;
+}
+
 .admin-register-page__success h2 {
-  color: #4a4;
-  margin-bottom: var(--space-md);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1.25rem;
+  color: var(--brown);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  margin: 0;
 }
 
 .admin-register-page__success p {
-  color: var(--color-text);
-  margin-bottom: var(--space-lg);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--light-brown);
+  margin: 0;
+  max-width: 320px;
+  line-height: 1.5;
 }
 
-.admin-register-page__error {
-  background: #fee;
-  color: var(--color-accent);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 4px;
-  margin-bottom: var(--space-md);
-  font-size: var(--font-size-sm);
-}
-
+/* Formulario */
 .admin-register-page__form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  background: var(--color-white);
-  padding: var(--space-lg);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  gap: 1.25rem;
 }
 
 .admin-register-page__field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 0.25rem;
 }
 
 .admin-register-page__label {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--color-text);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  color: var(--light-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
+/* Inputs - estilo transparente con borde inferior */
 .admin-register-page__input {
-  padding: var(--space-sm) var(--space-md);
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
-  transition: border-color 0.2s;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--brown);
+  background-color: transparent !important;
+  border: none;
+  border-bottom: 1px solid var(--light-brown);
+  border-radius: 0;
+  padding: 0.625rem 0;
+  transition: border-color 0.3s ease;
+  outline: none;
+  width: 100%;
+  /* Eliminar fondo blanco del autofill */
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  caret-color: var(--orange);
+}
+
+.admin-register-page__input::placeholder {
+  color: var(--light-brown);
+  opacity: 0.4;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.9375rem;
+}
+
+.admin-register-page__input:hover {
+  border-bottom-color: var(--brown);
 }
 
 .admin-register-page__input:focus {
-  outline: none;
-  border-color: var(--color-primary);
+  border-bottom-color: var(--orange);
+  border-bottom-width: 1.5px;
+  margin-bottom: -0.5px;
+  background-color: transparent !important;
+}
+
+/* Autofill - mantener transparente */
+.admin-register-page__input:-webkit-autofill,
+.admin-register-page__input:-webkit-autofill:hover,
+.admin-register-page__input:-webkit-autofill:focus,
+.admin-register-page__input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--dark-beige) inset !important;
+  box-shadow: 0 0 0 1000px var(--dark-beige) inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .admin-register-page__input:disabled {
-  background: var(--color-secondary);
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.admin-register-page__submit {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--space-sm) var(--space-md);
-  border: none;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: var(--space-sm);
-}
-
-.admin-register-page__submit:hover:not(:disabled) {
-  background: #333;
-}
-
-.admin-register-page__submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/* Botón principal */
 .admin-register-page__button {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--space-sm) var(--space-md);
-  border: none;
-  border-radius: 4px;
-  font-size: var(--font-size-base);
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+  background-color: transparent;
+  border: 1px solid var(--light-brown);
+  border-radius: 50px;
+  padding: 0.875rem 2rem;
+  margin-top: 0.75rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  align-self: center;
+  min-width: 180px;
 }
 
-.admin-register-page__button:hover {
-  background: #333;
+.admin-register-page__button:hover:not(:disabled) {
+  border-color: var(--brown);
+  background-color: var(--brown);
+  color: var(--beige);
+}
+
+.admin-register-page__button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.admin-register-page__button:disabled {
+  opacity: 0.35;
+  border-color: var(--light-brown);
+  color: var(--light-brown);
+  cursor: not-allowed;
+}
+
+/* Botón secundario (Crear otro) */
+.admin-register-page__button--secondary {
+  background-color: transparent;
+  border-color: var(--light-brown);
+  color: var(--light-brown);
+  min-width: 140px;
+}
+
+.admin-register-page__button--secondary:hover:not(:disabled) {
+  border-color: var(--pink);
+  background-color: var(--pink);
+  color: white;
+}
+
+/* Cruz para cerrar el success */
+.admin-register-page__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1.5rem;
+  color: var(--light-brown);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.admin-register-page__close:hover {
+  color: var(--brown);
+  background: rgba(149, 67, 0, 0.05);
+}
+
+/* Contenedor de acciones en success */
+.admin-register-page__success-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Ajuste al contenedor success para posicionar la cruz */
+.admin-register-page__success {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .admin-register-page {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 8rem;
+  }
+
+  .admin-register-page__container {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+
+  .admin-register-page__title {
+    font-size: 1.25rem;
+  }
+
+  .admin-register-page__success {
+    padding: 2rem 1rem;
+  }
 }

@@ -368,12 +368,12 @@
 }
 
 .cart-sidebar__form-subtitle {
-  font-family: 'Neue Montreal Light', sans-serif;
-  font-size: 0.875rem;
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: 0.69rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--light-brown);
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(149, 67, 0, 0.08);
 }
 
 
