@@ -24,7 +24,7 @@
 .cart-sidebar {
   width: 100%;
   max-width: 420px;
-  background: var(--dark-beige);
+  background: var(--beige);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -148,7 +148,8 @@
 }
 
 .cart-item__title {
-  font-family: 'Neue Montreal Medium', sans-serif;
+  font-family: 'Neue Montreal Light', sans-serif;
+  text-transform: uppercase;
   font-size: 0.9375rem;
   color: var(--brown);
   line-height: 1.3;
@@ -165,10 +166,9 @@
 .cart-item__price {
   font-family: 'PPEditorialNew', serif;
   font-size: 1.125rem;
-  font-weight: 100;
+  font-weight: 200;
   color: var(--pink);
   margin: 0.5rem 0 0 0;
-  letter-spacing: -0.02em;
 }
 
 /* Actions - Cantidad y eliminar */
@@ -305,15 +305,15 @@
 
 /* Variantes sutiles para WhatsApp y Email - sin colores chillones */
 .cart-sidebar__button--whatsapp:hover {
-  border-color: #25d366;
-  background: #25d366;
-  color: white;
+  border-color: var(--green);
+  background: var(--green);
+  color: var(--beige);
 }
 
 .cart-sidebar__button--email:hover {
-  border-color: var(--orange);
-  background: var(--orange);
-  color: white;
+  border-color: var(--pink);
+  background: var(--pink);
+  color: var(--beige);
 }
 
 /* Clear button - Muy sutil */

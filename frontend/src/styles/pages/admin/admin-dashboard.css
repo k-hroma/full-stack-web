@@ -1,0 +1,403 @@
+
+.admin-dashboard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--beige);
+  padding: 6rem 1.5rem;
+}
+
+/* Contenedor más ancho para el dashboard */
+.admin-dashboard__container {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--dark-beige);
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
+  margin-top: 2rem;
+}
+
+/* Header y Tabs */
+.admin-dashboard__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.08);
+}
+
+.admin-dashboard__title {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 1.5rem;
+  color: var(--brown);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.admin-dashboard__tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-dashboard__tab {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--light-brown);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  padding: 0.625rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.admin-dashboard__tab:hover {
+  color: var(--brown);
+  border-color: var(--light-brown);
+}
+
+.admin-dashboard__tab--active {
+  color: var(--brown);
+  border-color: var(--brown);
+  background-color: rgba(149, 67, 0, 0.05);
+}
+
+/* Secciones del formulario */
+.admin-dashboard__section {
+  margin-bottom: 2.5rem;
+}
+
+.admin-dashboard__section-title {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.875rem;
+  color: var(--light-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.06);
+}
+
+/* Filas y campos */
+.admin-dashboard__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-dashboard__row--three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.admin-dashboard__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.admin-dashboard__field--large {
+  grid-column: span 1;
+}
+
+/* Labels */
+.admin-dashboard__label {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.6875rem;
+  color: var(--light-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Inputs - Estilo consistente con los otros formularios */
+.admin-dashboard__input {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--brown);
+  background-color: transparent !important;
+  border: none;
+  border-bottom: 1px solid var(--light-brown);
+  border-radius: 0;
+  padding: 0.625rem 0;
+  transition: border-color 0.3s ease;
+  outline: none;
+  width: 100%;
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  caret-color: var(--orange);
+}
+
+.admin-dashboard__input::placeholder {
+  color: var(--light-brown);
+  opacity: 0.4;
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.875rem;
+}
+
+.admin-dashboard__input:hover {
+  border-bottom-color: var(--brown);
+}
+
+.admin-dashboard__input:focus {
+  border-bottom-color: var(--orange);
+  border-bottom-width: 1.5px;
+  margin-bottom: -0.5px;
+  background-color: transparent !important;
+}
+
+/* Autofill */
+.admin-dashboard__input:-webkit-autofill,
+.admin-dashboard__input:-webkit-autofill:hover,
+.admin-dashboard__input:-webkit-autofill:focus,
+.admin-dashboard__input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--dark-beige) inset !important;
+  box-shadow: 0 0 0 1000px var(--dark-beige) inset !important;
+  -webkit-text-fill-color: var(--brown) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Textarea */
+.admin-dashboard__textarea {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--brown);
+  background-color: transparent;
+  border: 1px solid var(--light-brown);
+  border-radius: 8px;
+  padding: 1rem;
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.admin-dashboard__textarea::placeholder {
+  color: var(--light-brown);
+  opacity: 0.4;
+  font-family: 'Neue Montreal Light', sans-serif;
+}
+
+.admin-dashboard__textarea:focus {
+  border-color: var(--orange);
+}
+
+/* Checkboxes */
+.admin-dashboard__checkboxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 2rem;
+}
+
+.admin-dashboard__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.admin-dashboard__checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--light-brown);
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__checkbox:checked {
+  background-color: var(--orange);
+  border-color: var(--orange);
+}
+
+.admin-dashboard__checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.75rem;
+  font-family: 'Neue Montreal Regular', sans-serif;
+}
+
+.admin-dashboard__checkbox-text {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.875rem;
+  color: var(--brown);
+}
+
+/* Acciones */
+.admin-dashboard__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(149, 67, 0, 0.08);
+}
+
+/* Botones */
+.admin-dashboard__button {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+  background-color: transparent;
+  border: 1px solid var(--light-brown);
+  border-radius: 50px;
+  padding: 0.875rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  min-width: 140px;
+}
+
+.admin-dashboard__button:hover:not(:disabled) {
+  border-color: var(--brown);
+  background-color: var(--brown);
+  color: var(--beige);
+}
+
+.admin-dashboard__button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.admin-dashboard__button--secondary {
+  border-color: transparent;
+  color: var(--light-brown);
+}
+
+.admin-dashboard__button--secondary:hover {
+  border-color: var(--light-brown);
+  background-color: transparent;
+  color: var(--brown);
+}
+
+.admin-dashboard__button--small {
+  min-width: auto;
+  padding: 0.625rem 1.25rem;
+}
+
+/* Modo edición */
+.admin-dashboard__edit-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.admin-dashboard__search-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.admin-dashboard__search-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.admin-dashboard__search-row .admin-dashboard__input {
+  flex: 1;
+}
+
+.admin-dashboard__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background-color: rgba(149, 67, 0, 0.02);
+  border-radius: 8px;
+  border: 1px dashed rgba(149, 67, 0, 0.1);
+}
+
+.admin-dashboard__placeholder p {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--light-brown);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 6rem;
+  }
+
+  .admin-dashboard__container {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  .admin-dashboard__title {
+    font-size: 1.25rem;
+  }
+
+  .admin-dashboard__tabs {
+    flex-wrap: wrap;
+  }
+
+  .admin-dashboard__tab {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .admin-dashboard__row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .admin-dashboard__row--three {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard__checkboxes {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .admin-dashboard__actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .admin-dashboard__button {
+    width: 100%;
+  }
+
+  .admin-dashboard__search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-dashboard__search-row .admin-dashboard__button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard__container {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .admin-dashboard__section-title {
+    font-size: 0.8125rem;
+  }
+}
