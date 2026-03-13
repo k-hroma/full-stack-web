@@ -6,20 +6,21 @@
 /** Libro - coincide con IBook del backend */
 export interface Book {
   _id: string;          // MongoDB ObjectId como string
-  img: string;          // URL de portada
-  isbn: string;         // ISBN único
-  title: string;        // Título
-  lastName: string;     // Apellido autor
-  firstName: string;    // Nombre autor
-  editorial: string;    // Editorial
-  price: number;        // Precio (≥ 0)
-  stock?: number;       // Stock disponible (default 0 en backend)
-  latestBook: boolean;  // Es novedad
-  fanzine: boolean;     // Es fanzine
-  url: string;          // Link externo (MercadoLibre)
-  showInHome?: boolean;
-  homeOrder?: number;
+  img: string;
+  isbn: string;
+  title: string;
+  lastName: string;
+  firstName: string;
+  editorial: string;
+  price: number;
+  stock: number;
+  latestBook: boolean;
+  fanzine: boolean;
+  showInHome: boolean; 
+  homeOrder: number | null;
   recomendedWriter: boolean;
+  description: string;
+  url: string;
   createdAt: string;    // ISO date
   updatedAt: string;    // ISO date
 }
@@ -33,12 +34,13 @@ export interface CreateBookInput {
   firstName: string;
   editorial: string;
   price: number;
-  stock?: number;
-  latestBook?: boolean;
-  fanzine?: boolean;
-  showInHome?: boolean;
-  homeOrder?: number;
-  recomendedWriter?: boolean;
+  stock: number;
+  latestBook: boolean;
+  fanzine: boolean;
+  showInHome: boolean; 
+  homeOrder: number | null;
+  recomendedWriter: boolean;
+  description: string;
   url: string;
 }
 

@@ -1,10 +1,87 @@
 
-
+import { useForm } from '../../hooks/useForm';
 import { useState } from 'react';
 import '../../styles/pages/admin/admin-dashboard.css';
+import type { CreateBookInput } from '../../types';
+import { createBook } from '../../api';
+
+
+type BookFormData = {
+  img: string
+  isbn: string
+  title: string
+  firstName: string
+  lastName: string
+  editorial: string
+  price: number | ''
+  stock: number | ''
+  latestBook: boolean
+  fanzine: boolean
+  showInHome: boolean
+  homeOrder: number | ''
+  recomendedWriter: boolean
+  description: string
+  url: string
+}
+
+const INITIAL_FORM_BOOK_DATA: BookFormData = {
+  img: '',
+  isbn: '',
+  title: '',
+  firstName: '',
+  lastName: '',
+  editorial: '',
+  price: '',
+  stock: '',
+  latestBook: false,
+  fanzine: false,
+  showInHome: false,
+  homeOrder: '',
+  recomendedWriter: false,
+  description: '',
+  url: '',
+}
+
+const prepareBookPayload = (formData: BookFormData): CreateBookInput => {
+  return {
+    ...formData,
+    price: formData.price === '' ? 0 : formData.price,
+    stock: formData.stock === '' ? 0 : formData.stock,
+    homeOrder: formData.homeOrder === '' ? null : formData.homeOrder,
+  };
+};
 
 export default function AdminDashboardPage() {
+  const { formData, handleChange, resetForm } = useForm<BookFormData>(INITIAL_FORM_BOOK_DATA);
+
+  const { img, isbn, title, firstName, lastName, editorial, price, stock, latestBook, fanzine, showInHome, homeOrder, recomendedWriter, description, url } = formData;
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
   const [activeTab, setActiveTab] = useState<'create' | 'edit'>('create');
+
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const payload = prepareBookPayload(formData);
+      const newBook = await createBook(payload)
+      console.log('Datos del libro creado:', newBook);
+      setSubmitStatus('success');
+      resetForm();
+
+    } catch (error) {
+      console.error('Error al crear el libro:', error);
+      setSubmitStatus('error');
+
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <div className="admin-dashboard">
@@ -31,7 +108,10 @@ export default function AdminDashboardPage() {
 
         {/* Formulario de Creación */}
         {activeTab === 'create' && (
-          <form className="admin-dashboard__form">
+          <form
+            className="admin-dashboard__form"
+            onSubmit={handleSubmit}
+          >
             {/* Sección: Información Básica */}
             <div className="admin-dashboard__section">
               <h2 className="admin-dashboard__section-title">Información Básica</h2>
@@ -47,6 +127,8 @@ export default function AdminDashboardPage() {
                     id="title"
                     name="title"
                     placeholder="Ej: Cien años de soledad"
+                    value={title}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -60,6 +142,8 @@ export default function AdminDashboardPage() {
                     id="isbn"
                     name="isbn"
                     placeholder="978-3-16-148410-0"
+                    value={isbn}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -75,6 +159,8 @@ export default function AdminDashboardPage() {
                     id="firstName"
                     name="firstName"
                     placeholder="Gabriel"
+                    value={firstName}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -88,6 +174,8 @@ export default function AdminDashboardPage() {
                     id="lastName"
                     name="lastName"
                     placeholder="García Márquez"
+                    value={lastName}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -103,6 +191,8 @@ export default function AdminDashboardPage() {
                     id="editorial"
                     name="editorial"
                     placeholder="Sudamericana"
+                    value={editorial}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -116,6 +206,8 @@ export default function AdminDashboardPage() {
                     id="url"
                     name="url"
                     placeholder="https://..."
+                    value={url}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -138,6 +230,8 @@ export default function AdminDashboardPage() {
                     min="0"
                     step="0.01"
                     placeholder="0.00"
+                    value={price}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -152,6 +246,8 @@ export default function AdminDashboardPage() {
                     name="stock"
                     min="0"
                     placeholder="0"
+                    value={stock}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -167,6 +263,8 @@ export default function AdminDashboardPage() {
                     min="1"
                     max="8"
                     placeholder="-"
+                    value={homeOrder}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -186,6 +284,8 @@ export default function AdminDashboardPage() {
                   id="img"
                   name="img"
                   placeholder="https://ejemplo.com/imagen.jpg"
+                  value={img}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -200,6 +300,8 @@ export default function AdminDashboardPage() {
                     type="checkbox"
                     name="latestBook"
                     className="admin-dashboard__checkbox"
+                    checked={latestBook}
+                    onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Novedad</span>
                 </label>
@@ -209,6 +311,8 @@ export default function AdminDashboardPage() {
                     type="checkbox"
                     name="fanzine"
                     className="admin-dashboard__checkbox"
+                    checked={fanzine}
+                    onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Fanzine</span>
                 </label>
@@ -218,6 +322,8 @@ export default function AdminDashboardPage() {
                     type="checkbox"
                     name="showInHome"
                     className="admin-dashboard__checkbox"
+                    checked={showInHome}
+                    onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Mostrar en Home</span>
                 </label>
@@ -227,6 +333,8 @@ export default function AdminDashboardPage() {
                     type="checkbox"
                     name="recomendedWriter"
                     className="admin-dashboard__checkbox"
+                    checked={recomendedWriter}
+                    onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Escritor recomendado</span>
                 </label>
@@ -244,16 +352,39 @@ export default function AdminDashboardPage() {
                   name="description"
                   rows={4}
                   placeholder="Descripción del libro..."
+                  value={description}
+                  onChange={handleChange}
                 />
               </div>
             </div>
 
             {/* Acciones */}
+
+            {/* Mensajes de estado */}
+            {submitStatus === 'success' && (
+              <div className="form-alert form-alert--success">
+                ✅ Libro creado exitosamente.
+              </div>
+            )}
+
+            {submitStatus === 'error' && (
+              <div className="form-alert form-alert--error">
+                ❌ Error al crear el libro. Intentá de nuevo.
+              </div>
+            )}
+
             <div className="admin-dashboard__actions">
-              <button type="button" className="admin-dashboard__button admin-dashboard__button--secondary">
+              <button
+                type="button"
+                className="admin-dashboard__button admin-dashboard__button--secondary"
+                onClick={resetForm}
+              >
                 Cancelar
               </button>
-              <button type="submit" className="admin-dashboard__button">
+              <button
+                type="submit"
+                className="admin-dashboard__button"
+                disabled={isSubmitting}>
                 Crear libro
               </button>
             </div>
@@ -273,6 +404,7 @@ export default function AdminDashboardPage() {
                   type="text"
                   id="searchBook"
                   placeholder="Título, ISBN o autor..."
+
                 />
                 <button type="button" className="admin-dashboard__button admin-dashboard__button--small">
                   Buscar
