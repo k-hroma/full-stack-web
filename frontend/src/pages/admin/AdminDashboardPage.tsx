@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { CreateBookInput, Book } from '../../types';
 import { createBook, updateBook, deleteBook } from '../../api';
 import { useSearch } from '../../hooks/useSearch';
-import { searchBooks } from '../../api';
+import { searchBooks, getBooksByCategory } from '../../api/books';
 import '../../styles/pages/admin/admin-dashboard.css';
 
 type BookFormData = {
@@ -23,6 +23,8 @@ type BookFormData = {
   description: string
   url: string
 }
+
+type CategoryFilter = 'all' | 'latestBook' | 'fanzine' | 'showInHome' | 'recomendedWriter';
 
 const INITIAL_FORM_BOOK_DATA: BookFormData = {
   img: '',
@@ -86,6 +88,9 @@ export default function AdminDashboardPage() {
   const [editingBookId, setEditingBookId] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
+  // Nuevo estado para el filtro de categoría activo
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
+
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -95,33 +100,26 @@ export default function AdminDashboardPage() {
       const payload = prepareBookPayload(formData);
 
       if (editingBookId) {
-        const updatedBook = await updateBook(editingBookId, payload);
+        await updateBook(editingBookId, payload);
         setSubmitStatus('success');
 
-        setResults((prevResults) =>
-          prevResults.map((book) =>
-            book._id === editingBookId ? { ...book, ...updatedBook } : book
-          )
-        );
+        // Solo scroll al tope y resetear campos, SIN cambiar de tab
         setTimeout(() => {
-          setActiveTab('edit');
           resetForm();
           setEditingBookId(null);
           setSubmitStatus('idle');
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }, 1000);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 1500);
       } else {
         await createBook(payload);
         setSubmitStatus('success');
-      }
 
-      resetForm();
-      setEditingBookId(null);
-      setActiveTab('edit');
-
-      if (inputValue) {
-        const refreshedResults = await searchBooks(inputValue.trim());
-        setResults(refreshedResults);
+        // Solo scroll al tope y resetear campos, SIN cambiar de tab
+        setTimeout(() => {
+          resetForm();
+          setSubmitStatus('idle');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 1500);
       }
 
     } catch (error) {
@@ -154,6 +152,7 @@ export default function AdminDashboardPage() {
     resetForm();
     setEditingBookId(null);
     setSubmitStatus('idle');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,10 +175,35 @@ export default function AdminDashboardPage() {
         setResults(results);
         setInputValue('');
         setErrorMsg('');
+        setActiveCategory('all'); // Resetear filtro de categoría
       } else {
         setResults([]);
         setErrorMsg(`No se encontraron resultados para "${inputValue}"`);
         setInputValue('');
+      }
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : 'Error inesperado';
+      setErrorMsg(`Ocurrió un error al buscar: ${errMsg}`);
+      setResults([]);
+    }
+  };
+
+  const handleCategorySearch = async (category: CategoryFilter) => {
+    setActiveCategory(category);
+    setErrorMsg('');
+    setInputValue('');
+
+    if (category === 'all') {
+      setResults([]);
+      return;
+    }
+
+    try {
+      const books = await getBooksByCategory(category);
+      setResults(books);
+
+      if (books.length === 0) {
+        setErrorMsg(`No se encontraron libros en esta categoría`);
       }
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : 'Error inesperado';
@@ -511,6 +535,7 @@ export default function AdminDashboardPage() {
         {/* Modo Edición - Búsqueda y Resultados */}
         {activeTab === 'edit' && (
           <div className="admin-dashboard__edit-mode">
+            {/* Búsqueda por texto */}
             <div className="admin-dashboard__search-box">
               <label className="admin-dashboard__label" htmlFor="searchBook">
                 Buscar libro para editar
@@ -540,9 +565,72 @@ export default function AdminDashboardPage() {
               )}
             </div>
 
+            {/* NUEVO: Botones de búsqueda por categoría */}
+            <div className="admin-dashboard__category-filters">
+              <h3 className="admin-dashboard__category-title">O buscar por categoría:</h3>
+              <div className="admin-dashboard__category-buttons">
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'latestBook' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('latestBook')}
+                >
+                  📚 Novedades
+                </button>
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'fanzine' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('fanzine')}
+                >
+                  📖 Fanzines
+                </button>
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'showInHome' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('showInHome')}
+                >
+                  🏠 Mostrar en Home
+                </button>
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'recomendedWriter' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('recomendedWriter')}
+                >
+                  ⭐ Escritores Recomendados
+                </button>
+                {activeCategory !== 'all' && (
+                  <button
+                    className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
+                    onClick={() => {
+                      setActiveCategory('all');
+                      setResults([]);
+                      setErrorMsg('');
+                    }}
+                  >
+                    ❌ Limpiar filtros
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Mostrar categoría activa */}
+            {activeCategory !== 'all' && results.length > 0 && (
+              <div className="admin-dashboard__active-filter">
+                <span>Mostrando: </span>
+                <strong>
+                  {activeCategory === 'latestBook' && 'Novedades'}
+                  {activeCategory === 'fanzine' && 'Fanzines'}
+                  {activeCategory === 'showInHome' && 'Mostrar en Home'}
+                  {activeCategory === 'recomendedWriter' && 'Escritores Recomendados'}
+                </strong>
+                <span> ({results.length} {results.length === 1 ? 'libro' : 'libros'})</span>
+              </div>
+            )}
+
             {results.length === 0 ? (
               <div className="admin-dashboard__placeholder">
-                <p>{inputValue ? `No se encontraron resultados` : 'Realizá una búsqueda para encontrar libros'}</p>
+                <p>
+                  {activeCategory !== 'all'
+                    ? `No hay libros en esta categoría`
+                    : inputValue
+                      ? `No se encontraron resultados`
+                      : 'Realizá una búsqueda para encontrar libros o seleccioná una categoría'}
+                </p>
               </div>
             ) : (
               <div className="admin-dashboard__results-grid">
@@ -567,6 +655,7 @@ export default function AdminDashboardPage() {
                         {book.latestBook && <span className="badge badge--new">Novedad</span>}
                         {book.fanzine && <span className="badge badge--fanzine">Fanzine</span>}
                         {book.showInHome && <span className="badge badge--home">Home</span>}
+                        {book.recomendedWriter && <span className="badge badge--recommended">Recomendado</span>}
                       </div>
                     </div>
 

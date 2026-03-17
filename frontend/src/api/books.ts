@@ -50,6 +50,20 @@ export const searchBooks = async (term: string): Promise<Book[]> => {
 };
 
 /**
+ * Obtiene libros por categoría específica
+ * @param category - La categoría por la que filtrar: 'latestBook' | 'fanzine' | 'showInHome' | 'recomendedWriter'
+ */
+export const getBooksByCategory = async (
+  category: 'latestBook' | 'fanzine' | 'showInHome' | 'recomendedWriter'
+): Promise<Book[]> => {
+  const filters: BookFilters = {
+    [category]: true,
+  };
+  
+  return getBooks(filters);
+};
+
+/**
  * Obtiene un libro por ID
  */
 export const getBookById = async (id: string): Promise<Book> => {
