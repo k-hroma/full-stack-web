@@ -401,3 +401,340 @@
     font-size: 0.8125rem;
   }
 }
+
+.search-admin-toast {
+  background-color: rgba(255, 118, 220, 0.9);
+  color: var(--brown);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: 'Neue Montreal Regular';
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(149, 67, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  animation: fadein 0.3s ease;
+  border-left: 2px solid var(--pink);
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--brown);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.toast-close:hover {
+  opacity: 0.6;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   RESULTADOS DE BÚSQUEDA - GRID DE LIBROS
+   ============================================ */
+
+.admin-dashboard__results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Tarjeta de libro individual */
+.admin-book-card {
+  background-color: var(--beige);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(149, 67, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(149, 67, 0, 0.12);
+  border-color: rgba(149, 67, 0, 0.15);
+}
+
+/* Imagen de la tarjeta */
+.admin-book-card__image {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  background-color: rgba(149, 67, 0, 0.03);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-book-card__image img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.admin-book-card:hover .admin-book-card__image img {
+  transform: scale(1.05);
+}
+
+.admin-book-card__no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-brown);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.875rem;
+  opacity: 0.6;
+}
+
+/* Contenido de la tarjeta */
+.admin-book-card__content {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-book-card__title {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--brown);
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-book-card__author {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.875rem;
+  color: var(--light-brown);
+  margin: 0;
+}
+
+.admin-book-card__isbn {
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.75rem;
+  color: var(--light-brown);
+  opacity: 0.7;
+  margin: 0;
+  margin-top: 0.25rem;
+}
+
+/* Badges de categorización */
+.admin-book-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+}
+
+.badge {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.625rem;
+  border-radius: 50px;
+  border: 1px solid;
+}
+
+.badge--new {
+  background-color: rgba(255, 118, 220, 0.15);
+  color: #ff76dc;
+  border-color: rgba(255, 118, 220, 0.3);
+}
+
+.badge--fanzine {
+  background-color: rgba(149, 67, 0, 0.08);
+  color: var(--brown);
+  border-color: rgba(149, 67, 0, 0.2);
+}
+
+.badge--home {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #f9a825;
+  border-color: rgba(255, 193, 7, 0.3);
+}
+
+/* Acciones de la tarjeta */
+.admin-book-card__actions {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(149, 67, 0, 0.06);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.admin-book-card__btn {
+  flex: 1;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.625rem 1rem;
+  border-radius: 50px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  background-color: transparent;
+}
+
+.btn-icon {
+  font-size: 0.875rem;
+}
+
+/* Botón Editar */
+.admin-book-card__btn--edit {
+  color: var(--brown);
+  border-color: var(--light-brown);
+}
+
+.admin-book-card__btn--edit:hover {
+  background-color: var(--brown);
+  color: var(--beige);
+  border-color: var(--brown);
+}
+
+/* Botón Eliminar */
+.admin-book-card__btn--delete {
+  color: #c44d34;
+  border-color: rgba(196, 77, 52, 0.3);
+}
+
+.admin-book-card__btn--delete:hover {
+  background-color: #c44d34;
+  color: white;
+  border-color: #c44d34;
+}
+
+/* Confirmación de eliminación */
+.admin-book-card__confirm {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.75rem;
+  color: var(--brown);
+}
+
+.admin-book-card__btn--confirm-yes,
+.admin-book-card__btn--confirm-no {
+  min-width: 40px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.6875rem;
+}
+
+.admin-book-card__btn--confirm-yes {
+  background-color: #c44d34;
+  color: white;
+  border-color: #c44d34;
+}
+
+.admin-book-card__btn--confirm-no {
+  color: var(--light-brown);
+  border-color: var(--light-brown);
+}
+
+/* Banner de edición */
+.admin-dashboard__edit-banner {
+  background: linear-gradient(135deg, rgba(255, 118, 220, 0.1) 0%, rgba(255, 118, 220, 0.05) 100%);
+  border: 1px solid rgba(255, 118, 220, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.875rem;
+  color: var(--brown);
+}
+
+.admin-dashboard__edit-banner-close {
+  background: none;
+  border: none;
+  color: var(--light-brown);
+  font-family: 'Neue Montreal Light', sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.admin-dashboard__edit-banner-close:hover {
+  color: var(--brown);
+}
+
+/* Vista previa de imagen en formulario */
+.admin-dashboard__image-preview {
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(149, 67, 0, 0.1);
+  max-width: 200px;
+}
+
+.admin-dashboard__image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Responsive para resultados */
+@media (max-width: 768px) {
+  .admin-dashboard__results-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .admin-book-card__image {
+    height: 240px;
+  }
+
+  .admin-book-card__actions {
+    flex-direction: row;
+  }
+
+  .admin-dashboard__edit-banner {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-book-card__content {
+    padding: 1rem;
+  }
+
+  .admin-book-card__actions {
+    padding: 0.875rem 1rem;
+  }
+
+  .admin-book-card__btn {
+    padding: 0.5rem 0.875rem;
+  }
+}

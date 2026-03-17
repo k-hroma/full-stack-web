@@ -3,7 +3,7 @@ import type { Book } from '../types';
 
 export interface SearchContextType {
   results: Book[];
-  setResults: (books: Book[]) => void;
+  setResults: React.Dispatch<React.SetStateAction<Book[]>>; // <-- Cambiar aquí
   searchTerm: string;
   setSearchTerm: (term: string) => void;
 }

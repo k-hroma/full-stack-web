@@ -30,6 +30,16 @@
   color: var(--brown);
 }
 
+.resultados-title {
+  font-family: "Neue Montreal Medium";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%;
+  color: var(--brown);
+  text-transform: uppercase;
+
+}
+
 .link-return:hover {
   color: var(--pink);
 }

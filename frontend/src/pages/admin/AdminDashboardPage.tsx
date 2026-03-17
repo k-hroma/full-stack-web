@@ -1,10 +1,10 @@
-
 import { useForm } from '../../hooks/useForm';
 import { useState } from 'react';
+import type { CreateBookInput, Book } from '../../types';
+import { createBook, updateBook, deleteBook } from '../../api';
+import { useSearch } from '../../hooks/useSearch';
+import { searchBooks } from '../../api';
 import '../../styles/pages/admin/admin-dashboard.css';
-import type { CreateBookInput } from '../../types';
-import { createBook } from '../../api';
-
 
 type BookFormData = {
   img: string
@@ -51,8 +51,26 @@ const prepareBookPayload = (formData: BookFormData): CreateBookInput => {
   };
 };
 
+const populateFormWithBook = (book: Book): BookFormData => ({
+  img: book.img || '',
+  isbn: book.isbn || '',
+  title: book.title || '',
+  firstName: book.firstName || '',
+  lastName: book.lastName || '',
+  editorial: book.editorial || '',
+  price: book.price ?? '',
+  stock: book.stock ?? '',
+  latestBook: book.latestBook || false,
+  fanzine: book.fanzine || false,
+  showInHome: book.showInHome || false,
+  homeOrder: book.homeOrder ?? '',
+  recomendedWriter: book.recomendedWriter || false,
+  description: book.description || '',
+  url: book.url || '',
+});
+
 export default function AdminDashboardPage() {
-  const { formData, handleChange, resetForm } = useForm<BookFormData>(INITIAL_FORM_BOOK_DATA);
+  const { formData, handleChange, resetForm, setFormData } = useForm<BookFormData>(INITIAL_FORM_BOOK_DATA);
 
   const { img, isbn, title, firstName, lastName, editorial, price, stock, latestBook, fanzine, showInHome, homeOrder, recomendedWriter, description, url } = formData;
 
@@ -61,6 +79,12 @@ export default function AdminDashboardPage() {
 
   const [activeTab, setActiveTab] = useState<'create' | 'edit'>('create');
 
+  const { setResults, setSearchTerm, results } = useSearch();
+  const [inputValue, setInputValue] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [editingBookId, setEditingBookId] = useState<string | null>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,19 +93,100 @@ export default function AdminDashboardPage() {
 
     try {
       const payload = prepareBookPayload(formData);
-      const newBook = await createBook(payload)
-      console.log('Datos del libro creado:', newBook);
-      setSubmitStatus('success');
+
+      if (editingBookId) {
+        const updatedBook = await updateBook(editingBookId, payload);
+        setSubmitStatus('success');
+
+        setResults((prevResults) =>
+          prevResults.map((book) =>
+            book._id === editingBookId ? { ...book, ...updatedBook } : book
+          )
+        );
+        setTimeout(() => {
+          setActiveTab('edit');
+          resetForm();
+          setEditingBookId(null);
+          setSubmitStatus('idle');
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }, 1000);
+      } else {
+        await createBook(payload);
+        setSubmitStatus('success');
+      }
+
       resetForm();
+      setEditingBookId(null);
+      setActiveTab('edit');
+
+      if (inputValue) {
+        const refreshedResults = await searchBooks(inputValue.trim());
+        setResults(refreshedResults);
+      }
 
     } catch (error) {
-      console.error('Error al crear el libro:', error);
+      console.error('Error:', error);
       setSubmitStatus('error');
-
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
+
+  const handleEdit = (book: Book) => {
+    setFormData(populateFormWithBook(book));
+    setEditingBookId(book._id);
+    setActiveTab('create');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDelete = async (bookId: string) => {
+    try {
+      await deleteBook(bookId);
+      setResults(results.filter(b => b._id !== bookId));
+      setDeleteConfirmId(null);
+    } catch (error) {
+      console.error('Error al eliminar:', error);
+      setErrorMsg('Error al eliminar el libro');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    resetForm();
+    setEditingBookId(null);
+    setSubmitStatus('idle');
+  };
+
+  const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    setErrorMsg('');
+  };
+
+  const handleSearchSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (inputValue.trim() === '') {
+      setErrorMsg('La búsqueda no puede estar vacía.');
+      setResults([]);
+      return;
+    }
+    try {
+      const results = await searchBooks(inputValue.trim());
+
+      if (results.length > 0) {
+        setSearchTerm(inputValue.trim());
+        setResults(results);
+        setInputValue('');
+        setErrorMsg('');
+      } else {
+        setResults([]);
+        setErrorMsg(`No se encontraron resultados para "${inputValue}"`);
+        setInputValue('');
+      }
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : 'Error inesperado';
+      setErrorMsg(`Ocurrió un error al buscar: ${errMsg}`);
+      setResults([]);
+    }
+  };
 
   return (
     <div className="admin-dashboard">
@@ -95,7 +200,7 @@ export default function AdminDashboardPage() {
               className={`admin-dashboard__tab ${activeTab === 'create' ? 'admin-dashboard__tab--active' : ''}`}
               onClick={() => setActiveTab('create')}
             >
-              Nuevo Libro
+              {editingBookId ? 'Editar Libro' : 'Nuevo Libro'}
             </button>
             <button
               className={`admin-dashboard__tab ${activeTab === 'edit' ? 'admin-dashboard__tab--active' : ''}`}
@@ -106,12 +211,21 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Formulario de Creación */}
+        {/* Formulario de Creación/Edición */}
         {activeTab === 'create' && (
           <form
             className="admin-dashboard__form"
             onSubmit={handleSubmit}
           >
+            {editingBookId && (
+              <div className="admin-dashboard__edit-banner">
+                <span>✏️ Editando: {title}</span>
+                <button type="button" onClick={handleCancelEdit} className="admin-dashboard__edit-banner-close">
+                  Cancelar edición
+                </button>
+              </div>
+            )}
+
             {/* Sección: Información Básica */}
             <div className="admin-dashboard__section">
               <h2 className="admin-dashboard__section-title">Información Básica</h2>
@@ -288,6 +402,11 @@ export default function AdminDashboardPage() {
                   onChange={handleChange}
                 />
               </div>
+              {img && (
+                <div className="admin-dashboard__image-preview">
+                  <img src={img} alt="Vista previa" />
+                </div>
+              )}
             </div>
 
             {/* Sección: Categorización */}
@@ -358,18 +477,16 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Acciones */}
-
             {/* Mensajes de estado */}
             {submitStatus === 'success' && (
               <div className="form-alert form-alert--success">
-                ✅ Libro creado exitosamente.
+                ✅ {editingBookId ? 'Libro actualizado exitosamente' : 'Libro creado exitosamente'}
               </div>
             )}
 
             {submitStatus === 'error' && (
               <div className="form-alert form-alert--error">
-                ❌ Error al crear el libro. Intentá de nuevo.
+                ❌ Error al {editingBookId ? 'actualizar' : 'crear'} el libro. Intentá de nuevo.
               </div>
             )}
 
@@ -377,7 +494,7 @@ export default function AdminDashboardPage() {
               <button
                 type="button"
                 className="admin-dashboard__button admin-dashboard__button--secondary"
-                onClick={resetForm}
+                onClick={editingBookId ? handleCancelEdit : resetForm}
               >
                 Cancelar
               </button>
@@ -385,37 +502,113 @@ export default function AdminDashboardPage() {
                 type="submit"
                 className="admin-dashboard__button"
                 disabled={isSubmitting}>
-                Crear libro
+                {editingBookId ? 'Guardar cambios' : 'Crear libro'}
               </button>
             </div>
           </form>
         )}
 
-        {/* Formulario de Edición (estructura similar, simplificada para el ejemplo) */}
+        {/* Modo Edición - Búsqueda y Resultados */}
         {activeTab === 'edit' && (
           <div className="admin-dashboard__edit-mode">
             <div className="admin-dashboard__search-box">
               <label className="admin-dashboard__label" htmlFor="searchBook">
                 Buscar libro para editar
               </label>
-              <div className="admin-dashboard__search-row">
+              <form
+                className="admin-dashboard__search-row"
+                onSubmit={handleSearchSubmit}>
                 <input
                   className="admin-dashboard__input"
                   type="text"
                   id="searchBook"
                   placeholder="Título, ISBN o autor..."
-
+                  value={inputValue}
+                  onChange={handleSearchTerm}
                 />
-                <button type="button" className="admin-dashboard__button admin-dashboard__button--small">
+                <button type="submit" className="admin-dashboard__button admin-dashboard__button--small">
                   Buscar
                 </button>
-              </div>
+              </form>
+              {errorMsg && (
+                <div className="search-admin-toast">
+                  <span>{errorMsg}</span>
+                  <button className="toast-close" onClick={() => setErrorMsg('')}>
+                    ×
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* Aquí iría el formulario de edición (misma estructura que create) */}
-            <div className="admin-dashboard__placeholder">
-              <p>Seleccioná un libro para editar sus datos</p>
-            </div>
+            {results.length === 0 ? (
+              <div className="admin-dashboard__placeholder">
+                <p>{inputValue ? `No se encontraron resultados` : 'Realizá una búsqueda para encontrar libros'}</p>
+              </div>
+            ) : (
+              <div className="admin-dashboard__results-grid">
+                {results.map((book) => (
+                  <div key={book._id} className="admin-book-card">
+                    <div className="admin-book-card__image">
+                      {book.img ? (
+                        <img src={book.img} alt={book.title} />
+                      ) : (
+                        <div className="admin-book-card__no-image">Sin imagen</div>
+                      )}
+                    </div>
+
+                    <div className="admin-book-card__content">
+                      <h3 className="admin-book-card__title">{book.title}</h3>
+                      <p className="admin-book-card__author">
+                        {book.firstName} {book.lastName}
+                      </p>
+                      <p className="admin-book-card__isbn">ISBN: {book.isbn}</p>
+
+                      <div className="admin-book-card__badges">
+                        {book.latestBook && <span className="badge badge--new">Novedad</span>}
+                        {book.fanzine && <span className="badge badge--fanzine">Fanzine</span>}
+                        {book.showInHome && <span className="badge badge--home">Home</span>}
+                      </div>
+                    </div>
+
+                    <div className="admin-book-card__actions">
+                      <button
+                        className="admin-book-card__btn admin-book-card__btn--edit"
+                        onClick={() => handleEdit(book)}
+                      >
+                        <span className="btn-icon">✏️</span>
+                        Editar
+                      </button>
+
+                      {deleteConfirmId === book._id ? (
+                        <div className="admin-book-card__confirm">
+                          <span>¿Eliminar?</span>
+                          <button
+                            className="admin-book-card__btn admin-book-card__btn--confirm-yes"
+                            onClick={() => handleDelete(book._id)}
+                          >
+                            Sí
+                          </button>
+                          <button
+                            className="admin-book-card__btn admin-book-card__btn--confirm-no"
+                            onClick={() => setDeleteConfirmId(null)}
+                          >
+                            No
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          className="admin-book-card__btn admin-book-card__btn--delete"
+                          onClick={() => setDeleteConfirmId(book._id)}
+                        >
+                          <span className="btn-icon">🗑️</span>
+                          Eliminar
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
