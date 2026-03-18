@@ -17,6 +17,7 @@ export interface AuthPayload {
 /** Usuario registrado (respuesta de login/register) - coincide con IRegisterUser */
 export interface User {
   id: string;
+  avatar?: string; // falta agrgar al backend
   name: string;
   email: string;
   role: UserRole;

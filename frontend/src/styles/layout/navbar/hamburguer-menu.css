@@ -1,92 +1,316 @@
-.open-nav-menu-container {
+/**
+ * HamburguerMenu Styles - Slide In from Left
+ * @module styles/layout/navbar/hamburguer-menu
+ */
+
+/* ============================================
+   OVERLAY (Fondo semitransparente)
+   ============================================ */
+
+.hamburguer-menu__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(149, 67, 0, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  justify-content: flex-start;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   SIDEBAR (Panel lateral izquierdo)
+   ============================================ */
+
+.hamburguer-menu {
+  width: 100%;
+  max-width: 420px;
+  background: var(--light-violet);
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 30%;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  overflow-y: auto;
-  box-sizing: border-box;
+  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
 
-  @media (max-width: 1400px) {
-    width: 45%;
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
   }
-
-  @media (max-width: 850px) {
-    width: 70%;
-  }
-
-  @media (max-width: 550px) {
-    width: 100%;
+  to {
+    transform: translateX(0);
   }
 }
 
-.links-container {
+/* ============================================
+   CONTENIDO INTERNO
+   ============================================ */
+
+.hamburguer-menu__container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: var(--light-violet);
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 3.5rem;
-  padding-bottom: 4.1rem;
+  padding: 3.5rem 2rem 4.1rem;
   width: 100%;
   height: 100vh;
   box-sizing: border-box;
-  @media (max-width: 480px) {
-    padding-left: 1rem;
-  }
-
+  overflow-y: auto;
 }
 
-.close-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 2.5rem;
+/* ============================================
+   HEADER CON USUARIO (NUEVO)
+   ============================================ */
+
+.hamburguer-menu__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  min-height: 28px; /* Para evitar saltos */
+}
+
+.hamburguer-menu__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hamburguer-menu__user-name {
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: 1rem;
+  color: var(--brown);
+  letter-spacing: 0.02em;
+  margin: 0;
   padding: 0;
 }
 
-.menu-links-wrapper {
+.hamburguer-menu__guest {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 0.875rem;
+  color: var(--light-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Botón cerrar - AHORA EN EL HEADER */
+.hamburguer-menu__close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  margin: 0; /* Eliminado el margin-bottom anterior */
+}
+
+.hamburguer-menu__close:hover {
+  opacity: 1;
+}
+
+/* ============================================
+   NAVEGACIÓN
+   ============================================ */
+
+.hamburguer-menu__nav {
   display: flex;
   flex-direction: column;
   width: 100%;
-  @media (max-width: 355px) {
-  margin-top: 0.5rem;
-  }
 }
 
-.sub-menu-container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-.menu-link {
+/* Links principales */
+.hamburguer-menu__link {
   display: flex;
   text-decoration: none;
   color: var(--orange);
-  font-family: 'Neue Montreal Regular';
+  font-family: 'Neue Montreal Regular', sans-serif;
   font-size: 5rem;
   line-height: 1;
-  @media (max-width: 425px) {
-    font-size: 4rem;
-    
-  }
-  
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
 }
 
-.sub-menu-link {
-  text-decoration: none;
-  color: var(--orange);
-  font-family: "Neue Montreal Regular";
-  font-size: 1.2rem;
-}
-
-.menu-link:hover, .sub-menu-link:hover {
+.hamburguer-menu__link:hover {
   color: var(--pink);
 }
 
+/* Submenú container */
+.hamburguer-menu__submenu {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
+}
 
+/* Links del submenú */
+.hamburguer-menu__sublink {
+  text-decoration: none;
+  color: var(--orange);
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
 
+.hamburguer-menu__sublink:hover {
+  color: var(--pink);
+}
+
+/* ============================================
+   FOOTER - Auth y Logout
+   ============================================ */
+
+.hamburguer-menu__footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Botón de Login (nuevo) */
+.hamburguer-menu__auth-btn {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--orange);
+  background: transparent;
+  border: 1px solid var(--orange);
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hamburguer-menu__auth-btn:hover {
+  background: var(--orange);
+  color: var(--light-violet);
+}
+
+/* Botón de Logout */
+.hamburguer-menu__logout {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--orange);
+  background: transparent;
+  border: 1px solid var(--orange);
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+}
+
+.hamburguer-menu__logout:hover {
+  background: var(--orange);
+  color: var(--light-violet);
+}
+
+.hamburguer-menu__logout::before {
+  content: '→';
+  transform: rotate(180deg);
+  display: inline-block;
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   SCROLLBAR PERSONALIZADA
+   ============================================ */
+
+.hamburguer-menu__container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hamburguer-menu__container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hamburguer-menu__container::-webkit-scrollbar-thumb {
+  background: rgba(149, 67, 0, 0.2);
+  border-radius: 2px;
+}
+
+.hamburguer-menu__container::-webkit-scrollbar-thumb:hover {
+  background: rgba(149, 67, 0, 0.4);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1400px) {
+  .hamburguer-menu {
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 850px) {
+  .hamburguer-menu {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 550px) {
+  .hamburguer-menu {
+    max-width: 100%;
+  }
+  
+  .hamburguer-menu__container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hamburguer-menu__header {
+    margin-bottom: 2rem;
+  }
+  
+  .hamburguer-menu__link {
+    font-size: 4rem;
+  }
+  
+  .hamburguer-menu__sublink {
+    font-size: 1.1rem;
+  }
+  
+  .hamburguer-menu__auth-btn,
+  .hamburguer-menu__logout {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.5rem;
+  }
+}
+
+@media (max-width: 355px) {
+  .hamburguer-menu__container {
+    padding-top: 2.5rem;
+    padding-left: 1rem;
+    padding-bottom: 2rem;
+  }
+  
+  .hamburguer-menu__link {
+    font-size: 3.5rem;
+  }
+  
+  .hamburguer-menu__header {
+    margin-bottom: 1.5rem;
+  }
+}

@@ -40,9 +40,7 @@
 
   @media (max-width: 425px) {
     font-size: 1.8rem;
-
   }
-
 }
 
 .contactanos {
@@ -50,11 +48,12 @@
   text-decoration: none;
   padding-top: 7rem;
   padding-bottom: 2rem;
-   @media (max-width: 768px) {
+  
+  @media (max-width: 768px) {
     padding-top: 3.5rem;
     padding-bottom: 1rem;
-    
   }
+  
   @media (max-width: 425px) {
     padding-top: 2rem;
     padding-bottom: 0.5rem;
@@ -65,6 +64,8 @@
   color: var(--brown);
   font-size: var(--super-large-font-size);
   line-height: 100%;
+  word-break: break-word; /* Evitar overflow horizontal */
+  hyphens: none; /* No cortar con guiones */
 
   @media (max-width: 950px) {
     font-size: 4rem;
@@ -77,27 +78,44 @@
   @media (max-width: 475px) {
     font-size: 2.2rem;
   }
-    @media (max-width: 360px) {
-    font-size: 2rem;
+  
+  /* NUEVO: Breakpoint intermedio para el rango problemático 412px-420px */
+  @media (max-width: 420px) {
+    font-size: 1.85rem; /* Ligeramente menor a 2rem para que quepa bien */
+  }
+  
+  @media (max-width: 360px) {
+    font-size: 1.7rem; /* Un poco más chico para 360px */
   }
 }
 
+/* El ".com" se oculta un poco antes (420px) para evitar el corte feo */
 .contact-dot-com {
-  @media (max-width: 385px) {
+  @media (max-width: 420px) {
     display: none;
-    
   }
 }
 
+/* El "com" solo aparece en línea nueva debajo de 420px */
 .contact-com {
   color: var(--brown);
   font-size: 2.2rem;
   line-height: 100%;
-    @media (min-width: 384px) {
-    display: none;
-    
+  margin: 0; /* Resetear márgenes por si acaso */
+  padding: 0;
+  
+  @media (max-width: 420px) {
+    font-size: 1.85rem; /* Match con .contacto */
+    display: block;
   }
-
+  
+  @media (max-width: 360px) {
+    font-size: 1.7rem; /* Match con .contacto */
+  }
+  
+  @media (min-width: 421px) {
+    display: none;
+  }
 }
 
 .link-about-us{
@@ -105,5 +123,4 @@
   font-family: 'Neue Montreal Regular';
   font-size: .875rem;
   padding-top: .8rem;
-
 }

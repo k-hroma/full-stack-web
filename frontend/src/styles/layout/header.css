@@ -1,23 +1,111 @@
-/* Header */
+/* ============================================
+   HEADER - Layout Flexbox Responsive
+   ============================================ */
 
-.header__user {
+.header {
+  position: relative;
+  width: 100%;
+  z-index: 100;
+}
+
+/* Contenedor principal - Flexbox layout */
+.header__container {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 3.5rem 2rem 0;
+  z-index: 9;
+  box-sizing: border-box;
+  pointer-events: none;
 }
 
-.header__user-name {
-  font-family: 'Neue Montreal Regular', sans-serif;
-  font-size: 1rem;
-  color: var(--brown);
-  letter-spacing: 0.02em;
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* Secciones del header */
+.header__section {
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  position: relative;
 }
 
-.header__admin-link {
+/* Izquierda: Hamburguesa */
+.header__section--left {
+  flex: 1;
+  justify-content: flex-start;
+  z-index: 10;
+}
+
+/* Centro: Logo - Siempre centrado absoluto */
+.header__section--center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+  top: 3.5rem;
+}
+
+/* Derecha: Variable según contenido */
+.header__section--right {
+  flex: 1;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+/* ============================================
+   LOGO - Link
+   ============================================ */
+
+.header__logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 11;
+  padding: 15px;
+  margin: -15px;
+  transition: transform 0.2s ease;
+}
+
+.header__logo-hit-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.header__logo-link img {
+  display: block;
+  width: 51px;
+  height: 56px;
+  pointer-events: none;
+}
+
+.header__logo-link:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.header__logo-link:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   SECCIÓN ADMIN - Sin nombre de usuario
+   ============================================ */
+
+.header__admin-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header__admin-btn {
   font-family: 'Neue Montreal Regular', sans-serif;
   font-size: 0.6875rem;
   color: var(--brown);
@@ -29,15 +117,55 @@
   border-radius: 50px;
   transition: all 0.3s ease;
   background-color: transparent;
+  white-space: nowrap;
 }
 
-.header__admin-link:hover {
+.header__admin-btn:hover {
   border-color: var(--brown);
   background-color: var(--brown);
   color: var(--beige);
 }
 
-.header__logout {
+/* ============================================
+   ICONO DE USUARIO Y AVATAR
+   ============================================ */
+
+.header__auth-icon {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+/* Estilo para la imagen de avatar del usuario */
+.header__user-avatar {
+  object-fit: cover;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border: 1px solid var(--light-brown);
+}
+
+/* ============================================
+   BOTONES COMUNES
+   ============================================ */
+
+.header__icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+  text-decoration: none;
+}
+
+.header__icon-btn:hover {
+  opacity: 0.7;
+}
+
+.header__logout-btn {
   font-family: 'Neue Montreal Regular', sans-serif;
   font-size: 0.6875rem;
   color: var(--brown);
@@ -49,108 +177,31 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  white-space: nowrap;
 }
 
-.header__logout:hover {
+.header__logout-btn:hover {
   border-color: var(--brown);
   background-color: var(--brown);
   color: var(--beige);
-
 }
 
-.header__logout:active {
-  transform: scale(0.98);
+.header__divider {
+  opacity: 0.6;
 }
 
+/* ============================================
+   CARRITO
+   ============================================ */
 
-.nav-bar-container {
-  display: flex;
-  position: fixed;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  left: 0;
-  z-index: 9;
-  width: 100%; 
-}
-
-.left-nav {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 8;
-  padding-left: 2rem;
-  padding-top: 3.5rem;
-  @media (max-width: 795px) {
-  padding-left: 1rem;
-  }
-}
-
-.center-nav {
-  display: flex;
-  position: fixed;
-  top: -1rem;
-  z-index: 8;
-  padding-top: 3.5rem;
-   @media (max-width: 768px) {
-    display: none;
-  }
-}
-
-.right-nav {
-  display: flex;
-  position: fixed;
-  top: 0;
-  right: 0;
-  gap: .5rem;
-  z-index: 8;
-  padding-right: 2rem;
-  padding-top: 3.5rem;
-  align-items: center;
-  justify-content: center;
-  @media (max-width: 795px) {
-  padding-right: 1rem;
-  }
-  @media (max-width: 355px) {
-  padding-right: 0.9rem;
-  padding-top: 5.5rem;
-  }
-}
-
-.btn-home-menu {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  align-self: center;
-
-}
-
-.icon-user {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-xs);
-  align-self: baseline;
-
-}
-
-.header__cart {
-  position: relative; /* Necesario para posicionar el badge */
-  background: transparent;
-  border: none;
-  font-size: var(--font-size-lg);
-  cursor: pointer;
-  padding: var(--space-xs);
-  display: flex; /* Para alinear bien el ícono */
-  align-items: center;
-  justify-content: center;
+.header__cart-btn {
+  position: relative;
 }
 
 .header__cart-badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: -2px;
+  right: -2px;
   background: var(--orange);
   color: var(--beige);
   font-family: 'Neue Montreal Medium', sans-serif;
@@ -166,30 +217,132 @@
   line-height: 1;
 }
 
+/* ============================================
+   SEARCH WRAPPER - Desktop vs Mobile
+   ============================================ */
 
-.user-auth {
-  @media (max-width: 768px) {
-    display: none;
-  }
-
+.header__search-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-/* Responsive: apilar elementos en pantallas pequeñas */
-@media (max-width: 768px) {
-  .header__user {
+.header__search-desktop {
+  display: block;
+}
+
+.header__search-toggle {
+  display: none;
+}
+
+.header__search-mobile {
+  display: none;
+}
+
+/* ============================================
+   BREAKPOINTS - ESTRATEGIA DE 3 NIVELES
+   ============================================ */
+
+/* NIVEL 2: Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  .header__container {
+    padding: 3.5rem 1.5rem 0;
+  }
+}
+
+@media (max-width: 888px) {
+  .header__logo-link {
+    display: none;
+  }
+}
+
+/* Móvil pequeño (intermedio) */
+@media (max-width: 480px) {
+  .header__container {
+    padding: 2rem 1rem 0;
+  }
+  
+  /* Ocultar logo centrado */
+  .header__section--center {
+    display: none;
+  }
+  
+  /* Ajustar sección derecha para ocupar espacio disponible */
+  .header__section--right {
     gap: 0.75rem;
   }
-
-  .header__user-name {
-    display: none; /* Ocultar nombre en mobile, mostrar solo icono/botones */
+  
+  /* Search: Cambiar a modo colapsable */
+  .header__search-desktop {
+    display: none;
   }
-
-  .header__admin-link {
-    padding: 0.25rem 0.625rem;
-    font-size: 0.625rem;
+  
+  .header__search-toggle {
+    display: flex;
   }
+  
+  .header__search-mobile {
+    display: block;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 280px;
+    background: var(--beige);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(149, 67, 0, 0.15);
+    animation: slideDown 0.3s ease;
+    z-index: 100;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Ajustar tamaños para móvil */
+  .header__section--left {
+    flex: 0 0 auto;
+  }
+  
+  .header__section--right {
+    flex: 1;
+    justify-content: flex-end;
+  }
+  
+  .header__search-mobile {
+    width: 260px;
+    right: -40px;
+  }
+  
+  .header__icon-btn img {
+    width: 22px;
+    height: 22px;
+  }
+  
+  /* Ajustar tamaño avatar en móvil */
+  .header__user-avatar {
+    width: 22px;
+    height: 22px;
+  }
+}
 
-  .header__logout {
-    font-size: 0.6875rem;
+/* Móvil muy pequeño */
+@media (max-width: 355px) {
+  .header__section--right {
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+  
+  .header__search-mobile {
+    width: 240px;
+    right: -20px;
+    padding: 0.75rem;
   }
 }
