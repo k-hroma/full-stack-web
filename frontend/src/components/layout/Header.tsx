@@ -50,7 +50,7 @@ export function Header() {
             </button>
           </div>
 
-          {/* Centro: Logo - Oculto en móvil (< 768px) */}
+          {/* Centro: Logo */}
           <div className="header__section header__section--center">
             <Link
               to="/"
@@ -68,32 +68,25 @@ export function Header() {
             </Link>
           </div>
 
-          {/* Derecha: Icono User, Search y Cart */}
+          {/* Derecha: Icono User (siempre visible), Admin (si aplica), Search y Cart */}
           <div className="header__section header__section--right">
             {/* Icono de Usuario - SIEMPRE VISIBLE */}
             <Link
-              to={isAuthenticated ? "/profile" : "/login"}
+              to="/login"
               className="header__icon-btn header__auth-icon"
-              aria-label={isAuthenticated ? user?.name || "Mi perfil" : "Iniciar sesión"}
-              title={isAuthenticated ? user?.name || "Mi perfil" : "Iniciar sesión"}
+              aria-label="Iniciar sesión"
             >
-              <img
-                src={user?.avatar || usericon}
-                alt="Usuario"
-                width="25"
-                height="25"
-                className={user?.avatar ? "header__user-avatar" : ""}
-              />
+              <img src={usericon} alt="Usuario" width="25" height="25" />
             </Link>
 
-            {/* Botón Admin (solo para admins) - Sin nombre de usuario */}
+            {/* Panel Admin - Solo para admins (sin nombre de usuario) */}
             {isAuthenticated && isAdmin && (
               <Link to="/admin" className="header__admin-btn">
                 Panel Admin
               </Link>
             )}
 
-            {/* Línea divisoria: Siempre visible */}
+            {/* Línea divisoria */}
             <img
               className="header__divider"
               src={lineicon}
