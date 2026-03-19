@@ -47,13 +47,13 @@
   top: 3.5rem;
 }
 
-/* Derecha: Variable según contenido - SIEMPRE VISIBLE */
+/* Derecha: Variable según contenido */
 .header__section--right {
   flex: 1;
   justify-content: flex-end;
   gap: 0.5rem;
   z-index: 10;
-  flex-wrap: nowrap; /* Prevenir salto de línea */
+  flex-wrap: nowrap; 
   min-width: 0; /* Permitir que el flex se encoja */
 }
 
@@ -147,6 +147,104 @@
   width: 25px;
   height: 25px;
   border: 1px solid var(--light-brown);
+}
+
+.header-logput-toast {
+  position: absolute;
+  background-color: rgba(255, 118, 220, 0.9);
+  color: var(--brown);
+  padding: 1rem 1rem;
+  border-radius: 8px;
+  font-family: 'Neue Montreal Regular';
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(149, 67, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  animation: fadein 0.3s ease;
+  border-left: 2px solid var(--pink);
+  min-width: 250px;
+}
+.header__logout-actions {
+  width: 100%;
+}
+
+.header-logout-user-name{
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.header-logout-user-name:hover {
+  color: var(--orange);
+  transform: translateY(-2px);
+  transform: translateX(1px);
+}
+
+.header__logout-btn--confirm {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--orange);
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  margin-top: 1rem;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.header__logout-btn--confirm {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--orange);
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Si tenés un span con la flecha dentro del botón, o usás ::after */
+.header__logout-btn--confirm::after {
+  content: '→';
+  font-size: 0.9em;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.header__logout-btn--confirm:hover {
+  color: var(--brown);
+  transform: translateX(2px);
+}
+
+.header__logout-btn--confirm:hover::after {
+  transform: translateX(4px); /* La flecha se mueve un poco más que el texto */
+}
+
+.toast-user-close {
+  background-color: transparent;
+  border: none;
+  color: var(--orange);
+}
+.toast-user-close:hover {
+  color: var(--orange);
+  text-transform:uppercase ;
+}
+.action-btn-header-logout-confirm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 
 /* ============================================
@@ -255,35 +353,18 @@
    BREAKPOINTS - ESTRATEGIA RESPONSIVE
    ============================================ */
 
-/* NIVEL 2: Tablet (768px - 1024px) */
-@media (max-width: 1024px) {
-  .header__container {
-    padding: 3.5rem 1.5rem 0;
-  }
-}
-
 @media (max-width: 888px) {
   .header__logo-link {
     display: none;
   }
 }
 
-/* ============================================
-   MÓVIL (hasta 480px): Input expandible
-   ============================================ */
-
-@media (max-width: 480px) {
+@media (max-width: 795px) {
   .header__container {
-    padding: 2rem 0.75rem 0;
+     padding: 2.5rem 1rem 0;
     gap: 0.5rem; /* Gap entre izquierda y derecha */
   }
-  
-  /* Ocultar logo centrado */
-  .header__section--center {
-    display: none;
-  }
-  
-  /* IZQUIERDA: Solo el tamaño del botón hamburguesa, sin crecer */
+   /* IZQUIERDA: Solo el tamaño del botón hamburguesa, sin crecer */
   .header__section--left {
     flex: 0 0 auto; /* No crece, no se encoge, tamaño automático */
   }
@@ -292,21 +373,15 @@
   .header__section--right {
     flex: 1; /* Ocupa todo el flex restante */
     justify-content: flex-end;
-    gap: 0.75rem;
+    gap: .3rem;
     min-width: 0; /* Permite que el contenido se encoja */
   }
-  
-  /* Ocultar usuario y línea divisoria */
-  .header__auth-icon,
-  .header__divider {
-    display: none !important;
-  }
-  
   /* El wrapper del buscador ocupa todo el ancho disponible */
   .header__search-wrapper {
     flex: 1; /* Ocupa todo el espacio dentro de right */
     max-width: none; /* Eliminar cualquier restricción de ancho */
     width: 100%;
+    gap: .3rem;
   }
   
   .header__search-desktop {
@@ -334,14 +409,21 @@
   }
 }
 
-/* Móvil muy pequeño: Ajustes finos */
-@media (max-width: 355px) {
+/* ============================================
+   MÓVIL (hasta 480px): Input expandible
+   ============================================ */
+
+@media (max-width: 480px) {
   .header__container {
-    padding: 2rem 0.5rem 0;
-    gap: 0.25rem;
+    padding: 2rem 0.75rem 0;
+    gap: 0.5rem; /* Gap entre izquierda y derecha */
+  }
+   
+  /* Ocultar usuario y línea divisoria */
+  .header__auth-icon,
+  .header__divider {
+    display: none !important;
   }
   
-  .header__section--right {
-    gap: 0.5rem;
   }
-}
+

@@ -8,6 +8,9 @@
 .search-form {
   display: flex;
   gap: 6px;
+  @media (max-width: 795px) {
+  gap:3px
+  }
   @media (max-width: 355px) {
   gap:2px
   }

@@ -30,6 +30,8 @@ const HamburguerMenu = ({
     onClose();
   };
 
+  const firstName = userName?.split(' ')[0] || 'Usuario';
+
   if (!isOpen) return null;
 
   return (
@@ -48,14 +50,6 @@ const HamburguerMenu = ({
         <div className='hamburguer-menu__container'>
           {/* Header con nombre de usuario y cerrar */}
           <div className="hamburguer-menu__header">
-            <div className="hamburguer-menu__user-info">
-              {isAuthenticated && userName ? (
-                <span className="hamburguer-menu__user-name">Hola, {userName}</span>
-              ) : (
-                <span className="hamburguer-menu__guest">Menú</span>
-              )}
-            </div>
-
             <button
               className='hamburguer-menu__close'
               type='button'
@@ -69,6 +63,13 @@ const HamburguerMenu = ({
                 height="18"
               />
             </button>
+            <div className="hamburguer-menu__user-info">
+              {isAuthenticated && userName ? (
+                <span className="hamburguer-menu__user-name">Hola {firstName}</span>
+              ) : (
+                <span className="hamburguer-menu__guest">Menú</span>
+              )}
+            </div>
           </div>
 
           {/* Links de navegación */}

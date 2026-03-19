@@ -1,5 +1,5 @@
 // Header.tsx
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react'; // Agregar useRef y useEffect
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
@@ -22,11 +22,41 @@ export function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isConfirmLogout, setIsConfirmLogout] = useState(false);
+
+  // Referencia al contenedor del usuario para detectar clics fuera
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
     await logout();
+    setIsConfirmLogout(false); // Cerrar el dropdown
     navigate('/');
   };
+
+  const confirmLogout = () => {
+    setIsConfirmLogout(true);
+  };
+
+  const cancelLogout = () => {
+    setIsConfirmLogout(false);
+  };
+
+  // Efecto para cerrar el dropdown cuando se hace clic fuera
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsConfirmLogout(false);
+      }
+    }
+
+    if (isConfirmLogout) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isConfirmLogout]);
 
   return (
     <>
@@ -70,14 +100,54 @@ export function Header() {
 
           {/* Derecha: Icono User (siempre visible), Admin (si aplica), Search y Cart */}
           <div className="header__section header__section--right">
-            {/* Icono de Usuario - SIEMPRE VISIBLE */}
-            <Link
-              to="/login"
-              className="header__icon-btn header__auth-icon"
-              aria-label="Iniciar sesión"
-            >
-              <img src={usericon} alt="Usuario" width="25" height="25" />
-            </Link>
+
+            {/* Contenedor del Usuario con el Dropdown */}
+            <div className="header__user-menu" ref={userMenuRef}>
+              {/* Icono de Usuario - SIEMPRE VISIBLE */}
+              {isAuthenticated ? (
+                <button
+                  className="header__icon-btn header__auth-icon"
+                  onClick={confirmLogout}
+                  aria-label="Opciones de usuario"
+                >
+                  <img src={usericon} alt="Usuario" width="25" height="25" />
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="header__icon-btn header__auth-icon"
+                  aria-label="Iniciar sesión"
+                >
+                  <img src={usericon} alt="Usuario" width="25" height="25" />
+                </Link>
+              )}
+
+              {/* MINI ASIDE/DROPDOWN de Confirmación */}
+              {isAuthenticated && isConfirmLogout && (
+                <div className="header-logput-toast">
+                  <div className="header__logout-actions">
+                    <div className='action-btn-header-logout-confirm'>
+                      <p className='header-logout-user-name'>{user?.name}</p>
+                      <button
+                        className="toast-user-close"
+                        onClick={cancelLogout}
+                        aria-label="Cerrar menú"
+                      >
+                        x
+                      </button>
+                    </div>
+
+                    <p>{user?.email}</p>
+                    <button
+                      className="header__logout-btn--confirm"
+                      onClick={handleLogout}
+                    >
+                      Salir
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Panel Admin - Solo para admins (sin nombre de usuario) */}
             {isAuthenticated && isAdmin && (
@@ -129,7 +199,7 @@ export function Header() {
             </button>
           </div>
         </div>
-      </header>
+      </header >
 
       <HamburguerMenu
         isOpen={isMenuOpen}

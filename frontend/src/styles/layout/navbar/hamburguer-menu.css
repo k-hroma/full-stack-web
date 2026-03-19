@@ -30,7 +30,7 @@
 .hamburguer-menu {
   width: 100%;
   max-width: 420px;
-  background: var(--light-violet);
+  background: var(--brown);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -84,18 +84,30 @@
 .hamburguer-menu__user-name {
   font-family: 'Neue Montreal Medium', sans-serif;
   font-size: 1rem;
-  color: var(--brown);
+  color: var(--orange);
   letter-spacing: 0.02em;
   margin: 0;
   padding: 0;
+  text-transform: uppercase;
+}
+.hamburguer-menu__user-name:hover {
+  color: var(--pink);
+  translate: 1px;
 }
 
 .hamburguer-menu__guest {
-  font-family: 'Neue Montreal Regular', sans-serif;
-  font-size: 0.875rem;
-  color: var(--light-brown);
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: 1rem;
+  color: var(--orange);
+  letter-spacing: 0.02em;
+  margin: 0;
+  padding: 0;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+}
+
+.hamburguer-menu__guest:hover {
+  color: var(--pink);
+  translate: 1px;
 }
 
 /* Botón cerrar - AHORA EN EL HEADER */
@@ -169,7 +181,7 @@
 
 .hamburguer-menu__footer {
   margin-top: auto;
-  padding-top: 2rem;
+  padding-top: 1rem;
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -195,8 +207,15 @@
 }
 
 .hamburguer-menu__auth-btn:hover {
-  background: var(--orange);
-  color: var(--light-violet);
+  color: var(--pink);
+  translate: 1px;
+  border: 1px solid var(--pink);
+}
+
+.hamburguer-menu__auth-btn::after {
+  content: '→';
+  display: inline-block;
+  font-size: 0.8rem;
 }
 
 /* Botón de Logout */
@@ -220,8 +239,9 @@
 }
 
 .hamburguer-menu__logout:hover {
-  background: var(--orange);
-  color: var(--light-violet);
+  color: var(--pink);
+  translate: 1px;
+  border: 1px solid var(--pink);
 }
 
 .hamburguer-menu__logout::before {
