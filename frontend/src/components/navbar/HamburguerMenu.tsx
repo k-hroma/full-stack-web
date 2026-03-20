@@ -1,5 +1,6 @@
 // HamburguerMenu.tsx
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import closeHamburguerMenuIcon from '../../assets/icons/hamburguer-close.svg';
 import '../../styles/layout/navbar/hamburguer-menu.css';
 
@@ -18,6 +19,8 @@ const HamburguerMenu = ({
   onLogout,
   userName
 }: HamburguerMenuProps) => {
+
+  const { isAdmin } = useAuth();
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') onClose();
@@ -75,9 +78,28 @@ const HamburguerMenu = ({
           {/* Links de navegación */}
           <nav className="hamburguer-menu__nav">
             {/* Home - Nuevo link */}
+
             <Link className='hamburguer-menu__link' to='/' onClick={onClose}>
               Home
             </Link>
+            {isAdmin &&
+              <div className='hamburguer-menu__submenu'>
+                <Link
+                  className='hamburguer-menu__sublink'
+                  to='/admin'
+                  onClick={onClose}
+                >
+                  Dasboard
+                </Link>
+                <Link
+                  className='hamburguer-menu__sublink'
+                  to='/admin/register-admin'
+                  onClick={onClose}
+                >
+                  Registrar admin
+                </Link>
+              </div>
+            }
 
             <Link className='hamburguer-menu__link' to='/catalogo' onClick={onClose}>
               Impresos

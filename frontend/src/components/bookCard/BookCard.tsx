@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import type { Book } from '../../types/book'
 import { useState } from "react";
 import '../../styles/components/book-card.css'
@@ -9,12 +8,13 @@ interface BookCardProps {
   book: Book;
   isInCart: boolean;
   onAddToCart: () => void;
+  onViewMore: () => void;
 }
 
 
-const BookCard = ({ index, book, isInCart, onAddToCart }: BookCardProps) => {
+const BookCard = ({ index, book, isInCart, onAddToCart, onViewMore }: BookCardProps) => {
   const bgColors = [
-    '#CDB0EA', '#383838', '#954300', '#CDB0EA', 
+    '#CDB0EA', '#383838', '#954300', '#CDB0EA',
     '#DBD0C1', '#CDB0EA', '#34C759', '#7D94A3',
   ];
 
@@ -38,9 +38,9 @@ const BookCard = ({ index, book, isInCart, onAddToCart }: BookCardProps) => {
 
   return (
     <div className='item-book-container'>
-      <div 
-        style={hover 
-          ? { backgroundColor: bgColor, border: "10px solid #FF76DC" } 
+      <div
+        style={hover
+          ? { backgroundColor: bgColor, border: "10px solid #FF76DC" }
           : { backgroundColor: bgColor, border: `10px solid ${bgBorder}` }
         }
         onMouseEnter={() => setHover(true)}
@@ -57,7 +57,7 @@ const BookCard = ({ index, book, isInCart, onAddToCart }: BookCardProps) => {
           />
         </div>
       </div>
-      
+
       <div className='info-container'>
         <div className='info-txt-precio-container'>
           <div className='txt-content'>
@@ -67,20 +67,16 @@ const BookCard = ({ index, book, isInCart, onAddToCart }: BookCardProps) => {
             <p>${book.price}</p>
           </div>
         </div>
-        
+
         <div className='details-section'>
           <p className='txt-author'>{book.lastName} {book.firstName}</p>
-          
+
           <div className='actions-container'>
-            <Link 
-              className='item-book-btn btn-outline' 
-              to={book.url} 
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Ver más
-            </Link>
-            
+            <button
+              className='item-book-btn btn-outline'
+              onClick={onViewMore}>
+              ver más
+            </button>
             <button
               className={`item-book-btn btn-primary ${buttonState.className}`}
               onClick={onAddToCart}

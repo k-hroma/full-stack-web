@@ -62,7 +62,6 @@ export function Header() {
     <>
       <header className="header">
         <AnimatedNav />
-
         <div className="header__container">
           {/* Izquierda: Menú Hamburguesa */}
           <div className="header__section header__section--left">
@@ -122,7 +121,7 @@ export function Header() {
                 </Link>
               )}
 
-              {/* MINI ASIDE/DROPDOWN de Confirmación */}
+              {/* ASIDE/DROPDOWN */}
               {isAuthenticated && isConfirmLogout && (
                 <div className="header-logput-toast">
                   <div className="header__logout-actions">
@@ -136,25 +135,37 @@ export function Header() {
                         x
                       </button>
                     </div>
-
                     <p>{user?.email}</p>
-                    <button
-                      className="header__logout-btn--confirm"
-                      onClick={handleLogout}
-                    >
-                      Salir
-                    </button>
                   </div>
+                  {/* Solo para admins*/}
+                  <div className='admin__header_links_wrapper'>
+                    {isAuthenticated && isAdmin && (
+                      <>
+                        <Link
+                          to="/admin" className='header__admin-links'
+                          onClick={() => setIsConfirmLogout(false)}
+                        >
+                          Dashboard
+                        </Link>
+                        <Link
+                          to="/admin/register-admin" className='header__admin-links'
+                          onClick={() => setIsConfirmLogout(false)}
+
+                        >
+                          Registrar Admin
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                  <button
+                    className="header__logout-btn--confirm"
+                    onClick={handleLogout}
+                  >
+                    Salir
+                  </button>
                 </div>
               )}
             </div>
-
-            {/* Panel Admin - Solo para admins (sin nombre de usuario) */}
-            {isAuthenticated && isAdmin && (
-              <Link to="/admin" className="header__admin-btn">
-                Panel Admin
-              </Link>
-            )}
 
             {/* Línea divisoria */}
             <img
@@ -166,6 +177,7 @@ export function Header() {
             />
 
             {/* Search: Versión desktop siempre visible, móvil colapsable */}
+
             <div className={`header__search-wrapper ${isSearchExpanded ? 'is-expanded' : ''}`}>
               <div className="header__search-desktop">
                 <SearchBooks />
@@ -187,7 +199,7 @@ export function Header() {
             </div>
 
             {/* Cart */}
-            <button
+            {!isAdmin && (<button
               onClick={() => setIsCartOpen(true)}
               className="header__icon-btn header__cart-btn"
               aria-label={`Carrito con ${itemCount} items`}
@@ -196,11 +208,11 @@ export function Header() {
               {itemCount > 0 && (
                 <span className="header__cart-badge">{itemCount}</span>
               )}
-            </button>
+            </button>)}
+
           </div>
         </div>
       </header >
-
       <HamburguerMenu
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
@@ -208,11 +220,13 @@ export function Header() {
         onLogout={handleLogout}
         userName={user?.name}
       />
+      {!isAdmin && (
+        <CartSidebar
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+        />
+      )}
 
-      <CartSidebar
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-      />
     </>
   );
 }

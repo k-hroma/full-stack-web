@@ -1,0 +1,322 @@
+/**
+ * Estilos del Modal de Detalle de Libro
+ * @module styles/components/bookDetailModal
+ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(219, 208, 193, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-container {
+  background: var(--beige);
+  width: 90%;
+  max-width: 1200px;
+  height: 85vh;
+  max-height: 800px;
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 50px -12px rgba(149, 67, 0, 0.25);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--brown);
+  background: transparent;
+  color: var(--brown);
+  font-family: 'Neue Montreal Medium';
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modal-content {
+  display: grid;
+  grid-template-columns: 45% 55%;
+  height: 100%;
+}
+
+/* Sección de Imagen */
+.modal-image-section {
+  background: var(--dark-beige);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.modal-image-border {
+  border: 10px solid #5BA8F7; /* Azul característico de la imagen */
+  padding: 2rem;
+  background: #2a2a2a; /* Fondo oscuro detrás del libro */
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 3/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-image-wrapper {
+  width: 70%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Sección de Información */
+.modal-info-section {
+  padding: 3rem 4rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--beige);
+}
+
+.modal-header {
+  margin-bottom: 2rem;
+}
+
+.modal-category {
+  font-family: 'Neue Montreal Regular';
+  font-size: 0.875rem;
+  color: var(--brown);
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.modal-title {
+  font-family: 'PPEditorialNew', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  color: var(--pink);
+  line-height: 1.1;
+  margin: 0 0 0.75rem 0;
+  font-weight: 100;
+  letter-spacing: -0.02em;
+}
+
+.modal-author {
+  font-family: 'Neue Montreal Medium';
+  font-size: 1.25rem;
+  color: var(--pink);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Precio y Botón */
+.modal-price-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(149, 67, 0, 0.2);
+}
+
+.modal-price {
+  font-family: 'PPEditorialNew', serif;
+  font-size: 2.5rem;
+  color: var(--brown);
+  font-weight: 100;
+  letter-spacing: -0.02em;
+}
+
+.modal-interest-btn {
+  padding: 0.75rem 2.5rem;
+  border-radius: 2rem;
+  border: 2px solid var(--pink);
+  background: var(--pink);
+  color: var(--beige);
+  font-family: 'Neue Montreal Medium';
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+
+.modal-interest-btn:hover:not(:disabled) {
+  background: transparent;
+  color: var(--pink);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 118, 220, 0.3);
+}
+
+.modal-interest-btn.in-cart {
+  background: var(--brown);
+  border-color: var(--brown);
+  opacity: 0.8;
+  cursor: default;
+}
+
+.modal-interest-btn.no-stock {
+  background: #ccc;
+  border-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Metadatos */
+.modal-metadata {
+  margin-bottom: 2rem;
+}
+
+.metadata-item {
+  font-family: 'Neue Montreal Regular';
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--brown);
+}
+
+.metadata-label {
+  color: var(--brown);
+  font-weight: 500;
+  border-bottom: 1px solid var(--brown);
+  margin-right: 0.25rem;
+}
+
+.metadata-value {
+  color: var(--brown);
+}
+
+/* Descripción */
+.modal-description {
+  flex: 1;
+}
+
+.description-label {
+  font-family: 'Neue Montreal Medium';
+  font-size: 0.9375rem;
+  color: var(--brown);
+  margin: 0 0 1rem 0;
+  font-weight: 500;
+  border-bottom: 1px solid var(--brown);
+  display: inline-block;
+  padding-bottom: 0.25rem;
+}
+
+.description-text {
+  font-family: 'Neue Montreal Regular';
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--brown);
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.description-text p {
+  margin: 0 0 1rem 0;
+}
+
+.description-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Scrollbar personalizada para la descripción */
+.description-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.description-text::-webkit-scrollbar-thumb {
+  background: var(--dark-beige);
+  border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .modal-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: 40% 60%;
+  }
+  
+  .modal-image-section {
+    padding: 2rem;
+  }
+  
+  .modal-image-border {
+    max-width: 250px;
+    padding: 1.5rem;
+  }
+  
+  .modal-info-section {
+    padding: 2rem;
+  }
+  
+  .modal-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    padding: 0;
+  }
+  
+  .modal-container {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+  }
+  
+  .modal-price-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
