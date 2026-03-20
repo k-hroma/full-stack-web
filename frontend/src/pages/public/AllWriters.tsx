@@ -9,6 +9,10 @@ export default function AllWriters() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Abecedario completo incluyendo Ñ para nombres en español
+  const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
   useEffect(() => {
     const loadBooks = async () => {
       setIsLoading(true);
@@ -16,7 +20,6 @@ export default function AllWriters() {
       try {
         const data = await getBooks();
 
-        // Primero filtrar duplicados, luego ordenar (más eficiente y predecible)
         const uniqueBooks = data.filter((book, index, self) =>
           index === self.findIndex((b) =>
             b.lastName.toLowerCase() === book.lastName.toLowerCase() &&
@@ -24,7 +27,6 @@ export default function AllWriters() {
           )
         );
 
-        // Luego ordenar por apellido
         uniqueBooks.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
         setBooks(uniqueBooks);
@@ -40,6 +42,14 @@ export default function AllWriters() {
     loadBooks();
   }, []);
 
+  // Función opcional para hacer scroll a la primera letra disponible
+  const scrollToLetter = (letter: string) => {
+    const element = document.getElementById(`letter-${letter}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   if (isLoading) return <div className='link-return-writers'>Cargando...</div>;
   if (error) return <div>{error}</div>;
 
@@ -52,18 +62,46 @@ export default function AllWriters() {
           </p>
           <Link className="link-return-writers" to='/'>Volver</Link>
         </div>
-        <div className="txt-writers-container">
-          {books && books.map(book => (
 
-            <div key={`${book.lastName}-${book.firstName}`}>
-              <p className="txt-writers-container-authors">
-                {book.lastName} {book.firstName} <span className="txt-gender-container">{book.editorial}</span>
-              </p>
-              <p className="txt-g-c-small">{book.editorial}</p>
-            </div>
-          ))}
+        <div className="txt-writers-container">
+          {books && books.map((book, index) => {
+            const currentLetter = book.lastName.charAt(0).toUpperCase();
+            const prevLetter = index > 0 ? books[index - 1].lastName.charAt(0).toUpperCase() : null;
+            const showLetterHeader = currentLetter !== prevLetter;
+
+            return (
+              <div key={`${book.lastName}-${book.firstName}`}>
+                {showLetterHeader && (
+                  <div id={`letter-${currentLetter}`} className="letter-section-header">
+                    {currentLetter}
+                  </div>
+                )}
+                <Link className="writers-txt-wrapper" to="/escritorxs">
+                  <div className="writers-txt-wrapper" >
+                    <p className="txt-writers-container-authors">
+                      {book.lastName} {book.firstName} <span className="txt-gender-container">→</span>
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* Abecedario flotante */}
+      <nav className="alphabet-nav">
+        {alphabet.map((letter) => (
+          <button
+            key={letter}
+            className="alphabet-letter"
+            onClick={() => scrollToLetter(letter)}
+            aria-label={`Ir a letra ${letter}`}
+          >
+            {letter}
+          </button>
+        ))}
+      </nav>
     </section>
   )
 }

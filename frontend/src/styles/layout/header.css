@@ -133,6 +133,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  
 }
 
 .header__admin-links {
@@ -145,21 +146,20 @@
   text-transform: lowercase;
   color: var(--orange);
   text-decoration: none;
-}
-
-.header__admin-links:hover {
-  color: var(--brown);
-  transform: translateX(4px);
-  transform: translatey(-4px);
+  transition: transform 0.3s ease;
 }
 
 .header__admin-links::after {
   content: '→';
   font-size: 0.9em;
-  transition: transform 0.3s ease;
   display: inline-block;
+}
+.header__admin-links:hover {
+  color: var(--brown);
+  transform: translateX(4px) translatey(-4px);
 
 }
+
 
 /* ============================================
    ICONO DE USUARIO Y AVATAR
@@ -210,8 +210,9 @@
 
 .header-logout-user-name:hover {
   color: var(--orange);
-  transform: translateY(-2px);
-  transform: translateX(1px);
+  transform: translateY(-2px) translateX(2px);
+  cursor: pointer;
+
 }
 
 .header__logout-btn--confirm {
@@ -257,11 +258,7 @@
 
 .header__logout-btn--confirm:hover {
   color: var(--brown);
-  transform: translateX(2px);
-}
-
-.header__logout-btn--confirm:hover::after {
-  transform: translateX(4px); 
+  transform: translateX(2px) translateY(-2px);
 }
 
 .toast-user-close {

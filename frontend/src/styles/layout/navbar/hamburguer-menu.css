@@ -75,41 +75,6 @@
   min-height: 28px; /* Para evitar saltos */
 }
 
-.hamburguer-menu__user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.hamburguer-menu__user-name {
-  font-family: 'Neue Montreal Medium', sans-serif;
-  font-size: 1rem;
-  color: var(--orange);
-  letter-spacing: 0.02em;
-  margin: 0;
-  padding: 0;
-  text-transform: uppercase;
-}
-.hamburguer-menu__user-name:hover {
-  color: var(--pink);
-  translate: 1px;
-}
-
-.hamburguer-menu__guest {
-  font-family: 'Neue Montreal Medium', sans-serif;
-  font-size: 1rem;
-  color: var(--orange);
-  letter-spacing: 0.02em;
-  margin: 0;
-  padding: 0;
-  text-transform: uppercase;
-}
-
-.hamburguer-menu__guest:hover {
-  color: var(--pink);
-  translate: 1px;
-}
-
 /* Botón cerrar - AHORA EN EL HEADER */
 .hamburguer-menu__close {
   background: transparent;
@@ -147,10 +112,12 @@
   line-height: 1;
   margin-bottom: 0.5rem;
   transition: color 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .hamburguer-menu__link:hover {
   color: var(--pink);
+  transform: translateY(-3px) translateX(10px);
 }
 
 /* Submenú container */
@@ -159,6 +126,8 @@
   flex-direction: column;
   margin-bottom: 1rem;
   margin-left: 0.5rem;
+  transition: color 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 /* Links del submenú */
@@ -169,10 +138,12 @@
   font-size: 1.2rem;
   line-height: 1.6;
   transition: color 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .hamburguer-menu__sublink:hover {
   color: var(--pink);
+  transform: translateY(-3px) translateX(10px);
 }
 
 /* ============================================
@@ -204,11 +175,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  transition: transform 0.5s ease;
 }
 
 .hamburguer-menu__auth-btn:hover {
   color: var(--pink);
-  translate: 1px;
+  transform: translateX(10px);
   border: 1px solid var(--pink);
 }
 
@@ -235,12 +207,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  transition: transform 0.5s ease;
 
 }
 
 .hamburguer-menu__logout:hover {
   color: var(--pink);
-  translate: 1px;
+  transform: translateX(-10px);
   border: 1px solid var(--pink);
 }
 

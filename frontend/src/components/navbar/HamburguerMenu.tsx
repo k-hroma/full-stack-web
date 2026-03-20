@@ -17,7 +17,6 @@ const HamburguerMenu = ({
   onClose,
   isAuthenticated = false,
   onLogout,
-  userName
 }: HamburguerMenuProps) => {
 
   const { isAdmin } = useAuth();
@@ -33,7 +32,6 @@ const HamburguerMenu = ({
     onClose();
   };
 
-  const firstName = userName?.split(' ')[0] || 'Usuario';
 
   if (!isOpen) return null;
 
@@ -66,13 +64,7 @@ const HamburguerMenu = ({
                 height="18"
               />
             </button>
-            <div className="hamburguer-menu__user-info">
-              {isAuthenticated && userName ? (
-                <span className="hamburguer-menu__user-name">Hola {firstName}</span>
-              ) : (
-                <span className="hamburguer-menu__guest">Menú</span>
-              )}
-            </div>
+
           </div>
 
           {/* Links de navegación */}

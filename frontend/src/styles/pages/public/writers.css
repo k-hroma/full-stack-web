@@ -19,11 +19,13 @@
   padding-bottom: 1.5rem;
   @media (max-width: 795px) {
   padding-left: 1rem;
+  padding-right: 1rem;
 
   }
 }
 
 .txt-writers-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -52,16 +54,32 @@
   font-weight: 400;
   font-size: 0,875rem;
   line-height: 130%;
-  @media (max-width: 768px) {
-    display: none;
-  }
+}
+
+.writers-txt-wrapper {
+display: flex;
+align-items: baseline;
+transition: transform 0.3s ease;
+text-decoration: none;
+}
+
+.writers-txt-wrapper:hover {
+  transform: translateX(10px) translateY(-10px); 
 }
 
 .txt-writers-container-authors {
+  display: flex;
   color: var(--pink);
   font-family: 'Neue Montreal Regular';
   font-size: clamp(2.4rem, calc(1.5rem + 3.93vw), 5rem);
   line-height: 1.2;
+  align-items: baseline;
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+  }
 }
 
 .txt-writers-container p:hover {
@@ -70,35 +88,103 @@
 }
 
 .txt-gender-container {
+  display: flex;
   color: var(--orange);
-  font-size: 1rem;
+  font-size: 2rem;
   font-family: 'PPEditorialNew';
-  margin-right: 0.875rem ;
   height: 100%;
-  align-self:flex-start;
-  @media (max-width: 768px) {
-    display: none;
+  margin-left: 1rem;
+  align-self: baseline;
+   @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-left: 0.3rem;
   }
 }
 
-.txt-g-c-small {
-  color: var(--orange);
-  font-size: 1rem;
-  font-family: 'PPEditorialNew';
-  margin-right: 0.875rem ;
-  height: 100%;
-  align-self:flex-start;
-  @media (min-width: 769px) {
-    display: none;
-  }
-
-}
 
 .ver-mas-writers {
   display: flex;
   align-self: center;
   margin-top: 3rem;
-  @media (min-width: 769px) {
-    display: none;
 }
+
+/* Abecedario flotante vertical */
+.alphabet-nav {
+  position: fixed;
+  right: 2rem;
+  top: 65%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  z-index: 100;
+  padding: 1rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.055); /* Semi-transparente para legibilidad */
+  border-radius: 15px;
+  backdrop-filter: blur(4px);
+}
+
+.alphabet-letter {
+  color: var(--orange);
+  font-family: 'Neue Montreal Medium';
+  font-size: 0.85rem;
+  line-height: 1.2;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.alphabet-letter:hover {
+  color: var(--pink);
+  opacity: 1;
+  transform: scale(1.2);
+  border: .5px solid var(--pink);
+  border-radius: 50px;
+}
+
+.alphabet-letter:active {
+  color: var(--orange);
+}
+
+/* Headers de sección por letra (opcional) */
+.letter-section-header {
+  color: var(--orange);
+  font-family: 'Neue Montreal Medium';
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--orange);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  /* Importante para el scroll si tenés header fijo */
+  scroll-margin-top: 100px;
+}
+
+/* Responsive: ocultar abecedario en móviles pequeños */
+@media (max-width: 1024px) {
+  .alphabet-nav {
+    right: 1rem;
+    gap: 0.15rem;
+  }
+  
+  .alphabet-letter {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .alphabet-nav {
+   
+  }
+  
 }

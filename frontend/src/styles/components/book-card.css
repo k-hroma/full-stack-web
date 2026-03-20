@@ -126,32 +126,40 @@
 .btn-outline {
   background-color: transparent;
   color: var(--pink);
+  transition: transform o.3s ease;
+  
 }
 
 .btn-outline:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px) translateX(3px);
+
 }
 
 /* Botón primary (Agregar) */
 .btn-primary {
   background: transparent;
   border-color: var(--pink);
+  transition: transform o.3s ease;
+  text-transform: lowercase;
+  
 }
 
 .btn-primary:hover:not(:disabled) {
   background: transparent;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 118, 220, 0.3);
+  transform: translateY(-3px) translateX(3px);
 }
 
 /* Estados especiales */
 .btn-primary.in-cart {
-  background: var(--brown);
-  border-color: var(--brown);
-  color: white;
-  opacity: 0.8;
+  background: transparent;
+  border-color: var(--orange);
+  color: var(--orange);
   cursor: default;
+  transition: transform o.3s ease;
+}
+
+.btn-primary.in-cart:hover {
+  transform: translateY(-3px) translateX(3px);
 }
 
 .btn-primary.no-stock {
@@ -162,11 +170,6 @@
   opacity: 0.6;
 }
 
-/* Efecto de ripple al hacer click */
-.item-book-btn:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
 
 /* Focus visible para accesibilidad */
 .item-book-btn:focus-visible {
