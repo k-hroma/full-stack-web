@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getBooks } from "../../api";
 import type { Book } from "../../types";
 import '../../styles/pages/public/writers.css'
+import { Link } from "react-router-dom";
 
 export default function Writers() {
   const [books, setBooks] = useState<Book[]>([])
@@ -57,7 +57,10 @@ export default function Writers() {
         <div className="txt-writers-container">
           {books && books.map(book => (
             <div key={`${book.lastName}-${book.firstName}`}>
-              <Link className="writers-txt-wrapper" to="/escritorxs">
+              <Link
+                to={`/books/${book._id}`}
+                className="writers-txt-wrapper"
+              >
                 <div className="writers-txt-wrapper" >
                   <p className="txt-writers-container-authors">
                     {book.lastName} {book.firstName} <span className="txt-gender-container">→</span>

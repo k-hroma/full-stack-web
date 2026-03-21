@@ -73,6 +73,43 @@ const getBooks = async (
   }
 };
 
+const getBookById = async (
+  req: Request<{ id: string }>,
+  res: Response<QueryResponse>,
+  next:NextFunction
+): Promise<void> => {
+  const { id } = req.params;
+  if (!id) {
+    const errMsg = "Book ID is required."
+    res.status(400).json({
+      success: false,
+      message: errMsg
+    });
+    console.error(errMsg)
+    return
+  }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const errMsg = "Invalid ID format."
+    res.status(400).json({
+      success: false,
+      message: errMsg
+    })
+    console.error(errMsg)
+    return
+  }
+  try {
+    const book = await Book.findById(id);
+    res.status(200).json({
+      success: true,
+      message: book ? "Books retrieved successfully" : "No books found",
+      data: book
+    })
+  } catch (error:unknown) { 
+    next(error)
+  }
+
+}
+
 /**
  * Búsqueda full-text en catálogo (título, autor, editorial).
  * 
@@ -370,6 +407,7 @@ const deleteBook = async (
 
 export { 
   getBooks, 
+  getBookById,
   searchBook, 
   addBook, 
   updateBook, 

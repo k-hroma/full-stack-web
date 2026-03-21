@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { getBooks, addBook, updateBook, deleteBook, searchBook } from "../controllers/bookControllers.js";
+import { getBooks, getBookById, addBook, updateBook, deleteBook, searchBook } from "../controllers/bookControllers.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { requireRole } from "../middlewares/requireRole.js";
 
 const bookRouter = Router();
 
 bookRouter.get("/", getBooks);
+bookRouter.get("/:id", getBookById)
 bookRouter.get("/search", searchBook);
 
 bookRouter.post(
