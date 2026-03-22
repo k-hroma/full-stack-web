@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getBookById } from "../../api";
 import type { Book } from "../../types";
+import Writers from "../../pages/public/Writers"
 import WriterBioCard from "../../components/writerCard/WriterBioCard";
 
 export default function WriterBioPage() {
@@ -51,11 +52,10 @@ export default function WriterBioPage() {
 
   return (
     <section className="writer-bio-section">
-      <h1>Writer Card</h1>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, soluta ratione dolorem beatae non quam deserunt eos, voluptatem iure quia est a porro reiciendis sint nihil ab et, rem consequuntur!</p>
       <WriterBioCard
         book={book}
       />
+      <Writers />
     </section>
   )
 }

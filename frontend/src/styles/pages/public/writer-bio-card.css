@@ -1,0 +1,88 @@
+.writer-bio-container {
+  background-color: var(--light-violet);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 6.5rem 2rem 8rem 2rem;
+  
+}
+
+.featured-quote {
+  font-family:'Neue Montreal Regular';
+  color: var(--orange);
+  font-size: var(--super-large-font-size);
+  padding: 4rem 6rem 1rem 6rem;
+  text-align: center;
+}
+
+.writer-sub-quote {
+  font-family:'Neue Montreal Medium';
+  color: var(--orange);
+  font-size: var(--very-small-font-size);
+  text-align: center;
+  line-height: 130%;
+  padding-top: 2rem;
+  padding-bottom: 8rem;
+}
+.writer-bio-line {
+  border:none;
+  border-top: 2px solid var(--pink);  
+  padding-top: 8rem;
+}
+
+.writer-bio-line:hover {
+border-color: var(--green);
+}
+
+
+
+.writer-bio-wrapper{
+  display: flex;
+  width: 100%;
+  font-family:'Neue Montreal Regular';
+  color: var(--brown);
+  font-size: var(--large-font-size);
+  letter-spacing:-1%;
+  justify-content: space-between;
+ 
+}
+
+.writer-details-bio-books {
+  display: flex;
+  flex-direction: column;
+  gap:2rem;
+
+
+}
+.writer-bio-description{
+  display: flex;
+  width: 75%;
+
+}
+
+.writer-bio-name-last-name p:nth-child(2n) {
+  line-height: 99%;
+}
+
+.writer-books-titles {
+  font-size: var(--very-small-font-size);
+  color: var(--orange);
+}
+
+.writer-books-titles li {
+ list-style: none;
+}
+
+.writer-titles-btn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: var(--orange);
+  text-decoration: underline;
+}
+
+.writer-titles-btn:hover {
+ color: var(--brown);
+}
+
+
