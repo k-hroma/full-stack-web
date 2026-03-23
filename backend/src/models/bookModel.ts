@@ -119,7 +119,7 @@ const bookSchema = new Schema<IBook>(
     },
     description: {
       type: String,
-      required: true,
+      required: [true, "Description is required"],
       trim: true,
     },
     url: {

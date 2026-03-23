@@ -6,6 +6,7 @@
 
 import type { IRegisterUser } from "./authInterface.js";
 import type { IBook } from "./bookInterface.js";
+import type { IWriter } from "./writerInterface.js";
 
 /**
  * Respuesta estandarizada para peticiones exitosas a la API.
@@ -28,7 +29,7 @@ interface QueryResponse {
   success: boolean;
   message: string;
   token?: string;
-  data?: IBook | IBook[] | IRegisterUser | null;
+  data?: IBook | IBook[] | IRegisterUser | IWriter | null;
   error?: unknown; 
 }
 

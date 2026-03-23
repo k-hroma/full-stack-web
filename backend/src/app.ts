@@ -11,6 +11,7 @@ import cors from 'cors';
 import { handleErrors } from './middlewares/handleErrors.js';
 import { bookRouter } from './routes/bookRouter.js';
 import { authRouter } from './routes/authRouter.js';
+import { writerRouter } from "./routes/writerRouter.js";
 
 
 /**
@@ -78,6 +79,10 @@ app.use("/books", bookRouter)
  * (ej: /auth/login, /auth/register, /auth/refresh)
  */
 app.use("/auth", authRouter)
+
+
+
+app.use("/writer", writerRouter)
 
 
 // ============================================================================
