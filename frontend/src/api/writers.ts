@@ -1,5 +1,5 @@
-import type{  CreateWriterInput, WriterResponse, WritersResponse, Writer, UpdateWriterInput } from '../types/writer';
 import { httpClient } from './client';
+import type{  CreateWriterInput, WriterResponse, WritersResponse, Writer, UpdateWriterInput, WriterFilters } from '../types/writer';
 
 export const createWriter = async (writer: CreateWriterInput): Promise<Writer> => {
   const response = await httpClient<WriterResponse>('/writers', {
@@ -30,9 +30,17 @@ export const searchWriters = async (term: string): Promise<Writer[]> => {
     return response.data;
 }
  
-export const getWriters = async (): Promise<Writer[]> => {
-  const response = await httpClient<WritersResponse>(`/writers`)
-  console.log(response.data)
+export const getWriters = async (filters?: WriterFilters): Promise<Writer[]> => {
+  const params = new URLSearchParams();
+  if (filters?.recomended !== undefined) {
+    params.append('recomended', String(filters.recomended))
+  }
+  const query = params.toString() ? `?${params.toString()}` : '';
+  const response = await httpClient<WritersResponse>(`/writers${query}`)
   return response.data
  }
  
+export const getWriterById = async (id: string): Promise<Writer> => {
+  const response = await httpClient<WriterResponse>(`/writers/${id}`);
+  return response.data
+ }

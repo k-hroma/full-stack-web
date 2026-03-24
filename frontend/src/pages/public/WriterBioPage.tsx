@@ -1,36 +1,38 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getBookById } from "../../api";
-import type { Book } from "../../types";
+import { getWriterById } from "../../api/writers";
+import type { Writer } from "../../types/writer";
 import Writers from "../../pages/public/Writers"
 import WriterBioCard from "../../components/writerCard/WriterBioCard";
 
+
 export default function WriterBioPage() {
-  const [book, setBook] = useState<Book>()
+
+  const [writer, setWriter] = useState<Writer>()
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams();
 
   useEffect(() => {
-    console.log(id)
+
     if (!id) {
       setError('ID no proporcionado');
       setIsLoading(false);
       return;
     }
 
-    const loadBooks = async () => {
+    const loadWriter = async () => {
 
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getBookById(id);
-        console.log(data)
+        const data = await getWriterById(id);
+
         if (!data) {
           throw new Error('Escritor no encontrado');
         }
-        setBook(data);
+        setWriter(data);
 
       } catch (error) {
         const errMsg = error instanceof Error
@@ -42,18 +44,18 @@ export default function WriterBioPage() {
       }
     };
 
-    loadBooks();
+    loadWriter();
   }, [id]);
 
   if (isLoading) return <div className='link-return-writers'>Cargando...</div>;
   if (error) return <div>{error}</div>;
-  if (!book) return <div>No se encontró el libro</div>;
+  if (!writer) return <div>No se encontró el Esrcitorx</div>;
 
 
   return (
     <section className="writer-bio-section">
       <WriterBioCard
-        book={book}
+        writer={writer}
       />
       <Writers />
     </section>

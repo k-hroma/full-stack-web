@@ -72,6 +72,21 @@ export const getBookById = async (id: string): Promise<Book> => {
 };
 
 /**
+ * Obtiene libros por nombre y apellido del autor
+ */
+export const getBooksByAuthor = async (
+  lastName: string,
+  firstName: string
+): Promise<Book[]> => {
+  const params = new URLSearchParams();
+  params.append('lastName', lastName);
+  params.append('firstName', firstName);
+
+  const response = await httpClient<BooksResponse>(`/books/author?${params.toString()}`);
+  return response.data;
+};
+
+/**
  * Crea un nuevo libro (solo admin)
  */
 export const createBook = async (book: CreateBookInput): Promise<Book> => {

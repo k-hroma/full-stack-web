@@ -27,6 +27,10 @@ export function Header() {
   // Referencia al contenedor del usuario para detectar clics fuera
   const userMenuRef = useRef<HTMLDivElement>(null);
 
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   const handleLogout = async () => {
     await logout();
     setIsConfirmLogout(false); // Cerrar el dropdown
@@ -85,6 +89,7 @@ export function Header() {
               to="/"
               className="header__logo-link"
               aria-label="Ir al inicio"
+              onClick={handleClick}
             >
               <span className="header__logo-hit-area">
                 <img

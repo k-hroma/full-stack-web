@@ -7,11 +7,15 @@ import mongoose from 'mongoose';
 import type { IWriter } from "../types/writerInterface.js";
 
 const getWriters = async (
-  req: Request<{}>,
+  req: Request<{}, {}, {}, {recomended?: string}>,
   res: Response<QueryResponse>,
   next: NextFunction
 ): Promise<void> => {
   try {
+    const filter: Record<string, boolean> = {};
+    if (req.query.recomended !== undefined) {
+      filter.fanzine = req.query.recomended === "true";
+    }
     const writers = await Writer.find()
       .sort({ createdAt: -1 })
       .lean<IWriter[]>();
@@ -28,9 +32,45 @@ const getWriters = async (
     
   }
  }
-const getWriterById = async () => { }
+const getWriterById = async (
+  req: Request<{ id: string }>,
+  res: Response<QueryResponse>,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    
+    if (!mongoose.isValidObjectId(id)) {
+      const errMsg = "Invalid ID format.";
+      res.status(400).json({
+        success: false,
+        message: errMsg
+      });
+      console.error(errMsg);
+      return;
+    }
 
+    const writer = await Writer.findById(id).lean<IWriter | null>();
 
+    if (!writer) {
+      res.status(404).json({
+        success: false,
+        message: "Writer not found"
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Book retrieved successfully",
+      data: writer
+    });
+  } catch (error: unknown) { 
+    next(error);
+  }
+
+}
+ 
 const searchWriter = async (
   req: Request<{}, {}, {}, { term?: string }>,
   res: Response<QueryResponse>,

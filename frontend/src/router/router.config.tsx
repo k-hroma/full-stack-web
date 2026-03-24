@@ -132,7 +132,7 @@ export const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'books/:id',
+        path: 'writers/:id',
         element: (
           <PageWrapper>
             <WriterBioPage />

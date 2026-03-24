@@ -172,6 +172,56 @@ const searchBook = async (
 };
 
 /**
+ * Obtiene libros por nombre y apellido del autor.
+ * 
+ * @function getBooksByAuthor
+ * @async
+ * @route GET /books/author?lastName=X&firstName=Y
+ * @access Public
+ * @query {string} lastName - Apellido del autor (requerido)
+ * @query {string} firstName - Nombre del autor (requerido)
+ * @returns {Promise<void>}
+ */
+const getBooksByAuthor = async (
+  req: Request<{}, {}, {}, { lastName?: string; firstName?: string }>,
+  res: Response<QueryResponse>,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { lastName, firstName } = req.query;
+
+    // Validar que vengan ambos parámetros
+    if (!lastName || !firstName) {
+      res.status(400).json({
+        success: false,
+        message: "Both lastName and firstName are required",
+      });
+      return;
+    }
+
+    // Crear filtro case-insensitive usando regex
+    const filter: Record<string, unknown> = {
+      lastName: { $regex: new RegExp(lastName, "i") },
+      firstName: { $regex: new RegExp(firstName, "i") },
+    };
+
+    const books = await Book.find(filter)
+      .sort({ title: 1 }) // Ordenar por título ascendente
+      .lean<IBook[]>();
+
+    res.status(200).json({
+      success: true,
+      message: books.length > 0 
+        ? `Found ${books.length} book(s) by ${firstName} ${lastName}`
+        : `No books found by ${firstName} ${lastName}`,
+      data: books,
+    });
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+/**
  * Crea un nuevo libro en el catálogo.
  * Requiere rol admin.
  * 
@@ -391,6 +441,7 @@ const deleteBook = async (
 export { 
   getBooks, 
   getBookById,
+  getBooksByAuthor,
   searchBook, 
   addBook, 
   updateBook, 

@@ -32,3 +32,7 @@ export interface WriterResponse {
   message: string;
   data: Writer;
 }
+
+export interface WriterFilters { 
+  recomended?: boolean;
+}

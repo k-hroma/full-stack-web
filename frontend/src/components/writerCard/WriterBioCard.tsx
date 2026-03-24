@@ -1,58 +1,97 @@
-import type { Book } from '../../types/book';
 import { BookDetailModal } from '../bookDetailModal/BookDetailModal';
 import { useCart } from '../../hooks/useCart';
 import '../../styles/pages/public/writer-bio-card.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { Writer } from '../../types/writer';
+import { getBooksByAuthor } from '../../api';
+import type { Book } from '../../types';
 
 interface WriterBioCardProps {
-  book: Book;
-  isInCart: boolean;
-  onAddToCart: () => void;
-  onViewMore: () => void;
-  onClose: () => void;
-
+  writer: Writer;
 }
 
-export default function WriterBioCard({ book }: WriterBioCardProps) {
+export default function WriterBioCard({ writer }: WriterBioCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const { addToCart, isInCart } = useCart();
 
-  const handleOpen = () => {
-    setIsOpen(true)
-  }
+  const [books, setBooks] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleOpen = (book: Book) => {
+    setSelectedBook(book);
+    setIsOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsOpen(false);
+    setSelectedBook(null); // Limpiar el libro seleccionado
   };
+
+
+  useEffect(() => {
+    const loadBooks = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // Usar el writer que viene por props para filtrar
+        const data = await getBooksByAuthor(writer.lastName, writer.firstName);
+        setBooks(data);
+      } catch (error) {
+        const errMsg = error instanceof Error
+          ? error.message
+          : 'Error al cargar los libros';
+        setError(errMsg);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    // Solo cargar si tenemos el writer
+    if (writer.lastName && writer.firstName) {
+      loadBooks();
+    }
+  }, [writer.lastName, writer.firstName]); // Dependencias del writer
+
+  if (isLoading) return <div className='link-return-writers'>Cargando...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div>
       <div className="writer-bio-container">
-        <p className="featured-quote">“Me  gusta pensar que estás leyendo y que si digo mar, ves tu propio mar. Que así sea. Dejame creer...” </p>
-        <p className='writer-sub-quote'>{book.firstName} {book.lastName} * § * {book.title} </p> { /*CAMBIAR PETITE QUOTE*/}
+        <p className="featured-quote">{writer.bioQuote} </p>
+        <p className='writer-sub-quote'>{writer.firstName} {writer.lastName} * § * {writer.titleBookQuote} </p>
         <hr className="writer-bio-line" />
         <div className="writer-bio-wrapper">
           <div className="writer-details-bio-books">
             <div className='writer-bio-name-last-name'>
-              <p>{book.firstName} </p>
-              <p>{book.lastName}</p>
+              <p>{writer.firstName} </p>
+              <p>{writer.lastName}</p>
             </div>
             <div className='writer-books-titles'>
               <p>Libros disponibles</p>
-              <ul>
-                <li>
-                  <button
-                    className='writer-titles-btn'
-                    onClick={handleOpen}
-                  >
-                    {book.title}
-                  </button>
-                </li>
-              </ul>
+              {books.length > 0 ? (
+                <ul>
+                  {books.map(book => (
+                    <li key={book._id}>
+                      <button
+                        className='writer-titles-btn'
+                        onClick={() => handleOpen(book)}
+                      >
+                        {book.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="no-books-message">No hay libros disponibles de este autor</p>
+              )}
             </div>
           </div>
           <div className='writer-bio-description'>
-            <p >Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, atque inventore cum quia odio praesentium consequatur assumenda autem corporis maxime? Doloribus dolores necessitatibus similique, reprehenderit vel voluptate ex sed veritatis.
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus, reprehenderit ipsam voluptatem nulla, perspiciatis placeat quasi blanditiis beatae officiis dicta sunt culpa mollitia alias numquam ab tempore quis reiciendis tenetur.
+            <p >{writer.bioDescription}
             </p>
           </div>
 
@@ -61,15 +100,15 @@ export default function WriterBioCard({ book }: WriterBioCardProps) {
       </div>
 
       <div>
-        {isOpen &&
+        {isOpen && selectedBook && (
           <BookDetailModal
-            book={book}
-            isInCart={isInCart(book._id)}
-            onAddToCart={() => addToCart(book)}
+            book={selectedBook}
+            isInCart={isInCart(selectedBook._id)}
+            onAddToCart={() => addToCart(selectedBook)}
             isOpen={isOpen}
             onClose={handleCloseModal}
           />
-        }
+        )}
       </div>
 
     </div>

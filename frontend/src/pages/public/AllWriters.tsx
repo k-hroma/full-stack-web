@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getBooks } from "../../api";
-import type { Book } from "../../types";
+import { getWriters } from "../../api/writers";
+import type { Writer } from "../../types/writer";
 import '../../styles/pages/public/writers.css'
 
 export default function AllWriters() {
-  const [books, setBooks] = useState<Book[]>([])
+  const [writers, setWriters] = useState<Writer[]>([])
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,32 +14,33 @@ export default function AllWriters() {
     'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
   useEffect(() => {
-    const loadBooks = async () => {
+    const loadWriters = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getBooks();
-
-        const uniqueBooks = data.filter((book, index, self) =>
+        const data = await getWriters({ recomended: true });
+        // Primero filtrar duplicados por nombre y apellido (ignorando mayúsculas)
+        const uniqueWriters = data.filter((writer, index, self) =>
           index === self.findIndex((b) =>
-            b.lastName.toLowerCase() === book.lastName.toLowerCase() &&
-            b.firstName.toLowerCase() === book.firstName.toLowerCase()
+            b.lastName.toLowerCase() === writer.lastName.toLowerCase() &&
+            b.firstName.toLowerCase() === writer.firstName.toLowerCase()
           )
         );
 
-        uniqueBooks.sort((a, b) => a.lastName.localeCompare(b.lastName));
+        // Luego ordenar por apellido
+        uniqueWriters.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
-        setBooks(uniqueBooks);
+        setWriters(uniqueWriters);
       } catch (error) {
         const errMsg = error instanceof Error
           ? error.message
-          : 'Error al cargar los libros';
+          : 'Error al cargar los escritorxs';
         setError(errMsg);
       } finally {
         setIsLoading(false);
       }
     }
-    loadBooks();
+    loadWriters();
   }, []);
 
   // Función opcional para hacer scroll a la primera letra disponible
@@ -64,22 +65,25 @@ export default function AllWriters() {
         </div>
 
         <div className="txt-writers-container">
-          {books && books.map((book, index) => {
-            const currentLetter = book.lastName.charAt(0).toUpperCase();
-            const prevLetter = index > 0 ? books[index - 1].lastName.charAt(0).toUpperCase() : null;
+          {writers && writers.map((writer, index) => {
+            const currentLetter = writer.lastName.charAt(0).toUpperCase();
+            const prevLetter = index > 0 ? writers[index - 1].lastName.charAt(0).toUpperCase() : null;
             const showLetterHeader = currentLetter !== prevLetter;
 
             return (
-              <div key={`${book.lastName}-${book.firstName}`}>
+              <div key={`${writer.lastName}-${writer.firstName}`}>
                 {showLetterHeader && (
                   <div id={`letter-${currentLetter}`} className="letter-section-header">
                     {currentLetter}
                   </div>
                 )}
-                <Link className="writers-txt-wrapper" to="/escritorxs">
+                <Link
+                  className="writers-txt-wrapper"
+                  to={`/writers/${writer._id}`}
+                >
                   <div className="writers-txt-wrapper" >
                     <p className="txt-writers-container-authors">
-                      {book.lastName} {book.firstName} <span className="txt-gender-container">→</span>
+                      {writer.lastName} {writer.firstName} <span className="txt-gender-container">→</span>
                     </p>
                   </div>
                 </Link>

@@ -1,46 +1,45 @@
 import { useEffect, useState } from "react";
-import { getBooks } from "../../api";
-import type { Book } from "../../types";
+import { getWriters } from "../../api/writers";
+import type { Writer } from "../../types/writer";
 import '../../styles/pages/public/writers.css'
 import { Link } from "react-router-dom";
 
 export default function Writers() {
-  const [books, setBooks] = useState<Book[]>([])
+  const [writers, setWriters] = useState<Writer[]>([])
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadBooks = async () => {
+    const loadWriters = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getBooks({ recomendedWriter: true });
-
+        const data = await getWriters({ recomended: true });
         // Primero filtrar duplicados por nombre y apellido (ignorando mayúsculas)
-        const uniqueBooks = data.filter((book, index, self) =>
+        const uniqueWriters = data.filter((writer, index, self) =>
           index === self.findIndex((b) =>
-            b.lastName.toLowerCase() === book.lastName.toLowerCase() &&
-            b.firstName.toLowerCase() === book.firstName.toLowerCase()
+            b.lastName.toLowerCase() === writer.lastName.toLowerCase() &&
+            b.firstName.toLowerCase() === writer.firstName.toLowerCase()
           )
         );
 
         // Luego ordenar por apellido
-        uniqueBooks.sort((a, b) => a.lastName.localeCompare(b.lastName));
+        uniqueWriters.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
         // Mostrar solo los primeros 9 escritores recomendados  
-        const nineWriters = uniqueBooks.slice(0, 9);
+        const nineWriters = uniqueWriters.slice(0, 9);
 
-        setBooks(nineWriters);
+        setWriters(nineWriters);
       } catch (error) {
         const errMsg = error instanceof Error
           ? error.message
-          : 'Error al cargar los libros';
+          : 'Error al cargar los escritorxs';
         setError(errMsg);
       } finally {
         setIsLoading(false);
       }
     }
-    loadBooks();
+    loadWriters();
   }, []);
 
   if (isLoading) return <div className='link-return-writers'>Cargando...</div>;
@@ -55,15 +54,15 @@ export default function Writers() {
           </p>
         </div>
         <div className="txt-writers-container">
-          {books && books.map(book => (
-            <div key={`${book.lastName}-${book.firstName}`}>
+          {writers && writers.map(writer => (
+            <div key={`${writer.lastName}-${writer.firstName}`}>
               <Link
-                to={`/books/${book._id}`}
+                to={`/writers/${writer._id}`}
                 className="writers-txt-wrapper"
               >
                 <div className="writers-txt-wrapper" >
                   <p className="txt-writers-container-authors">
-                    {book.lastName} {book.firstName} <span className="txt-gender-container">→</span>
+                    {writer.lastName} {writer.firstName} <span className="txt-gender-container">→</span>
                   </p>
                 </div>
               </Link>
