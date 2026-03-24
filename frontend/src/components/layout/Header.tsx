@@ -148,11 +148,25 @@ export function Header() {
                           Dashboard
                         </Link>
                         <Link
+                          to="/admin/dashboard-books" className='header__admin-links'
+                          onClick={() => setIsConfirmLogout(false)}
+
+                        >
+                          Gestión de libros
+                        </Link>
+                        <Link
+                          to="/admin/dashboard-writers" className='header__admin-links'
+                          onClick={() => setIsConfirmLogout(false)}
+
+                        >
+                          Gestión de Escritores
+                        </Link>
+                        <Link
                           to="/admin/register-admin" className='header__admin-links'
                           onClick={() => setIsConfirmLogout(false)}
 
                         >
-                          Registrar Admin
+                          Gestión de usuarios
                         </Link>
                       </>
                     )}

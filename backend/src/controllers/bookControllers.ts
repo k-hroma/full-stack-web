@@ -33,42 +33,36 @@ import type { IBook } from "../types/bookInterface.js";
  * @returns {Promise<void>}
  */
 const getBooks = async (
-  // Los query params siempre son texto, porque vienen de la URL. Se parsean a booleano dentro del controlador.
   req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome?: string; recomendedWriter?: string }>,
   res: Response<QueryResponse>,
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Construir filtro dinámico
     const filter: Record<string, boolean> = {};
     
-    // aca parseo a booleano porque los query params vienen como string. Si el param existe, lo convierto a booleano.
     if (req.query.fanzine !== undefined) {
       filter.fanzine = req.query.fanzine === "true";
     }
     if (req.query.latestBook !== undefined) {
       filter.latestBook = req.query.latestBook === "true";
     }
-
     if (req.query.showInHome !== undefined) {
       filter.showInHome = req.query.showInHome === "true";
     }
-
-    if(req.query.recomendedWriter !== undefined) {
+    if (req.query.recomendedWriter !== undefined) {
       filter.recomendedWriter = req.query.recomendedWriter === "true";
     }
 
     const books = await Book.find(filter)
-      .sort({ createdAt: -1 }) // Más recientes primero
-      .lean<IBook[]>();; // Performance: objetos planos en lugar de documentos Mongoose
+      .sort({ createdAt: -1 })
+      .lean<IBook[]>();
 
     res.status(200).json({
       success: true,
       message: books.length > 0 ? "Books retrieved successfully" : "No books found",
       data: books,
     });
-
-  } catch (error:unknown) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -76,39 +70,40 @@ const getBooks = async (
 const getBookById = async (
   req: Request<{ id: string }>,
   res: Response<QueryResponse>,
-  next:NextFunction
+  next: NextFunction
 ): Promise<void> => {
-  const { id } = req.params;
-  if (!id) {
-    const errMsg = "Book ID is required."
-    res.status(400).json({
-      success: false,
-      message: errMsg
-    });
-    console.error(errMsg)
-    return
-  }
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const errMsg = "Invalid ID format."
-    res.status(400).json({
-      success: false,
-      message: errMsg
-    })
-    console.error(errMsg)
-    return
-  }
   try {
-    const book = await Book.findById(id);
+    const { id } = req.params;
+    
+    if (!mongoose.isValidObjectId(id)) {
+      const errMsg = "Invalid ID format.";
+      res.status(400).json({
+        success: false,
+        message: errMsg
+      });
+      console.error(errMsg);
+      return;
+    }
+
+    const book = await Book.findById(id).lean<IBook | null>();
+
+    if (!book) {
+      res.status(404).json({
+        success: false,
+        message: "Book not found"
+      });
+      return;
+    }
+
     res.status(200).json({
       success: true,
-      message: book ? "Books retrieved successfully" : "No books found",
+      message: "Book retrieved successfully",
       data: book
-    })
-  } catch (error:unknown) { 
-    next(error)
+    });
+  } catch (error: unknown) { 
+    next(error);
   }
-
-}
+};
 
 /**
  * Búsqueda full-text en catálogo (título, autor, editorial).
@@ -126,33 +121,30 @@ const searchBook = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Validación con Zod
     const parseResult = SearchBookQuerySchema.safeParse(req.query);
     
     if (!parseResult.success) {
       res.status(400).json({
         success: false,
         message: "Invalid search query",
-        error: parseResult.error.issues.map(i => i.message),
+        error: { issues: parseResult.error.issues.map(i => i.message) },
       });
       return;
     }
 
     const { term } = parseResult.data;
 
-    // Búsqueda con índice de texto (definido en bookModel.ts)
     const books = await Book.find(
       { $text: { $search: term } },
-      { score: { $meta: "textScore" } } // Relevancia del match
+      { score: { $meta: "textScore" } }
     )
-      .sort({ score: { $meta: "textScore" } }) // Ordenar por relevancia
-      .limit(20) // Límite de resultados
+      .sort({ score: { $meta: "textScore" } })
+      .limit(20)
       .lean<IBook[]>();
 
-    // Fallback: si no hay índice de texto o no encuentra, buscar con regex
     let results = books;
     if (books.length === 0) {
-      const regex = new RegExp(term, "i"); // case-insensitive
+      const regex = new RegExp(term, "i");
       
       results = await Book.find({
         $or: [
@@ -160,7 +152,7 @@ const searchBook = async (
           { firstName: regex },
           { lastName: regex },
           { editorial: regex },
-          { isbn: term.toUpperCase() }, // Búsqueda exacta por ISBN
+          { isbn: term.toUpperCase() },
         ],
       })
         .limit(20)
@@ -174,8 +166,7 @@ const searchBook = async (
         : `No books found for "${term}"`,
       data: results,
     });
-
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -197,7 +188,6 @@ const addBook = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Validación Zod
     const parseResult = AddBookSchema.safeParse(req.body);
     
     if (!parseResult.success) {
@@ -213,10 +203,9 @@ const addBook = async (
 
     const bookData = parseResult.data;
 
-    // Verificar duplicado por ISBN (race condition handling)
     const existingBook = await Book
       .findOne({ isbn: bookData.isbn.toUpperCase() })
-      .lean<IBook[]>();
+      .lean<IBook | null>();
     
     if (existingBook) {
       res.status(409).json({
@@ -234,11 +223,7 @@ const addBook = async (
       message: "Book created successfully",
       data: bookDTO,
     });
-
-
   } catch (error: unknown) {
-    // Error de duplicado de MongoDB (índice único)
-    // doble verificacion
     if ((error as { code?: number }).code === 11000) {
       res.status(409).json({
         success: false,
@@ -268,7 +253,6 @@ const updateBook = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Validar ID de MongoDB
     if (!mongoose.isValidObjectId(req.params.id)) {
       res.status(400).json({
         success: false,
@@ -277,21 +261,19 @@ const updateBook = async (
       return;
     }
 
-    // Validación Zod (campos opcionales)
     const parseResult = UpdateBookSchema.safeParse(req.body);
     
     if (!parseResult.success) {
       res.status(400).json({
         success: false,
         message: "Invalid update data",
-        error: parseResult.error.issues.map(i => i.message),
+        error: { issues: parseResult.error.issues.map(i => i.message) },
       });
       return;
     }
 
     const updateData = parseResult.data;
 
-    // Verificar que hay datos para actualizar
     if (Object.keys(updateData).length === 0) {
       res.status(400).json({
         success: false,
@@ -300,12 +282,11 @@ const updateBook = async (
       return;
     }
 
-    // Si actualiza ISBN, verificar que no exista otro libro con ese ISBN
     if (updateData.isbn) {
       const existingBook = await Book.findOne({
         isbn: updateData.isbn.toUpperCase(),
-        _id: { $ne: req.params.id }, // Excluir el libro actual
-      }).lean<IBook[]>();
+        _id: { $ne: req.params.id },
+      }).lean<IBook | null>();
 
       if (existingBook) {
         res.status(409).json({
@@ -322,8 +303,8 @@ const updateBook = async (
       req.params.id,
       updateData,
       { 
-        new: true, // Retornar documento actualizado
-        runValidators: true, // Ejecutar validaciones del schema
+        returnDocument: 'after',
+        runValidators: true,
       }
     );
 
@@ -374,7 +355,6 @@ const deleteBook = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Validar ID
     if (!mongoose.isValidObjectId(req.params.id)) {
       res.status(400).json({
         success: false,
@@ -393,14 +373,17 @@ const deleteBook = async (
       return;
     }
 
+    const deletedBookDTO = deletedBook.toObject();
+
     res.status(200).json({
       success: true,
-      message: `${deletedBook.toObject()} deleted successfully`,
+      message: `${deletedBookDTO.title} deleted successfully`,
+      data: deletedBookDTO,
     });
 
     console.log(`[BOOK DELETED] ${deletedBook.title} (ID: ${deletedBook._id})`);
 
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };

@@ -1,0 +1,102 @@
+[
+  {
+    "recomended": true,
+    "lastName": "de Saint-Exupéry",
+    "firstName": "Antoine",
+    "titleBookQuote": "Lo esencial es invisible a los ojos",
+    "bioQuote": "Solo se ve bien con el corazón",
+    "bioDescription": "Autor y aviador francés, conocido por su obra filosófica y poética.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Orwell",
+    "firstName": "George",
+    "titleBookQuote": "Big Brother te observa",
+    "bioQuote": "La libertad es decir lo que otros no quieren oír",
+    "bioDescription": "Escritor británico centrado en la crítica social y política.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Bradbury",
+    "firstName": "Ray",
+    "titleBookQuote": "No hace falta quemar libros",
+    "bioQuote": "Llena tus ojos de asombro",
+    "bioDescription": "Autor estadounidense de ciencia ficción y fantasía.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Herbert",
+    "firstName": "Frank",
+    "titleBookQuote": "El miedo es el asesino de la mente",
+    "bioQuote": "El poder atrae a los corruptos",
+    "bioDescription": "Escritor de ciencia ficción, famoso por la saga Dune.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Martin",
+    "firstName": "Robert",
+    "titleBookQuote": "El código limpio siempre parece escrito por alguien más",
+    "bioQuote": "La simplicidad es la clave",
+    "bioDescription": "Ingeniero de software conocido por promover buenas prácticas.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Crockford",
+    "firstName": "Douglas",
+    "titleBookQuote": "JavaScript tiene partes buenas",
+    "bioQuote": "La disciplina hace mejor al código",
+    "bioDescription": "Desarrollador y referente en el ecosistema JavaScript.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Banks",
+    "firstName": "Alex",
+    "titleBookQuote": "React cambia la forma de pensar interfaces",
+    "bioQuote": "Aprender haciendo es la mejor forma",
+    "bioDescription": "Autor técnico enfocado en tecnologías web modernas.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Casciaro",
+    "firstName": "Mario",
+    "titleBookQuote": "Los patrones resuelven problemas comunes",
+    "bioQuote": "El diseño importa tanto como el código",
+    "bioDescription": "Especialista en arquitectura de aplicaciones Node.js.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Slatkin",
+    "firstName": "Brett",
+    "titleBookQuote": "Pequeños cambios hacen gran diferencia",
+    "bioQuote": "Python es claridad",
+    "bioDescription": "Ingeniero de software enfocado en buenas prácticas en Python.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  },
+  {
+    "recomended": true,
+    "lastName": "Gamma",
+    "firstName": "Erich",
+    "titleBookQuote": "Diseñar es resolver problemas",
+    "bioQuote": "Los patrones simplifican la complejidad",
+    "bioDescription": "Uno de los autores del libro clásico de patrones de diseño.",
+    "createdAt": "2026-03-23T03:55:03.560Z",
+    "updatedAt": "2026-03-23T03:55:03.560Z"
+  }
+]

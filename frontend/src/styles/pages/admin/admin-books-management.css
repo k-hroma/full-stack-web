@@ -1,0 +1,654 @@
+/* ============================================
+   ADMIN DASHBOARD - COMPLETO
+   ============================================ */
+
+/* Container principal */
+.admin-books-dashboard {
+  min-height: 100vh;
+  background: #f5f5f5;  
+  padding: 1.5rem;
+}
+
+.admin-books-dashboard__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header y tabs */
+.admin-books-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.admin-dashboard-book-page__back {
+  font-size: 14px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+}
+
+.admin-dashboard__tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-dashboard__tab {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__tab:hover {
+  background: #f0f0f0;
+  border-color: #ccc;
+}
+
+.admin-dashboard__tab--active {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+.admin-dashboard__tab--active:hover {
+  background: #222;
+}
+
+/* Formulario */
+.admin-dashboard__form {
+  padding: 24px;
+}
+
+.admin-dashboard__edit-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  color: #1565c0;
+  font-weight: 500;
+}
+
+.admin-dashboard__edit-banner-close {
+  padding: 6px 12px;
+  border: 1px solid #90caf9;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #1565c0;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__edit-banner-close:hover {
+  background: #1565c0;
+  color: white;
+}
+
+/* Secciones del form */
+.admin-dashboard__section {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-dashboard__section:last-of-type {
+  border-bottom: none;
+}
+
+.admin-dashboard__section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+}
+
+/* Filas y campos */
+.admin-dashboard__row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-dashboard__row--three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.admin-dashboard__field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-dashboard__field--large {
+  flex: 2;
+}
+
+.admin-dashboard__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.admin-dashboard__input,
+.admin-dashboard__textarea {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.2s ease;
+}
+
+.admin-dashboard__input:focus,
+.admin-dashboard__textarea:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.admin-dashboard__textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Preview de imagen */
+.admin-dashboard__image-preview {
+  margin-top: 12px;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.admin-dashboard__image-preview img {
+  max-height: 200px;
+  max-width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkboxes */
+.admin-dashboard__checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.admin-dashboard__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.admin-dashboard__checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.admin-dashboard__checkbox-text {
+  user-select: none;
+}
+
+/* Botones del form */
+.admin-dashboard__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.admin-dashboard__button {
+  padding: 12px 24px;
+  border: 1px solid #333;
+  background: #333;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__button:hover:not(:disabled) {
+  background: #222;
+}
+
+.admin-dashboard__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-dashboard__button--secondary {
+  background: white;
+  color: #333;
+}
+
+.admin-dashboard__button--secondary:hover {
+  background: #f5f5f5;
+}
+
+.admin-dashboard__button--small {
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+/* Alertas */
+.form-alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.form-alert--success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.form-alert--error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+/* ============================================
+   SECCIÓN: MODO EDICIÓN (Búsqueda y Resultados)
+   ============================================ */
+
+.admin-dashboard__edit-mode {
+  padding: 24px;
+}
+
+/* Caja de búsqueda */
+.admin-dashboard__search-box {
+  margin-bottom: 20px;
+}
+
+.admin-dashboard__search-row {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-dashboard__search-row .admin-dashboard__input {
+  flex: 1;
+}
+
+/* Toast de error en búsqueda */
+.search-admin-toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  margin-top: 12px;
+  color: #721c24;
+  font-size: 14px;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #721c24;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   SECCIÓN: FILTROS POR CATEGORÍA (NUEVO)
+   ============================================ */
+
+.admin-dashboard__category-filters {
+  margin: 24px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.admin-dashboard__category-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 12px;
+}
+
+.admin-dashboard__category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-dashboard__category-btn {
+  padding: 8px 16px;
+  border: 1px solid #ced4da;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #495057;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__category-btn:hover {
+  border-color: #adb5bd;
+  background: #f1f3f5;
+}
+
+.admin-dashboard__category-btn--active {
+  background: #495057;
+  color: white;
+  border-color: #495057;
+}
+
+.admin-dashboard__category-btn--active:hover {
+  background: #343a40;
+  border-color: #343a40;
+}
+
+.admin-dashboard__category-btn--clear {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.admin-dashboard__category-btn--clear:hover {
+  background: #f8d7da;
+  border-color: #dc3545;
+}
+
+/* Indicador de categoría activa */
+.admin-dashboard__active-filter {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: #e9ecef;
+  border-radius: 6px;
+  color: #495057;
+  font-size: 14px;
+}
+
+.admin-dashboard__active-filter strong {
+  color: #212529;
+  font-weight: 600;
+}
+
+/* Placeholder cuando no hay resultados */
+.admin-dashboard__placeholder {
+  padding: 48px 24px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* ============================================
+   SECCIÓN: GRID DE RESULTADOS (Tarjetas de libros)
+   ============================================ */
+
+.admin-dashboard__results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+/* Tarjeta de libro */
+.admin-book-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  transition: box-shadow 0.2s ease;
+}
+
+.admin-book-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-book-card__image {
+  height: 180px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.admin-book-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-book-card__no-image {
+  color: #999;
+  font-size: 14px;
+}
+
+.admin-book-card__content {
+  padding: 16px;
+}
+
+.admin-book-card__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.admin-book-card__author {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.admin-book-card__isbn {
+  font-size: 12px;
+  color: #999;
+  margin: 0 0 12px 0;
+}
+
+/* Badges */
+.admin-book-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.badge--new {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge--fanzine {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.badge--home {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge--recommended {
+  background: #6c757d;
+  color: white;
+}
+
+/* Acciones de la tarjeta */
+.admin-book-card__actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.admin-book-card__btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.admin-book-card__btn:hover {
+  background: #f0f0f0;
+}
+
+.admin-book-card__btn--edit {
+  color: #1565c0;
+  border-color: #90caf9;
+}
+
+.admin-book-card__btn--edit:hover {
+  background: #e3f2fd;
+}
+
+.admin-book-card__btn--delete {
+  color: #c62828;
+  border-color: #ef9a9a;
+}
+
+.admin-book-card__btn--delete:hover {
+  background: #ffebee;
+}
+
+/* Confirmación de eliminación */
+.admin-book-card__confirm {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.admin-book-card__btn--confirm-yes {
+  background: #c62828;
+  color: white;
+  border-color: #c62828;
+}
+
+.admin-book-card__btn--confirm-yes:hover {
+  background: #b71c1c;
+}
+
+.admin-book-card__btn--confirm-no {
+  background: white;
+  color: #666;
+}
+
+.btn-icon {
+  font-size: 14px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 12px;
+  }
+
+  .admin-dashboard__header {
+    padding: 16px;
+  }
+
+  .admin-dashboard__title {
+    font-size: 20px;
+  }
+
+  .admin-dashboard__tabs {
+    flex-wrap: wrap;
+  }
+
+  .admin-dashboard__tab {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .admin-dashboard__form {
+    padding: 16px;
+  }
+
+  .admin-dashboard__row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .admin-dashboard__row--three {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard__actions {
+    flex-direction: column;
+  }
+
+  .admin-dashboard__button {
+    width: 100%;
+  }
+
+  .admin-dashboard__search-row {
+    flex-direction: column;
+  }
+
+  .admin-dashboard__category-buttons {
+    flex-direction: column;
+  }
+
+  .admin-dashboard__category-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .admin-dashboard__results-grid {
+    grid-template-columns: 1fr;
+  }
+}

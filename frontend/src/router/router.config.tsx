@@ -31,7 +31,8 @@ const WriterBioPage = lazy(() => import('../pages/public/WriterBioPage'))
 // Páginas admin (lazy loading)
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
 const AdminRegisterPage = lazy(() => import('../pages/admin/AdminRegisterPage'));
-
+const AdminWritersManagementPage = lazy(() => import('../pages/admin/AdminWritersManagementPage'));
+const AdminBooksManagementPage = lazy(() => import('../pages/admin/AdminBooksManagementPage'));
 
 // Configuración de rutas 
 export const routes: RouteObject[] = [
@@ -152,6 +153,22 @@ export const routes: RouteObject[] = [
                 element: (
                   <PageWrapper>
                     <AdminDashboardPage />
+                  </PageWrapper>
+                ),
+              },
+              {
+                path: 'dashboard-writers',
+                element: (
+                  <PageWrapper>
+                    <AdminWritersManagementPage />
+                  </PageWrapper>
+                ),
+              },
+              {
+                path: 'dashboard-books',
+                element: (
+                  <PageWrapper>
+                    <AdminBooksManagementPage />
                   </PageWrapper>
                 ),
               },

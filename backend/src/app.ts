@@ -82,7 +82,7 @@ app.use("/auth", authRouter)
 
 
 
-app.use("/writer", writerRouter)
+app.use("/writers", writerRouter)
 
 
 // ============================================================================

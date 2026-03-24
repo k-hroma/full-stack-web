@@ -83,13 +83,7 @@ const HamburguerMenu = ({
                 >
                   Dasboard
                 </Link>
-                <Link
-                  className='hamburguer-menu__sublink'
-                  to='/admin/register-admin'
-                  onClick={onClose}
-                >
-                  Registrar admin
-                </Link>
+
               </div>
             }
 

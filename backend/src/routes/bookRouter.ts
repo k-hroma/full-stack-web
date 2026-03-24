@@ -6,8 +6,8 @@ import { requireRole } from "../middlewares/requireRole.js";
 const bookRouter = Router();
 
 bookRouter.get("/", getBooks);
-bookRouter.get("/:id", getBookById)
 bookRouter.get("/search", searchBook);
+bookRouter.get("/:id", getBookById)
 
 bookRouter.post(
   "/",

@@ -29,7 +29,7 @@ interface QueryResponse {
   success: boolean;
   message: string;
   token?: string;
-  data?: IBook | IBook[] | IRegisterUser | IWriter | null;
+  data?: IBook | IBook[] | IRegisterUser | IWriter | IWriter[]| null;
   error?: unknown; 
 }
 

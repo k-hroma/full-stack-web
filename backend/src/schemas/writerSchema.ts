@@ -68,9 +68,20 @@ const UpdateWriterSchema = z
 
 type UpdateWriterBody = z.infer<typeof UpdateWriterSchema>;
 
+const SearchWriterQuerySchema = z.object({
+  term: z
+    .string()
+    .trim()
+    .min(1, { message: "Search term is required" })
+    .max(100, { message: "Search term too long" }),
+});
+
+type SearchWriterQuery = z.infer<typeof SearchWriterQuerySchema>;
+
 export type { 
   AddWriterBody,
-  UpdateWriterBody
+  UpdateWriterBody,
+  SearchWriterQuery
 }
 
-export { AddWriterSchema, UpdateWriterSchema }
+export { AddWriterSchema, UpdateWriterSchema, SearchWriterQuerySchema }
