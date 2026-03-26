@@ -19,9 +19,9 @@
 
 .search-input {
   border-radius: 25px;
-  border: 1px solid var(--brown);
+  border: 2px solid var(--brown);
   background-color: transparent !important;
-  font-family: 'Neue Montreal Light';
+  font-family: 'Neue Montreal Regular';
   font-size: 0.875rem;
   color: var(--brown);
   outline: none;
@@ -37,9 +37,8 @@
 }
 
 .search-input::placeholder {
-  color: var(--ligth-brown);
-  font-family: 'Neue Montreal Light';
-  opacity: 0.6;
+  color: var(--brown);
+  font-family: 'Neue Montreal Regular';
   font-size: 0.875rem;
 }
 

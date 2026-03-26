@@ -1,7 +1,7 @@
 // HamburguerMenu.tsx
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import closeHamburguerMenuIcon from '../../assets/icons/hamburguer-close.svg';
+import { X } from '@boxicons/react';
 import '../../styles/layout/navbar/hamburguer-menu.css';
 
 interface HamburguerMenuProps {
@@ -57,12 +57,9 @@ const HamburguerMenu = ({
               onClick={onClose}
               aria-label="Cerrar menú"
             >
-              <img
-                src={closeHamburguerMenuIcon}
-                alt="Cerrar"
-                width="28"
-                height="18"
-              />
+              <X
+                fill='#FF76DC'
+                size='md' />
             </button>
 
           </div>

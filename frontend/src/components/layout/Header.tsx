@@ -6,12 +6,11 @@ import { useCart } from '../../hooks/useCart';
 import { CartSidebar } from '../cart/CartSidebar';
 import { AnimatedNav } from '../navbar/AnimatedNav';
 import { HamburguerMenu } from '../navbar/HamburguerMenu';
-import HamburguerIcon from '../../assets/icons/hamburguer-menu-icon.svg';
 import { SearchBooks } from '../search/Search';
 import lpicon from '../../assets/icons/lapalacio-logo.svg';
 import usericon from '../../assets/icons/loguin-user.svg';
 import lineicon from '../../assets/icons/line-nav-search.svg';
-import { Cart, Search as SearchIcon, X } from '@boxicons/react';
+import { Cart, Search as SearchIcon, X, Menu } from '@boxicons/react';
 import '../../styles/layout/header.css';
 
 export function Header() {
@@ -74,12 +73,7 @@ export function Header() {
               onClick={() => setIsMenuOpen(true)}
               aria-label="Abrir menú"
             >
-              <img
-                src={HamburguerIcon}
-                alt="Menú"
-                width="22"
-                height="15"
-              />
+              <Menu fill='#954300' />
             </button>
           </div>
 
