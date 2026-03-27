@@ -18,6 +18,7 @@ import {
 } from "../schemas/bookSchema.js";
 import mongoose from "mongoose";
 import type { IBook } from "../types/bookInterface.js";
+import { escapeRegExp } from "../utils/escapeRegExp.js";
 
 /**
  * Obtiene todos los libros del catálogo.
@@ -33,7 +34,7 @@ import type { IBook } from "../types/bookInterface.js";
  * @returns {Promise<void>}
  */
 const getBooks = async (
-  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome?: string; recomendedWriter?: string }>,
+  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome?: string;}>,
   res: Response<QueryResponse>,
   next: NextFunction
 ): Promise<void> => {
@@ -49,10 +50,7 @@ const getBooks = async (
     if (req.query.showInHome !== undefined) {
       filter.showInHome = req.query.showInHome === "true";
     }
-    if (req.query.recomendedWriter !== undefined) {
-      filter.recomendedWriter = req.query.recomendedWriter === "true";
-    }
-
+ 
     const books = await Book.find(filter)
       .sort({ createdAt: -1 })
       .lean<IBook[]>();
@@ -144,7 +142,7 @@ const searchBook = async (
 
     let results = books;
     if (books.length === 0) {
-      const regex = new RegExp(term, "i");
+      const regex = new RegExp(escapeRegExp(term), "i");
       
       results = await Book.find({
         $or: [
@@ -201,8 +199,8 @@ const getBooksByAuthor = async (
 
     // Crear filtro case-insensitive usando regex
     const filter: Record<string, unknown> = {
-      lastName: { $regex: new RegExp(lastName, "i") },
-      firstName: { $regex: new RegExp(firstName, "i") },
+      lastName: { $regex: new RegExp(escapeRegExp(lastName), "i") },
+      firstName: { $regex: new RegExp(escapeRegExp(firstName), "i") },
     };
 
     const books = await Book.find(filter)

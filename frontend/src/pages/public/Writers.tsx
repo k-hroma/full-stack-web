@@ -52,6 +52,7 @@ export default function Writers() {
           <p className="txt-writers">
             Escritores recomendados
           </p>
+          <Link to='/escritorxs' className="link-return">Ver más →</Link>
         </div>
         <div className="txt-writers-container">
           {writers && writers.map(writer => (

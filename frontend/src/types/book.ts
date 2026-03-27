@@ -18,7 +18,6 @@ export interface Book {
   fanzine: boolean;
   showInHome: boolean; 
   homeOrder: number | null;
-  recomendedWriter: boolean;
   description: string;
   url: string;
   createdAt: string;    // ISO date
@@ -39,7 +38,6 @@ export interface CreateBookInput {
   fanzine: boolean;
   showInHome: boolean; 
   homeOrder: number | null;
-  recomendedWriter: boolean;
   description: string;
   url: string;
 }
@@ -66,7 +64,6 @@ export interface BookFilters {
   fanzine?: boolean;
   latestBook?: boolean;
   showInHome?: boolean;
-  recomendedWriter?: boolean;
 }
 
 /** Query de búsqueda */

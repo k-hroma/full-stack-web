@@ -5,6 +5,7 @@ import type { AddWriterBody, UpdateWriterBody } from "../schemas/writerSchema.js
 import { AddWriterSchema, SearchWriterQuerySchema, UpdateWriterSchema } from "../schemas/writerSchema.js";
 import mongoose from 'mongoose';
 import type { IWriter } from "../types/writerInterface.js";
+import { escapeRegExp } from "../utils/escapeRegExp.js";
 
 const getWriters = async (
   req: Request<{}, {}, {}, {recomended?: string}>,
@@ -14,16 +15,16 @@ const getWriters = async (
   try {
     const filter: Record<string, boolean> = {};
     if (req.query.recomended !== undefined) {
-      filter.fanzine = req.query.recomended === "true";
+      filter.recomended = req.query.recomended === "true";
     }
-    const writers = await Writer.find()
+    const writers = await Writer.find(filter)
       .sort({ createdAt: -1 })
       .lean<IWriter[]>();
     
     
     res.status(200).json({
       success: true,
-      message: writers.length > 0 ? "Books retrieved successfully" : "No books found",
+      message: writers.length > 0 ? "Writers retrieved successfully" : "No writers found",
       data: writers,
     });
     
@@ -100,7 +101,7 @@ const searchWriter = async (
   
       let results = writers;
       if (writers.length === 0) {
-        const regex = new RegExp(term, "i");
+        const regex = new RegExp(escapeRegExp(term), "i");
         
         results = await Writer.find({
           $or: [

@@ -18,7 +18,7 @@ export default function AllWriters() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getWriters({ recomended: true });
+        const data = await getWriters();
         // Primero filtrar duplicados por nombre y apellido (ignorando mayúsculas)
         const uniqueWriters = data.filter((writer, index, self) =>
           index === self.findIndex((b) =>

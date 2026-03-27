@@ -463,6 +463,89 @@
 }
 
 /* ============================================
+   SECCIÓN: FILTROS POR CATEGORÍA 
+   ============================================ */
+
+.admin-dashboard__category-filters {
+  margin: 24px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.admin-dashboard__category-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 12px;
+}
+
+.admin-dashboard__category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-dashboard__category-btn {
+  padding: 8px 16px;
+  border: 1px solid #ced4da;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #495057;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__category-btn:hover {
+  border-color: #adb5bd;
+  background: #f1f3f5;
+}
+
+.admin-dashboard__category-btn--active {
+  background: #495057;
+  color: white;
+  border-color: #495057;
+}
+
+.admin-dashboard__category-btn--active:hover {
+  background: #343a40;
+  border-color: #343a40;
+}
+
+.admin-dashboard__category-btn--clear {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.admin-dashboard__category-btn--clear:hover {
+  background: #f8d7da;
+  border-color: #dc3545;
+}
+
+
+.admin-dashboard__active-filter {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: #e9ecef;
+  border-radius: 6px;
+  color: #495057;
+  font-size: 14px;
+}
+
+.admin-dashboard__active-filter strong {
+  color: #212529;
+  font-weight: 600;
+}
+
+/* Botón pequeño para búsqueda */
+.admin-dashboard__button--small {
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 
@@ -515,4 +598,14 @@
     flex-direction: column;
     width: 100%;
   }
+   .admin-dashboard__category-buttons {
+    flex-direction: column;
+  }
+
+  .admin-dashboard__category-btn {
+    width: 100%;
+    text-align: center;
+  }
 }
+
+

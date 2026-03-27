@@ -43,4 +43,13 @@ export const getWriters = async (filters?: WriterFilters): Promise<Writer[]> => 
 export const getWriterById = async (id: string): Promise<Writer> => {
   const response = await httpClient<WriterResponse>(`/writers/${id}`);
   return response.data
- }
+}
+ 
+export const getWritersByCategory = async (
+  category: 'recomended' | 'all'
+): Promise<Writer[]> => {
+  const filters: WriterFilters = {
+    [category]: true,
+  };
+  return getWriters(filters)
+}

@@ -4,6 +4,8 @@
 
 import { app } from './app.js';
 import { connectMongoDB } from './config/mongoDB.js';
+import mongoose from 'mongoose';
+import type { Server } from 'node:http';
 
 /**
  * Inicializa el servidor HTTP y la conexión a base de datos.
@@ -48,12 +50,12 @@ const startServer = async (): Promise<void> => {
   }
 
   // Validar PORT (con fallback a 3000)
-  const PORT = Number(portEnv) || 3000;
+  const PORT = portEnv ? Number(portEnv) : 3000;
   
-  if (portEnv && (isNaN(PORT) || PORT < 1 || PORT > 65535)) {
+  if (portEnv && (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535)) {
     throw new Error(
       `Invalid PORT environment variable: "${portEnv}". ` +
-      `Must be a number between 1 and 65535.`
+      `Must be an integer between 1 and 65535.`
     );
   }
 
@@ -71,17 +73,78 @@ const startServer = async (): Promise<void> => {
   /**
    * PASO 2: Inicio del servidor HTTP.
    */
-  await new Promise<void>((resolve, reject) => {
-    const server = app.listen(PORT, () => {
+  const server = await new Promise<Server>((resolve, reject) => {
+    const serverInstance = app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`🔐 JWT authentication: enabled`);
       console.log(`📚 API endpoint: http://localhost:${PORT}/books`);
-      resolve();
+      resolve(serverInstance);
     });
 
-    server.on('error', (error: Error) => {
+    serverInstance.once('error', (error: Error) => {
       reject(new Error(`Server failed to start on port ${PORT}: ${error.message}`));
     });
+  });
+
+  // ==========================================
+  // APAGADO GRACEFUL (SIGINT / SIGTERM)
+  // ==========================================
+  let isShuttingDown = false;
+
+  /**
+   * Cierre ordenado de servicios para evitar cortes bruscos:
+   * 1) Deja de aceptar nuevas requests HTTP
+   * 2) Cierra conexión a MongoDB
+   * 3) Finaliza proceso con código de salida apropiado
+   */
+  const gracefulShutdown = async (signal: string): Promise<void> => {
+    if (isShuttingDown) {
+      return;
+    }
+    isShuttingDown = true;
+
+    console.log(`🛑 Received ${signal}. Starting graceful shutdown...`);
+
+    // Timeout de seguridad: evita que el proceso quede colgado indefinidamente
+    const forceExitTimer = setTimeout(() => {
+      console.error('❌ Forced shutdown: graceful shutdown timeout exceeded (15s)');
+      process.exit(1);
+    }, 15000);
+
+    try {
+      // PASO 1: detener servidor HTTP (no acepta conexiones nuevas)
+      await new Promise<void>((resolve, reject) => {
+        server.close((error?: Error) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
+
+      // PASO 2: cerrar conexión MongoDB de forma limpia
+      await mongoose.connection.close(false);
+
+      clearTimeout(forceExitTimer);
+      console.log('✅ Graceful shutdown completed successfully');
+      process.exit(0);
+
+    } catch (error: unknown) {
+      clearTimeout(forceExitTimer);
+      const message = error instanceof Error ? error.message : 'Unknown shutdown error';
+      console.error(`❌ Error during graceful shutdown: ${message}`);
+      process.exit(1);
+    }
+  };
+
+  // Registrar señales del sistema operativo para apagado ordenado
+  process.on('SIGINT', () => {
+    void gracefulShutdown('SIGINT');
+  });
+
+  process.on('SIGTERM', () => {
+    void gracefulShutdown('SIGTERM');
   });
 };
 

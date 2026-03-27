@@ -26,7 +26,6 @@ import type { IBook } from "../types/bookInterface.js";
  * @property {boolean} fanzine - Categoría fanzine (default false)
   * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal (default false)
  * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal (del 1 al 8, default es null)
- * @property {boolean} recomendedWriter - Indica si el libro es de un escritor recomendado (default false)
  * @property {string} [description] - Descripción del libro (opcional)
  * @property {string} url - URL externa de referencia (requerido)
  */
@@ -110,12 +109,6 @@ const bookSchema = new Schema<IBook>(
       min: 1,
       max: 8,
       default: null,
-    },
-    recomendedWriter: {
-      type: Boolean,
-      required: true,
-      default: false,
-      index: true,
     },
     description: {
       type: String,

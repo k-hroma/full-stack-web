@@ -6,7 +6,7 @@
 
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-import type { ErrorResults } from "../types/errorResults.js";
+import type { ErrorResult } from "../types/errorResults.js";
 import type { AuthPayload } from "../types/authPayload.js";
 
 /**
@@ -33,7 +33,7 @@ import type { AuthPayload } from "../types/authPayload.js";
  */
 const authMiddleware = async (
   req: Request,
-  res: Response<ErrorResults>,
+  res: Response<ErrorResult>,
   next: NextFunction
 ): Promise<void> => {
   
@@ -63,8 +63,11 @@ const authMiddleware = async (
   }
 
   try {
-    // Verificación y decodificación del token
-    const decoded = jwt.verify(token, secretKey) as AuthPayload;
+    // Verificación y decodificación del token.
+    // `algorithms` es opción de jsonwebtoken: solo acepta el mismo algoritmo usado en jwt.sign (HS256).
+    const decoded = jwt.verify(token, secretKey, {
+      algorithms: ["HS256"],
+    }) as AuthPayload;
     // El método jwt.verify() hace dos cosas:
     //1. Verifica que el token sea válido (firma correcta, no expirado)
     //2. Decodifica y retorna el payload (los datos que guardaste al crear el token):>

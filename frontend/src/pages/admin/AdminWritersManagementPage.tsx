@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useWriterSearch } from '../../hooks/useWriterSearch';
 import type { CreateWriterInput, Writer } from '../../types/writer';
-import { createWriter, updateWriter, deleteWriter, searchWriters } from '../../api/writers';
+import { createWriter, updateWriter, deleteWriter, searchWriters, getWriters, getWritersByCategory } from '../../api/writers';
 import '../../styles/pages/admin/admin-writers-management.css';
+
+
+type CategoryFilter = 'all' | 'recomended' | 'viewAll';
 
 const INITIAL_FORM_WRITER_DATA: CreateWriterInput = {
   lastName: "",
@@ -33,6 +36,8 @@ export default function AdminWritersManagementPage() {
   const [editingWriterId, setEditingWriterId] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
+
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,6 +53,7 @@ export default function AdminWritersManagementPage() {
           setEditingWriterId(null);
           setSubmitStatus('idle');
           setWriterResults([]);
+          setActiveCategory('all');
           setInputValue('');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 1500);
@@ -99,6 +105,7 @@ export default function AdminWritersManagementPage() {
     setEditingWriterId(null);
     setSubmitStatus('idle');
     setWriterResults([]);
+    setActiveCategory('all');
     setInputValue('');
     setErrorMsg('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -126,6 +133,7 @@ export default function AdminWritersManagementPage() {
         setWriterResults(searchResults);
         setInputValue('');
         setErrorMsg('');
+        setActiveCategory('all');
       } else {
         setWriterResults([]);
         setErrorMsg(`No se encontraron resultados para "${inputValue}"`);
@@ -137,6 +145,38 @@ export default function AdminWritersManagementPage() {
       setWriterResults([]);
     }
   };
+
+  const handleCategorySearch = async (category: CategoryFilter) => {
+    setActiveCategory(category);
+    setErrorMsg('');
+    setInputValue('');
+
+    if (category === 'all') {
+      setWriterResults([]);
+      return;
+    }
+
+    try {
+      let writers;
+      if (category === 'viewAll') {
+        writers = await getWriters();
+      } else {
+        writers = await getWritersByCategory(category);
+      }
+      setWriterResults(writers);
+
+      if (writers.length === 0) {
+        setErrorMsg(category === 'viewAll'
+          ? 'No hay escritores registrados'
+          : `No se encontraron escritores en esta categoría`
+        );
+      }
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : 'Error inesperado';
+      setErrorMsg(`Ocurrió un error al buscar: ${errMsg}`);
+      setWriterResults([]);
+    }
+  }
 
   return (
     <div className="admin-writers-dashboard">
@@ -350,12 +390,58 @@ export default function AdminWritersManagementPage() {
               )}
             </div>
 
+            {/*Botones de búsqueda por categoría */}
+            <div className="admin-dashboard__category-filters">
+              <h3 className="admin-dashboard__category-title">O buscar por categoría:</h3>
+              <div className="admin-dashboard__category-buttons">
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'viewAll' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('viewAll')}
+                >
+                  📋 Ver todos
+                </button>
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'recomended' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('recomended')}
+                >
+                  ⭐ Recomendados
+                </button>
+
+                {activeCategory !== 'all' && (
+                  <button
+                    className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
+                    onClick={() => {
+                      setActiveCategory('all');
+                      setWriterResults([]);
+                      setErrorMsg('');
+                    }}
+                  >
+                    ❌ Limpiar filtros
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Mostrar categoría activa */}
+            {activeCategory !== 'all' && writerResults.length > 0 && (
+              <div className="admin-dashboard__active-filter">
+                <span>Mostrando: </span>
+                <strong>
+                  {activeCategory === 'viewAll' && 'Todos los escritores'}
+                  {activeCategory === 'recomended' && 'Recomendados'}
+                </strong>
+                <span> ({writerResults.length} {writerResults.length === 1 ? 'escritor' : 'escritores'})</span>
+              </div>
+            )}
+
             {writerResults.length === 0 ? (
               <div className="admin-dashboard__placeholder">
                 <p>
-                  {inputValue
-                    ? `No se encontraron resultados`
-                    : 'Realizá una búsqueda para encontrar escritores'}
+                  {activeCategory !== 'all'
+                    ? `No hay escritores en esta categoría`
+                    : inputValue
+                      ? `No se encontraron resultados`
+                      : 'Realizá una búsqueda para encontrar escritores, seleccioná una categoría o ver todos'}
                 </p>
               </div>
             ) : (

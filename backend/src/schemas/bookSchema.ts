@@ -23,7 +23,6 @@ import { z } from "zod";
  * @property {boolean} [fanzine=false] - Es fanzine
  * @property {boolean} [showInHome=false] - Mostrar en Home
  * @property {number} [homeOrder=null] - Orden en Home (1-8)
- * @property {boolean} [recomendedWriter=false] - Es de escritor recomendado
  * @proprty {string} [description] - Descripción del libro
  * @property {string} url - URL de referencia externa
  */
@@ -83,8 +82,6 @@ const AddBookSchema = z
     showInHome: z.boolean().default(false),  
     
     homeOrder: z.number().min(1).max(8).optional().nullable().default(null),  
-
-    recomendedWriter: z.boolean().default(false),
 
     description: z.string()
       .trim()
@@ -165,8 +162,6 @@ const UpdateBookSchema = z
     showInHome: z.boolean().default(false),  
     
     homeOrder: z.number().min(1).max(8).optional().nullable().default(null),  
-
-    recomendedWriter: z.boolean().default(false),
 
     description: z.string()
       .trim()

@@ -31,7 +31,13 @@ const SALT_ROUNDS = 10;
  * Duración del Access Token (corto, va en memoria del frontend).
  *Access Token	JWT	Contiene datos del usuario (id, name, role) y expira rápido
 */
-const ACCESS_TOKEN_EXPIRES_IN = "15m"; 
+const ACCESS_TOKEN_EXPIRES_IN = "15m";
+
+/**
+ * Algoritmo de firma del access token (jsonwebtoken).
+ * Debe coincidir con {@link authMiddleware} (`algorithms` en verify).
+ */
+const JWT_ALGORITHM = "HS256" as const;
 
 /**
  * Duración del Refresh Token (largo, va en httpOnly cookie) 7 días en segundos.
@@ -250,6 +256,7 @@ const loginUser = async (
     };
 
     const accessToken = jwt.sign(accessPayload, secretKey, {
+      algorithm: "HS256",
       expiresIn: ACCESS_TOKEN_EXPIRES_IN,
     });
 
@@ -427,8 +434,9 @@ const refreshAccessToken = async (
     const newRefreshTokenHash = await bcryptjs.hash(newRefreshTokenPlain, SALT_ROUNDS);
     const newExpiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN_MS);
 
-    // Marcar el viejo como reemplazado
+    // Marcar el viejo como reemplazado y revocado
     refreshTokenDoc.replacedByTokenHash = newRefreshTokenHash;
+    refreshTokenDoc.revokedAt = new Date();
     await refreshTokenDoc.save();
 
     // Crear el nuevo en BD (mismo tokenFamily, nuevo token)
@@ -452,6 +460,7 @@ const refreshAccessToken = async (
     };
 
     const newAccessToken = jwt.sign(accessPayload, secretKey, {
+      algorithm: JWT_ALGORITHM,
       expiresIn: ACCESS_TOKEN_EXPIRES_IN,
     });
 

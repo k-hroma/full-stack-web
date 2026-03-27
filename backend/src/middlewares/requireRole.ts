@@ -5,7 +5,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import type { ErrorResults } from "../types/errorResults.js";
+import type { ErrorResult } from "../types/errorResults.js";
 import type { UserRole } from "../types/authInterface.js";
 
 /**
@@ -25,7 +25,7 @@ import type { UserRole } from "../types/authInterface.js";
  */
 
 const requireRole = (...allowedRoles: UserRole[]) => {
-  return (req: Request, res: Response<ErrorResults>, next: NextFunction): void => {
+  return (req: Request, res: Response<ErrorResult>, next: NextFunction): void => {
     
     // Verificación de autenticación previa
     if (!req.user) {

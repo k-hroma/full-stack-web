@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useSearch } from '../../hooks/useSearch';
 import type { CreateBookInput, Book } from '../../types';
-import { searchBooks, getBooksByCategory, createBook, updateBook, deleteBook } from '../../api/books';
+import { searchBooks, getBooksByCategory, createBook, updateBook, deleteBook, getBooks } from '../../api/books';
 import '../../styles/pages/admin/admin-books-management.css';
 
 
@@ -21,12 +21,11 @@ type BookFormData = {
   fanzine: boolean
   showInHome: boolean
   homeOrder: number | ''
-  recomendedWriter: boolean
   description: string
   url: string
 }
 
-type CategoryFilter = 'all' | 'latestBook' | 'fanzine' | 'showInHome' | 'recomendedWriter';
+type CategoryFilter = 'all' | 'latestBook' | 'fanzine' | 'showInHome' | 'viewAll';
 
 const INITIAL_FORM_BOOK_DATA: BookFormData = {
   img: '',
@@ -41,7 +40,6 @@ const INITIAL_FORM_BOOK_DATA: BookFormData = {
   fanzine: false,
   showInHome: false,
   homeOrder: '',
-  recomendedWriter: false,
   description: '',
   url: '',
 }
@@ -68,7 +66,6 @@ const populateFormWithBook = (book: Book): BookFormData => ({
   fanzine: book.fanzine || false,
   showInHome: book.showInHome || false,
   homeOrder: book.homeOrder ?? '',
-  recomendedWriter: book.recomendedWriter || false,
   description: book.description || '',
   url: book.url || '',
 });
@@ -76,7 +73,7 @@ const populateFormWithBook = (book: Book): BookFormData => ({
 export default function AdminBooksManagementPage() {
   const { formData, handleChange, resetForm, setFormData } = useForm<BookFormData>(INITIAL_FORM_BOOK_DATA);
 
-  const { img, isbn, title, firstName, lastName, editorial, price, stock, latestBook, fanzine, showInHome, homeOrder, recomendedWriter, description, url } = formData;
+  const { img, isbn, title, firstName, lastName, editorial, price, stock, latestBook, fanzine, showInHome, homeOrder, description, url } = formData;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -91,7 +88,7 @@ export default function AdminBooksManagementPage() {
   const [editingBookId, setEditingBookId] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  // Nuevo estado para el filtro de categoría activo
+
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -209,11 +206,19 @@ export default function AdminBooksManagementPage() {
     }
 
     try {
-      const books = await getBooksByCategory(category);
+      let books;
+      if (category === 'viewAll') {
+        books = await getBooks();
+      } else {
+        books = await getBooksByCategory(category);
+      }
       setResults(books);
 
       if (books.length === 0) {
-        setErrorMsg(`No se encontraron libros en esta categoría`);
+        setErrorMsg(category === 'viewAll'
+          ? 'No hay libros registrados'
+          : `No se encontraron libros en esta categoría`
+        );
       }
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : 'Error inesperado';
@@ -484,16 +489,6 @@ export default function AdminBooksManagementPage() {
                   <span className="admin-dashboard__checkbox-text">Mostrar en Home</span>
                 </label>
 
-                <label className="admin-dashboard__checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="recomendedWriter"
-                    className="admin-dashboard__checkbox"
-                    checked={recomendedWriter}
-                    onChange={handleChange}
-                  />
-                  <span className="admin-dashboard__checkbox-text">Escritor recomendado</span>
-                </label>
               </div>
             </div>
 
@@ -578,10 +573,16 @@ export default function AdminBooksManagementPage() {
               )}
             </div>
 
-            {/* NUEVO: Botones de búsqueda por categoría */}
+            {/*Botones de búsqueda por categoría */}
             <div className="admin-dashboard__category-filters">
               <h3 className="admin-dashboard__category-title">O buscar por categoría:</h3>
               <div className="admin-dashboard__category-buttons">
+                <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'viewAll' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('viewAll')}
+                >
+                  📋 Ver todos
+                </button>
                 <button
                   className={`admin-dashboard__category-btn ${activeCategory === 'latestBook' ? 'admin-dashboard__category-btn--active' : ''}`}
                   onClick={() => handleCategorySearch('latestBook')}
@@ -600,12 +601,7 @@ export default function AdminBooksManagementPage() {
                 >
                   🏠 Mostrar en Home
                 </button>
-                <button
-                  className={`admin-dashboard__category-btn ${activeCategory === 'recomendedWriter' ? 'admin-dashboard__category-btn--active' : ''}`}
-                  onClick={() => handleCategorySearch('recomendedWriter')}
-                >
-                  ⭐ Escritores Recomendados
-                </button>
+
                 {activeCategory !== 'all' && (
                   <button
                     className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
@@ -626,10 +622,10 @@ export default function AdminBooksManagementPage() {
               <div className="admin-dashboard__active-filter">
                 <span>Mostrando: </span>
                 <strong>
+                  {activeCategory === 'viewAll' && 'Todos los libros'}
                   {activeCategory === 'latestBook' && 'Novedades'}
                   {activeCategory === 'fanzine' && 'Fanzines'}
                   {activeCategory === 'showInHome' && 'Mostrar en Home'}
-                  {activeCategory === 'recomendedWriter' && 'Escritores Recomendados'}
                 </strong>
                 <span> ({results.length} {results.length === 1 ? 'libro' : 'libros'})</span>
               </div>
@@ -642,7 +638,7 @@ export default function AdminBooksManagementPage() {
                     ? `No hay libros en esta categoría`
                     : inputValue
                       ? `No se encontraron resultados`
-                      : 'Realizá una búsqueda para encontrar libros o seleccioná una categoría'}
+                      : 'Realizá una búsqueda para encontrar libros, seleccioná una categoría o ver todos'}
                 </p>
               </div>
             ) : (
@@ -668,7 +664,6 @@ export default function AdminBooksManagementPage() {
                         {book.latestBook && <span className="badge badge--new">Novedad</span>}
                         {book.fanzine && <span className="badge badge--fanzine">Fanzine</span>}
                         {book.showInHome && <span className="badge badge--home">Home</span>}
-                        {book.recomendedWriter && <span className="badge badge--recommended">Recomendado</span>}
                       </div>
                     </div>
 

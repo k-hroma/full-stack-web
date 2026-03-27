@@ -28,11 +28,7 @@ export const getBooks = async (filters?: BookFilters): Promise<Book[]> => {
   if (filters?.showInHome !== undefined) {
     params.append('showInHome', String(filters.showInHome));
   }
-  if (filters?.recomendedWriter !== undefined) {
-    params.append('recomendedWriter', String(filters.recomendedWriter));
-  } 
   
-
   const query = params.toString() ? `?${params.toString()}` : '';
   const response = await httpClient<BooksResponse>(`/books${query}`);
   
@@ -54,7 +50,7 @@ export const searchBooks = async (term: string): Promise<Book[]> => {
  * @param category - La categoría por la que filtrar: 'latestBook' | 'fanzine' | 'showInHome' | 'recomendedWriter'
  */
 export const getBooksByCategory = async (
-  category: 'latestBook' | 'fanzine' | 'showInHome' | 'recomendedWriter'
+  category: 'latestBook' | 'fanzine' | 'showInHome' | 'all'
 ): Promise<Book[]> => {
   const filters: BookFilters = {
     [category]: true,

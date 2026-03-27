@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { searchBooks } from '../../api';
+import { searchBooks, searchWriters } from '../../api';
 import { useSearch } from '../../hooks/useSearch';
+import { useWriterSearch } from '../../hooks/useWriterSearch';
 import { Search } from '@boxicons/react';
 
 import '../../styles/components/search.css'
@@ -9,6 +10,7 @@ import '../../styles/components/search.css'
 export function SearchBooks() {
   const navigate = useNavigate();
   const { setResults, setSearchTerm } = useSearch();
+  const { setWriterResults, setWriterSearchTerm } = useWriterSearch();
   const [inputValue, setInputValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -20,30 +22,40 @@ export function SearchBooks() {
   const handleSearchSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (inputValue.trim() === '') {
+    const term = inputValue.trim();
+
+    if (term === '') {
       setErrorMsg('La búsqueda no puede estar vacía.');
       setResults([]);
+      setWriterResults([]);
       return;
     }
 
     try {
-      const results = await searchBooks(inputValue.trim());
+      const [bookResults, writerResults] = await Promise.all([
+        searchBooks(term),
+        searchWriters(term),
+      ]);
 
-      if (results.length > 0) {
-        setSearchTerm(inputValue.trim());
-        setResults(results);
+      if (bookResults.length > 0 || writerResults.length > 0) {
+        setSearchTerm(term);
+        setResults(bookResults);
+        setWriterSearchTerm(term);
+        setWriterResults(writerResults);
         setInputValue('');
         setErrorMsg('');
         navigate('/results');
       } else {
         setResults([]);
-        setErrorMsg(`No se encontraron resultados para "${inputValue}"`);
+        setWriterResults([]);
+        setErrorMsg(`No se encontraron resultados para "${term}"`);
         setInputValue('');
       }
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : 'Error inesperado';
       setErrorMsg(`Ocurrió un error al buscar: ${errMsg}`);
       setResults([]);
+      setWriterResults([]);
     }
   };
 
