@@ -11,6 +11,7 @@
 import 'dotenv/config';
 
 import bcryptjs from "bcryptjs";
+import mongoose from "mongoose"; // Importar mongoose para cierre graceful
 import { User } from "../models/authModel.js";
 import { connectMongoDB } from "../config/mongoDB.js";
 
@@ -35,6 +36,12 @@ const seedFirstAdmin = async (): Promise<void> => {
     if (existingAdmin) {
       console.log("ℹ️  Admin already exists:", existingAdmin.email);
       console.log("ℹ️  Skipping first admin creation");
+      
+      /**
+       * Cierre graceful de la conexión antes de salir.
+       * Evita dejar handles abiertos o conexiones pending.
+       */
+      await mongoose.connection.close(false);
       process.exit(0);
     }
 
@@ -50,6 +57,12 @@ const seedFirstAdmin = async (): Promise<void> => {
       console.error("Please set them in your .env file:");
       console.error("FIRST_ADMIN_EMAIL=admin@tuempresa.com");
       console.error("FIRST_ADMIN_PASSWORD=SecurePass123!");
+      
+      /**
+       * Cerrar conexión incluso en caso de error de configuración
+       * para evitar dejar el proceso colgado.
+       */
+      await mongoose.connection.close(false);
       process.exit(1);
     }
 
@@ -73,10 +86,26 @@ const seedFirstAdmin = async (): Promise<void> => {
     console.log("🔐 IMPORTANT: Change password after first login");
     console.log("   Login at: POST /auth/login");
 
+    /**
+     * Cierre graceful de la conexión MongoDB antes de terminar.
+     * El parámetro 'false' indica que no es un cierre forzado (espera operaciones pendientes).
+     */
+    await mongoose.connection.close(false);
     process.exit(0);
 
   } catch (error) {
     console.error("❌ Error creating first admin:", error);
+    
+    /**
+     * Intentar cerrar la conexión incluso en caso de error inesperado.
+     * Si la conexión no está abierta, close() no lanza error.
+     */
+    try {
+      await mongoose.connection.close(false);
+    } catch (closeError) {
+      // Ignorar error de cierre si la conexión no estaba abierta
+    }
+    
     process.exit(1);
   }
 };

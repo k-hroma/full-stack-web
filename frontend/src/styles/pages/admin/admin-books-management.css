@@ -22,6 +22,7 @@
 .admin-books-dashboard__header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 24px;
   border-bottom: 1px solid #e0e0e0;
   background: #fafafa;
@@ -593,12 +594,14 @@
    ============================================ */
 
 @media (max-width: 768px) {
-  .admin-dashboard {
+  .admin-books-dashboard {
     padding: 12px;
   }
 
-  .admin-dashboard__header {
-    padding: 16px;
+  .admin-books-dashboard__header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
   }
 
   .admin-dashboard__title {
@@ -607,12 +610,11 @@
 
   .admin-dashboard__tabs {
     flex-wrap: wrap;
-  }
-
-  .admin-dashboard__tab {
     flex: 1;
+    text-align: center;
     min-width: 120px;
   }
+
 
   .admin-dashboard__form {
     padding: 16px;

@@ -18,7 +18,15 @@ const refreshTokenSchema = new Schema<IRefreshToken>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "User ID is required"],
-      index: true, // Para buscar rápido todos los tokens de un usuario rápido (para "logout de todos los dispositivos")
+      /**
+       * Índice crítico para operaciones de seguridad:
+       * - 'logoutAllDevices': Busca todos los tokens de un usuario para revocarlos
+       * - 'refreshAccessToken': Verifica pertenencia del token al usuario
+       * - Cleanup de tokens expirados por usuario
+       * @security Sin este índice, un atacante podría causar DoS por queries lentas 
+       *           al forzar múltiples logouts masivos con userIds aleatorios.
+       */
+      index: true,
     },
     tokenHash: {
       type: String,

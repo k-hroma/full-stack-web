@@ -44,9 +44,17 @@ const startServer = async (): Promise<void> => {
     );
   }
 
-  // Validar longitud mínima de JWT_SECRET para seguridad
+  /**
+   * Validación estricta de longitud de JWT_SECRET para producción.
+   * @security Menos de 32 caracteres es inseguro para HS256.
+   * @throws {Error} Si la clave es demasiado corta.
+   */
   if (jwtSecret.length < 32) {
-    console.warn('⚠️  Warning: JWT_SECRET should be at least 32 characters for security');
+    throw new Error(
+      'JWT_SECRET must be at least 32 characters for production security.\n' +
+      `Current length: ${jwtSecret.length} characters. ` +
+      'Generate a secure key with: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"'
+    );
   }
 
   // Validar PORT (con fallback a 3000)
@@ -78,6 +86,7 @@ const startServer = async (): Promise<void> => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`🔐 JWT authentication: enabled`);
       console.log(`📚 API endpoint: http://localhost:${PORT}/books`);
+      console.log(`🏥 Health check: http://localhost:${PORT}/health`);
       resolve(serverInstance);
     });
 

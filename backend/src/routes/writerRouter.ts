@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addWriter, deleteWriter, getWriterById, getWriters, searchWriter, updateWriter } from '../controllers/writerController.js';
+import { addWriter, deleteWriter, getWriterById, getWriters, searchWriter, updateWriter } from '../controllers/writerControllers.js'
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { requireRole } from '../middlewares/requireRole.js';
 

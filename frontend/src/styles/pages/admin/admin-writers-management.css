@@ -561,12 +561,10 @@
   }
 
   .admin-dashboard__tabs {
-    width: 100%;
-  }
-
-  .admin-dashboard__tab {
+    flex-wrap: wrap;
     flex: 1;
     text-align: center;
+    min-width: 120px;
   }
 
   .admin-dashboard__form {

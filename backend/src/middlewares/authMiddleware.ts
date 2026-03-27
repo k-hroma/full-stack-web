@@ -6,7 +6,7 @@
 
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-import type { ErrorResult } from "../types/errorResults.js";
+import type { ErrorResult } from "../types/errorResult.js";
 import type { AuthPayload } from "../types/authPayload.js";
 
 /**

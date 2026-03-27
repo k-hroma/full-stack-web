@@ -5,7 +5,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import type { ErrorResult } from "../types/errorResults.js";
+import type { ErrorResult } from "../types/errorResult.js";
 import type { UserRole } from "../types/authInterface.js";
 
 /**

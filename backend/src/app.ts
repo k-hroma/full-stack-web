@@ -6,13 +6,15 @@
 
 import cookieParser from "cookie-parser";
 import express from 'express';
-import type { Application } from 'express';
+import type { Application, Request, Response } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoose from 'mongoose';
 import { handleErrors } from './middlewares/handleErrors.js';
 import { bookRouter } from './routes/bookRouter.js';
 import { authRouter } from './routes/authRouter.js';
 import { writerRouter } from "./routes/writerRouter.js";
-
 
 /**
  * Instancia principal de Express.
@@ -20,25 +22,103 @@ import { writerRouter } from "./routes/writerRouter.js";
  * 
  * @constant {Application} app
  */
-
 const app: Application = express();
 
+// ============================================================================
+// CONFIGURACIÓN DE SEGURIDAD (Helmet + Rate Limiting)
+// ============================================================================
+
 /**
- * Habilitación de CORS para comunicación cross-origin.
- * En producción, configurar con opciones específicas de origen:
+ * Helmet: Configuración de headers de seguridad HTTP.
+ * Protege contra XSS, clickjacking, MIME sniffing y otros ataques comunes.
  * 
- * @example Configuración restringida:
- * app.use(cors({
- *   origin: process.env.FRONTEND_URL,
- *   credentials: true,
- *   methods: ["GET", "POST", "PATCH", "DELETE"]
- * }));
+ * @security Desactiva X-Powered-By, configura CSP, HSTS, y otros headers.
  */
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+  crossOriginEmbedderPolicy: false, // Desactivado para permitir imágenes de URLs externas
 }));
+
+/**
+ * Rate Limiting general: Protección contra fuerza bruta y DDoS básicos.
+ * Limita a 100 requests por IP cada 15 minutos para endpoints no críticos.
+ * 
+ * @constant {rateLimit.RateLimit} generalLimiter
+ */
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 100, // Límite por IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many requests from this IP, please try again later."
+  }
+});
+
+/**
+ * Rate Limiting estricto: Para endpoints de autenticación.
+ * Limita a 5 intentos por IP cada 15 minutos (login/register).
+ * 
+ * @constant {rateLimit.RateLimit} authLimiter
+ */
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // 5 intentos de login/register por IP
+  skipSuccessfulRequests: true, // No cuenta los logins exitosos
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many authentication attempts, please try again after 15 minutes."
+  }
+});
+
+// Aplicar rate limiting general a toda la app
+app.use(generalLimiter);
+
+// ============================================================================
+// CORS CONFIGURACIÓN DINÁMICA (Producción vs Desarrollo)
+// ============================================================================
+
+/**
+ * Validación crítica de seguridad para producción:
+ * FRONTEND_URL debe estar definido explícitamente en producción para evitar
+ * que el fallback a localhost permita accesos no autorizados desde entornos
+ * de desarrollo locales.
+ * 
+ * @security Si NODE_ENV=production y no hay FRONTEND_URL, la app no inicia.
+ *           Esto previene configuraciones inseguras por defecto.
+ */
+if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
+  throw new Error(
+    'SECURITY ERROR: FRONTEND_URL environment variable is required in production.\n' +
+    'Please set it to your production frontend domain (e.g., https://mibiblioteca.com)'
+  );
+}
+
+/**
+ * Configuración de CORS dinámica basada en variables de entorno.
+ * En producción, solo permite el origen definido en FRONTEND_URL.
+ * En desarrollo, permite localhost.
+ * 
+ * @security credentials: true permite cookies httpOnly en cross-origin.
+ */
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+};
+
+app.use(cors(corsOptions));
 
 // ============================================================================
 // MIDDLEWARES ESENCIALES (orden importante - se ejecutan secuencialmente)
@@ -61,6 +141,36 @@ app.use(express.json({ limit: "10kb" }));
  */
 app.use(cookieParser());
 
+// ============================================================================
+// HEALTH CHECK ENDPOINT (FASE 2: Estabilidad)
+// ============================================================================
+
+/**
+ * Endpoint de health check para orquestadores de contenedores (Docker, Kubernetes).
+ * Permite verificar el estado de la aplicación y la conexión a BD.
+ * 
+ * @route GET /health
+ * @returns {Object} Estado de la aplicación
+ * @property {string} status - "ok" o "error"
+ * @property {string} database - "connected" (1) o "disconnected" (0)
+ * @property {string} timestamp - ISO timestamp de la respuesta
+ * @status 200 Si todo está operativo
+ * @status 503 Si la BD está desconectada
+ */
+app.get('/health', (_req: Request, res: Response) => {
+  const dbStates = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  const dbState = mongoose.connection.readyState;
+  
+  const isHealthy = dbState === 1; // 1 = connected
+  
+  const healthCheck = {
+    status: isHealthy ? 'ok' : 'error',
+    database: dbStates[dbState] || 'unknown',
+    timestamp: new Date().toISOString()
+  };
+  
+  res.status(isHealthy ? 200 : 503).json(healthCheck);
+});
 
 // ============================================================================
 // RUTAS DE LA API
@@ -71,19 +181,17 @@ app.use(cookieParser());
  * Todas las rutas internas se accederán con el prefijo /books
  * (ej: GET /books, POST /books, PATCH /books/:id)
  */
-app.use("/books", bookRouter)
+app.use("/books", bookRouter);
 
 /**
  * Monta el router de autenticación en la ruta base /auth.
+ * Rate limiting estricto aplicado solo a estas rutas sensibles.
  * Todas las rutas internas se accederán con el prefijo /auth
  * (ej: /auth/login, /auth/register, /auth/refresh)
  */
-app.use("/auth", authRouter)
+app.use("/auth", authLimiter, authRouter);
 
-
-
-app.use("/writers", writerRouter)
-
+app.use("/writers", writerRouter);
 
 // ============================================================================
 // MANEJO DE ERRORES (siempre al final de la cadena de middlewares)

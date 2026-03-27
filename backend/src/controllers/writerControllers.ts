@@ -33,6 +33,20 @@ const getWriters = async (
     
   }
  }
+
+/**
+ * Obtiene un escritor específico por su ID.
+ * 
+ * @async
+ * @function getWriterById
+ * @route GET /writers/:id
+ * @param {Request} req - Request con el ID del escritor en params
+ * @param {Response} res - Respuesta con el escritor encontrado
+ * @param {NextFunction} next - Middleware de manejo de errores
+ * @returns {Promise<void>}
+ * @throws {400} Si el formato del ID es inválido
+ * @throws {404} Si el escritor no existe
+ */
 const getWriterById = async (
   req: Request<{ id: string }>,
   res: Response<QueryResponse>,
@@ -63,7 +77,7 @@ const getWriterById = async (
 
     res.status(200).json({
       success: true,
-      message: "Book retrieved successfully",
+      message: "Writer retrieved successfully",
       data: writer
     });
   } catch (error: unknown) { 

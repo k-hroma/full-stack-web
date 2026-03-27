@@ -13,7 +13,7 @@ const AddWriterSchema = z.object({
   titleBookQuote: z
       .string()
       .trim()
-      .min(1, { message: "Author first name is required" }),
+      .min(1, { message: "Title book quote is required" }),
     
   recomended: z
     .boolean()

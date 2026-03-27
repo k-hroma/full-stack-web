@@ -21,6 +21,14 @@ import type { IBook } from "../types/bookInterface.js";
 import { escapeRegExp } from "../utils/escapeRegExp.js";
 
 /**
+ * Timeout máximo para operaciones de búsqueda complejas (en milisegundos).
+ * Previene bloqueo del servidor por queries de regex pesadas.
+ * 
+ * @constant {number} SEARCH_TIMEOUT_MS
+ */
+const SEARCH_TIMEOUT_MS = 5000;
+
+/**
  * Obtiene todos los libros del catálogo.
  * Soporta filtros opcionales por query params (fanzine, latestBook).
  * 
@@ -144,6 +152,11 @@ const searchBook = async (
     if (books.length === 0) {
       const regex = new RegExp(escapeRegExp(term), "i");
       
+      /**
+       * Búsqueda fallback con regex (case-insensitive).
+       * @performance maxTimeMS evita que regex complejos bloqueen el servidor.
+       * Si la query excede 5 segundos, MongoDB aborta y lanza error.
+       */
       results = await Book.find({
         $or: [
           { title: regex },
@@ -153,6 +166,7 @@ const searchBook = async (
           { isbn: term.toUpperCase() },
         ],
       })
+        .maxTimeMS(SEARCH_TIMEOUT_MS) // Timeout de seguridad para regex
         .limit(20)
         .lean<IBook[]>();
     }
@@ -165,6 +179,17 @@ const searchBook = async (
       data: results,
     });
   } catch (error: unknown) {
+    /**
+     * Manejo específico de timeout de MongoDB.
+     * Error code 50 indica que maxTimeMS fue excedido.
+     */
+    if ((error as { code?: number }).code === 50) {
+      res.status(503).json({
+        success: false,
+        message: "Search operation timed out. Please try a more specific term.",
+      });
+      return;
+    }
     next(error);
   }
 };
@@ -203,7 +228,12 @@ const getBooksByAuthor = async (
       firstName: { $regex: new RegExp(escapeRegExp(firstName), "i") },
     };
 
+    /**
+     * @performance maxTimeMS aplicado también a búsquedas por autor
+     * para mantener consistencia en protección contra queries pesadas.
+     */
     const books = await Book.find(filter)
+      .maxTimeMS(SEARCH_TIMEOUT_MS)
       .sort({ title: 1 }) // Ordenar por título ascendente
       .lean<IBook[]>();
 
@@ -215,6 +245,13 @@ const getBooksByAuthor = async (
       data: books,
     });
   } catch (error: unknown) {
+    if ((error as { code?: number }).code === 50) {
+      res.status(503).json({
+        success: false,
+        message: "Search operation timed out. Please try again.",
+      });
+      return;
+    }
     next(error);
   }
 };

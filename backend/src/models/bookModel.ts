@@ -7,7 +7,6 @@
 import { Schema, model } from "mongoose";
 import type { IBook } from "../types/bookInterface.js";
 
-
 /**
  * Schema de Mongoose para documentos de libros.
  * Define estructura del catálogo editorial con soporte para fanzines.
@@ -24,7 +23,7 @@ import type { IBook } from "../types/bookInterface.js";
  * @property {number} stock - Inventario disponible (default 0)
  * @property {boolean} latestBook - Indica novedad reciente (default false)
  * @property {boolean} fanzine - Categoría fanzine (default false)
-  * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal (default false)
+ * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal (default false)
  * @property {number} homeOrder - Indica la posición en la cual mosrar el libro en caso de estar en la página ppal (del 1 al 8, default es null)
  * @property {string} [description] - Descripción del libro (opcional)
  * @property {string} url - URL externa de referencia (requerido)
@@ -79,7 +78,7 @@ const bookSchema = new Schema<IBook>(
     },
     stock: {
       type: Number,
-      required:true,
+      required: true,
       default: 0,
       min: [0, "Stock cannot be negative"],
       validate: {
@@ -101,7 +100,6 @@ const bookSchema = new Schema<IBook>(
       type: Boolean,
       default: false,
       required: true,
-      index: true,          
     },
     homeOrder: {           
       type: Number,
@@ -138,8 +136,16 @@ bookSchema.index({ title: "text", firstName: "text", lastName: "text", editorial
 /**
  * Índice para filtrado por categorías comunes.
  */
-bookSchema.index({ fanzine: 1, latestBook: 1, recomendedWriter: 1 });
+bookSchema.index({ fanzine: 1, latestBook: 1 });
 
+/**
+ * Índice compuesto optimizado para consultas de homepage.
+ * 
+ * @performance Mejora queries que filtran por showInHome: true y ordenan por homeOrder.
+ * Ejemplo: db.books.find({ showInHome: true }).sort({ homeOrder: 1 })
+ * Con este índice, MongoDB usa el índice tanto para filtrar como para ordenar sin sort en memoria.
+ */
+bookSchema.index({ showInHome: 1, homeOrder: 1 });
 
 /**
  * Virtual para nombre completo del autor.
