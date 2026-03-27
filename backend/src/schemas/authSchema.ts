@@ -27,6 +27,7 @@ const RegisterUserSchema = z.object({
     .trim(),
 
   email: z
+    .string()
     .email({ message: "El email ingresado no es válido." })
     .trim()
     .toLowerCase(),
@@ -62,6 +63,7 @@ type registerUserBody = z.infer<typeof RegisterUserSchema>;
 
 const LoginUserSchema = z.object({
   email: z
+    .string()
     .email({ message: "Debe ser un email válido" })
     .trim()
     .toLowerCase(),

@@ -1,13 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend API para librería con autenticación JWT y gestión de catálogo",
+  "main": "dist/main.js",
   "scripts": {
     "dev": "tsx src/main.ts",
     "build": "tsc",
-    "start": "tsc & node dist/main.js",
+    "start": "node dist/main.js",
+    "start:prod": "npm run build && npm start",
     "seed:admin": "tsx src/scripts/seedFirstAdmin.ts"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "keywords": [],
   "author": "",
@@ -19,19 +23,18 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/uuid": "^10.0.0",
-    "ts-node-dev": "^2.0.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.4",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.2.0",
-    "uuid": "^13.0.0",
-    "zod": "^4.3.6"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.23.8"
   }
 }

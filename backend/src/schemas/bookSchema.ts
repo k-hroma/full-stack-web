@@ -33,6 +33,7 @@ import { z } from "zod";
 const AddBookSchema = z
   .object({
     img: z
+      .string()
       .url({ message: "Image URL must be a valid URL" })
       .min(1, { message: "Image URL is required" }),
 
@@ -88,6 +89,7 @@ const AddBookSchema = z
       .min(1, { message: "Description is required" }),
 
     url: z
+      .string()
       .url({ message: "Must be a valid URL" })
       .min(1, { message: "ML URL is required" }),
   })
@@ -113,6 +115,7 @@ type AddBookBody = z.infer<typeof AddBookSchema>;
 const UpdateBookSchema = z
   .object({
     img: z
+      .string()
       .url({ message: "Image URL must be a valid URL" })
       .min(1, { message: "Image URL is required" }),
 
@@ -168,6 +171,7 @@ const UpdateBookSchema = z
       .min(1, { message: "Description is required" }),
 
     url: z
+      .string()
       .url({ message: "Must be a valid URL" })
       .min(1, { message: "ML URL is required" }),
   })
