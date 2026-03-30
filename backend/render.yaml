@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: lapalaciolibros-backend
+    runtime: node
+    region: ohio # O southamerica-east1 si está disponible
+    plan: free # Free tier (se "duerme" tras inactividad)
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false # Lo ponés vos en el dashboard
+      - key: JWT_SECRET
+        sync: false # Lo ponés vos en el dashboard
+      - key: FRONTEND_URL
+        sync: false # Por ahora: http://localhost:5173
+      - key: PORT
+        value: 10000 # Render asigna este por defecto
