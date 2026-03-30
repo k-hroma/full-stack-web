@@ -65,7 +65,7 @@
 .precio-content p {
   font-family: 'PPEditorialNew', serif;
   font-weight: 100;
-  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  font-size: var(--small-font-size);
   line-height: 130%;
   letter-spacing: -0.48px;
   color: var(--pink);
@@ -74,12 +74,10 @@
 
 .txt-title {
   margin: 0;
-  font-family: "Neue Montreal Medium", sans-serif;
-  font-size: clamp(0.875rem, 1.5vw, 1.5rem);
-  line-height: 130%;
+  font-family: "Neue Montreal Bold", sans-serif;
+  font-size: var(--small-x-font-size);
+  line-height: 100%;
   color: var(--brown);
-  letter-spacing: -0.48px;
-  font-weight: 500;
 }
 
 .details-section {
@@ -88,8 +86,7 @@
 
 .txt-author {
   font-family: "Neue Montreal Medium", sans-serif;
-  font-weight: 400;
-  font-size: clamp(0.875rem, 1.5vw, 1.5rem);
+  font-size: var(--small-x-font-size);
   line-height: 130%;
   color: var(--brown);
   margin: 0 0 0.75rem 0;
@@ -105,19 +102,16 @@
 /* Estilo base para todos los botones/enlaces */
 .item-book-btn {
   flex: 1;
-  padding: 0.6rem 1rem;
-  border-radius: 2rem; /* Más redondeado, estilo moderno pill */
-  font-family: 'Neue Montreal Medium';
-  font-weight: 500;
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem; 
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: var(--very-small-font-size);
   text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1.5px solid var(--brown);
-  background-color: transparent;
-  color: var(--brown);
+  border: none;
+  color: var(--beige);
   position: relative;
   overflow: hidden;
 }
@@ -125,42 +119,41 @@
 /* Botón outline (Ver más) */
 .btn-outline {
   background-color: transparent;
+  border: 1.5px solid var(--pink);
   color: var(--pink);
   transition: transform o.3s ease;
   
 }
 
 .btn-outline:hover {
-  transform: translateY(-3px) translateX(3px);
+  transform: translateY(-1px) translateX(1px);
+  background-color: var(--pink);
+  color: var(--beige);
 
 }
 
 /* Botón primary (Agregar) */
 .btn-primary {
-  background: transparent;
-  border-color: var(--pink);
+  background: var(--brown);
   transition: transform o.3s ease;
-  text-transform: lowercase;
-  
+}
+
+.btn-primary:hover {
+  background-color: var(--orange);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: transparent;
-  transform: translateY(-3px) translateX(3px);
+  transform: translateY(-1px) translateX(1px);
 }
 
 /* Estados especiales */
 .btn-primary.in-cart {
-  background: transparent;
-  border-color: var(--orange);
-  color: var(--orange);
+  background-color: var(--orange);
+  color: var(--beige);
   cursor: default;
   transition: transform o.3s ease;
 }
 
-.btn-primary.in-cart:hover {
-  transform: translateY(-3px) translateX(3px);
-}
 
 .btn-primary.no-stock {
   background: #ccc;

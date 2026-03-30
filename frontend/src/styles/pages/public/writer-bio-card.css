@@ -26,14 +26,13 @@
 }
 .writer-bio-line {
   border:none;
-  border-top: 2px solid var(--pink);  
+  border-top: 1px solid var(--pink);  
   padding-top: 8rem;
 }
 
 .writer-bio-line:hover {
 border-color: var(--green);
 }
-
 
 
 .writer-bio-wrapper{
@@ -57,6 +56,7 @@ border-color: var(--green);
 .writer-bio-description{
   display: flex;
   width: 75%;
+  line-height: 110%;
 
 }
 
@@ -74,6 +74,7 @@ border-color: var(--green);
 }
 
 .writer-titles-btn {
+  font-family: 'Neue Montreal Regular';
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -83,6 +84,33 @@ border-color: var(--green);
 
 .writer-titles-btn:hover {
  color: var(--brown);
+}
+
+@media (max-width: 768px) {
+  .writer-bio-container {
+    padding: 4rem 1rem 6rem 1rem;
+  }
+.featured-quote {
+  font-size: var(--large-font-size);
+  padding: 4rem 0 0 0 ;
+}
+.writer-sub-quote {
+  padding-bottom: 4rem;
+}
+.writer-bio-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+}
+
+.writer-bio-line {
+  padding-top: 4rem;
+}
+
+.writer-bio-description{
+  margin-top:2rem ;
+  width: 100%;
+}
 }
 
 

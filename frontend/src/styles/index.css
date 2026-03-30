@@ -17,6 +17,7 @@
 
   /*Fonts Sizes*/
   --very-small-font-size: .875rem;
+  --small-x-font-size: 1rem;
   --small-font-size: 1.5rem;
   --large-font-size: 3rem;
   --super-large-font-size:5rem;
@@ -30,7 +31,8 @@
   --beige: #E2E2E2;
   --dark-beige: #DBD0C1;
   --light-violet:#CDB0EA;   
-  --green: #34C759;
+  --green: #0a9e50;
+  --grey: #7d94a3;
   
 }
 

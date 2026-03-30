@@ -1,16 +1,32 @@
 .books-genders-container {
+  display: flex;
   width: 100%;
+  height: auto;
   overflow: hidden;
-  text-align: center; /* Por si acaso, aunque con margin negativo no es estrictamente necesario */
-  font-size: 0; /* Elimina espacio en blanco de inline-block */
+  text-align: center; 
+  font-size: 0; 
   line-height: 0;
+  
 }
 
 .banner-img {
-  width: 110%; 
-  height: auto; 
-  max-width: none; 
-  display: inline-block; /* Necesario para que el margin negativo funcione bien */
-  vertical-align: top; /* Evita alineación baseline que agrega espacio */
-  margin: 0 -7.5%; /* Margen negativo de la mitad del exceso (15%/2) por cada lado */
+  width: 100%;
+  height: 100%; 
+  object-fit: cover;
+  @media (max-width:475px) {
+    display:none
+  }
+}
+
+.banner-img-mobile {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+   @media (max-width:475px) {
+    display: block;
+    max-height: 100vh;
+
+  }
 }

@@ -15,12 +15,12 @@ interface BookCardProps {
 const BookCard = ({ index, book, isInCart, onAddToCart, onViewMore }: BookCardProps) => {
   const bgColors = [
     '#CDB0EA', '#383838', '#954300', '#CDB0EA',
-    '#DBD0C1', '#CDB0EA', '#34C759', '#7D94A3',
+    '#DBD0C1', '#CDB0EA', '#0A9E50', '#7D94A3',
   ];
 
   const bgBorders = [
     '#954300', '#DBD0C1', '#CDB0EA', '#DBD0C1',
-    '#7D94A3', '#954300', '#DBD0C1', '#34C759',
+    '#7D94A3', '#954300', '#DBD0C1', '#0A9E50',
   ];
 
   const bgColor = bgColors[index % bgColors.length];
@@ -61,31 +61,31 @@ const BookCard = ({ index, book, isInCart, onAddToCart, onViewMore }: BookCardPr
       <div className='info-container'>
         <div className='info-txt-precio-container'>
           <div className='txt-content'>
-            <p className='txt-title'>{book.title.toUpperCase()}</p>
+            <p className='txt-title'>{book.title}</p>
+            <p className='txt-author'>{book.lastName} {book.firstName}</p>
           </div>
           <div className='precio-content'>
             <p>${book.price}</p>
           </div>
         </div>
 
-        <div className='details-section'>
-          <p className='txt-author'>{book.lastName} {book.firstName}</p>
 
-          <div className='actions-container'>
-            <button
-              className='item-book-btn btn-outline'
-              onClick={onViewMore}>
-              ver más
-            </button>
-            <button
-              className={`item-book-btn btn-primary ${buttonState.className}`}
-              onClick={onAddToCart}
-              disabled={buttonState.disabled}
-            >
-              {buttonState.text}
-            </button>
-          </div>
+        <div className='actions-container'>
+          <button
+            className={`item-book-btn btn-primary ${buttonState.className}`}
+            onClick={onAddToCart}
+            disabled={buttonState.disabled}
+          >
+            {buttonState.text}
+          </button>
+          <button
+            className='item-book-btn btn-outline'
+            onClick={onViewMore}>
+            Ver más +
+          </button>
+
         </div>
+
       </div>
     </div>
   );

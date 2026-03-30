@@ -7,7 +7,7 @@
 .cart-sidebar__overlay {
   position: fixed;
   inset: 0;
-  background: rgba(149, 67, 0, 0.2); /* Marrón muy transparente en vez de negro */
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   z-index: 200;
   display: flex;

@@ -6,9 +6,9 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(219, 208, 193, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,14 +24,14 @@
 
 .modal-container {
   background: var(--beige);
-  width: 90%;
+  width: 95%;
   max-width: 1200px;
   height: 85vh;
   max-height: 800px;
   position: relative;
   overflow: hidden;
   animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 25px 50px -12px rgba(149, 67, 0, 0.25);
+  
 }
 
 @keyframes slideUp {
@@ -51,24 +51,23 @@
   right: 1.5rem;
   width: 40px;
   height: 40px;
-  border: 2px solid var(--brown);
+  border:none;
   background: transparent;
   color: var(--brown);
-  font-family: 'Neue Montreal Medium';
-  font-size: 1.5rem;
+  font-family: 'Neue Montreal Light';
+  font-size: var(--large-font-size);
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+
 }
 
 .modal-close:hover {
-  background: var(--pink);
-  border-color: var(--pink);
-  color: white;
+  color: var(--pink);
+
   transform: rotate(90deg);
 }
 
@@ -82,18 +81,18 @@
 .modal-image-section {
   background: var(--dark-beige);
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
-  padding: 3rem;
+  padding: 4rem 3rem;
 }
 
 .modal-image-border {
   border: 10px solid #5BA8F7; /* Azul característico de la imagen */
-  padding: 2rem;
   background: #2a2a2a; /* Fondo oscuro detrás del libro */
+  padding: 2rem;
   width: 100%;
   max-width: 400px;
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +100,6 @@
 
 .modal-image-wrapper {
   width: 70%;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .modal-image {
@@ -113,7 +111,7 @@
 
 /* Sección de Información */
 .modal-info-section {
-  padding: 3rem 4rem;
+  padding: 4rem 3rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -126,76 +124,71 @@
 
 .modal-category {
   font-family: 'Neue Montreal Regular';
-  font-size: 0.875rem;
-  color: var(--brown);
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: var(--small-x-font-size);
+  color: var(--light-brown);
   display: block;
   margin-bottom: 0.5rem;
 }
 
 .modal-title {
-  font-family: 'PPEditorialNew', serif;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  color: var(--pink);
-  line-height: 1.1;
+  font-family: 'Neue Montreal Light';
+  font-size: var(--super-large-font-size);
+  color: var(--brown);
+  line-height: 90%;
   margin: 0 0 0.75rem 0;
-  font-weight: 100;
-  letter-spacing: -0.02em;
 }
 
 .modal-author {
-  font-family: 'Neue Montreal Medium';
-  font-size: 1.25rem;
-  color: var(--pink);
+  font-family: 'Neue Montreal Regular';
+  font-size: var(--small-font-size);
+  color: var(--brown);  
   margin: 0;
-  font-weight: 400;
+
 }
 
 /* Precio y Botón */
 .modal-price-section {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(149, 67, 0, 0.2);
+  border-bottom: 1px solid var(--pink);
 }
 
 .modal-price {
   font-family: 'PPEditorialNew', serif;
-  font-size: 2.5rem;
-  color: var(--brown);
-  font-weight: 100;
-  letter-spacing: -0.02em;
+  font-size: var(--large-font-size);
+  color: var(--pink);
+
 }
 
 .modal-interest-btn {
-  padding: 0.75rem 2.5rem;
+  flex: 0.5;
+  padding: 0.35rem 1rem;
   border-radius: 2rem;
-  border: 2px solid var(--pink);
-  background: var(--pink);
+  border:none;
+  background: var(--brown);
   color: var(--beige);
-  font-family: 'Neue Montreal Medium';
-  font-size: 0.875rem;
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: var(--very-small-font-size);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  text-transform: lowercase;
-  letter-spacing: 0.02em;
+  transition: transform o.3s ease;
+
+
 }
 
 .modal-interest-btn:hover:not(:disabled) {
-  background: transparent;
-  color: var(--pink);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 118, 220, 0.3);
+
+  transform: translateY(-1px) translateX(1px);
+  background-color: var(--pink);
+  color: var(--beige);
+
 }
 
 .modal-interest-btn.in-cart {
-  background: var(--brown);
-  border-color: var(--brown);
-  opacity: 0.8;
+  background: var(--orange);
+  border-color: none;
   cursor: default;
 }
 
@@ -214,15 +207,14 @@
 
 .metadata-item {
   font-family: 'Neue Montreal Regular';
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-size: var(--small-x-font-size);
+  line-height: 120%;
   color: var(--brown);
 }
 
 .metadata-label {
   color: var(--brown);
-  font-weight: 500;
-  border-bottom: 1px solid var(--brown);
+  text-decoration: underline;
   margin-right: 0.25rem;
 }
 
@@ -236,20 +228,20 @@
 }
 
 .description-label {
-  font-family: 'Neue Montreal Medium';
-  font-size: 0.9375rem;
+  font-family: 'Neue Montreal Regular';
+  font-size: var(--small-x-font-size);
   color: var(--brown);
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.5rem 0;
   font-weight: 500;
-  border-bottom: 1px solid var(--brown);
+  text-decoration: underline;
   display: inline-block;
   padding-bottom: 0.25rem;
 }
 
 .description-text {
   font-family: 'Neue Montreal Regular';
-  font-size: 0.9375rem;
-  line-height: 1.7;
+  font-size: var(--small-font-size);
+  line-height: 120%;
   color: var(--brown);
   max-height: 300px;
   overflow-y: auto;
@@ -282,24 +274,24 @@
 @media (max-width: 900px) {
   .modal-content {
     grid-template-columns: 1fr;
-    grid-template-rows: 40% 60%;
+
   }
   
   .modal-image-section {
-    padding: 2rem;
+    padding: 3.5rem 1rem 3rem 1rem;
+    width: 100%;
   }
   
   .modal-image-border {
-    max-width: 250px;
     padding: 1.5rem;
   }
   
   .modal-info-section {
-    padding: 2rem;
+    padding: 3rem 1rem;
   }
   
   .modal-title {
-    font-size: 2rem;
+    font-size: var(--large-font-size);
   }
 }
 
@@ -318,5 +310,10 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .modal-close {
+    top:0.5rem;
+    right: 0.5rem;
   }
 }

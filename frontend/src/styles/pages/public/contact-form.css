@@ -5,7 +5,7 @@
 
 .contact-section {
   width: 100%;
-  min-height: 100vh;
+  height: auto;
   background-color: var(--beige);
   display: flex;
   align-items: center;
@@ -20,6 +20,8 @@
   grid-template-columns: 1fr 2fr;
   gap: 4rem;
   align-items: start;
+  padding-top: 8rem;
+
 }
 
 /* Columna izquierda - Header */
@@ -30,16 +32,16 @@
 }
 
 .contact-title {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: 'Neue Montreal Regular';
   font-size: var(--large-font-size);
-  line-height: 1.1;
+  line-height: 100%;
+  font-weight: 400;
   color: var(--brown);
-  font-weight: 300;
   margin: 0;
 }
 
 .contact-subtitle {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: 'Neue Montreal Medium', sans-serif;
   font-size: var(--very-small-font-size);
   color: var(--brown);
   margin: 0;
@@ -47,10 +49,10 @@
 }
 
 .contact-note {
-  font-family: 'Neue Montreal Light', sans-serif;
-  font-size: 0.75rem;
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-size: var(--very-small-font-size);;
   color: var(--brown);
-  margin: 0;
+  margin-top: -0.5rem;
 
 }
 
@@ -132,19 +134,17 @@
   background-color: var(--brown);
   color: var(--beige);
   font-family: 'Neue Montreal Regular', sans-serif;
-  font-size: 0.75rem;
-  padding: 0.75rem 2.5rem;
-  border: 2px solid var(--orange);
-  border-radius: 50px;
+  font-size: var(--very-small-font-size);
+  padding: 0.35rem 2.5rem;
+  border: none;
+  border-radius: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .submit-btn:hover {
   background-color: var(--pink);
-  color: var(--brown);
-  border: 1px solid var(--brown);
-  opacity: 0.9;
+  border: none;
 }
 
 /* ============================================
@@ -153,7 +153,8 @@
 
 @media (max-width: 768px) {
   .contact-section {
-    padding: 8rem 1.5rem;
+    padding: 0rem 1rem;
+    padding-bottom: 5rem;
     align-items: flex-start;
     min-height: auto;
   }
@@ -167,17 +168,8 @@
     gap: 0.25rem;
   }
 
-  .contact-title {
-    font-size: var(--small-font-size);
-    line-height: 1.2;
-  }
-
-  .contact-subtitle {
-    font-size: 0.875rem;
-  }
-
   .contact-note {
-    font-size: 0.75rem;
+    margin-top: 0rem;
   }
 
   .form-row {

@@ -3,10 +3,11 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--dark-beige);
-  padding-top: 8rem;
+  padding-top: 6.5rem;
   padding-bottom: 8rem;
   @media(max-width: 768px) {
   padding-bottom: 5rem;
+  padding-top: 5rem;
   }
 }
 
@@ -36,12 +37,11 @@
   }
 }
 
-.txt-writers, .link-return-writers {
-  color: var(--light-brown);
+.txt-writers, .link-return {
+  color: var(--brown);
   font-family: 'Neue Montreal Medium';
-  font-weight: 400;
-  font-size: 0,875rem;
-  line-height: 130%;
+  font-size: var(--very-small-font-size);
+  
 }
 
 .link-return-writers:hover {
@@ -51,9 +51,8 @@
 .link-writers-top {
   color: var(--light-brown);
   font-family: 'Neue Montreal Medium';
-  font-weight: 400;
-  font-size: 0,875rem;
-  line-height: 130%;
+  font-size: var(--very-small-font-size);
+ 
 }
 
 .writers-txt-wrapper {
@@ -61,26 +60,32 @@ display: flex;
 align-items: baseline;
 transition: transform 0.3s ease;
 text-decoration: none;
+margin-bottom: 0.5rem;
 }
 
 .writers-txt-wrapper:hover {
-  transform: translateX(3px) translateY(-3px); 
+  transform: translateX(1.5px) translateY(-1.5px); 
 }
 
 .txt-writers-container-authors {
   display: flex;
   color: var(--pink);
   font-family: 'Neue Montreal Regular';
-  font-size: clamp(2.4rem, calc(1.5rem + 3.93vw), 5rem);
-  line-height: 1.2;
+  font-size: var(--super-large-font-size);
   align-items: baseline;
+  line-height:90% ;
   @media (max-width: 768px) {
-    font-size: 1.6rem;
+    font-size:var(--large-font-size);
+
   }
-  @media (max-width: 480px) {
-    font-size: 1.3rem;
-  }
+
 }
+
+.writers-arrow {
+  display: flex;
+  align-items: baseline;
+}
+
 
 .txt-writers-container p:hover {
   color: var(--orange);
@@ -90,13 +95,13 @@ text-decoration: none;
 .txt-gender-container {
   display: flex;
   color: var(--orange);
-  font-size: 2rem;
+  font-size: var(--small-font-size);
   font-family: 'PPEditorialNew';
   height: 100%;
   margin-left: 1rem;
   align-self: baseline;
    @media (max-width: 768px) {
-    font-size: 1.5rem;
+    font-size:var(--small-font-size);
     margin-left: 0.3rem;
   }
 }
@@ -128,7 +133,7 @@ text-decoration: none;
 .alphabet-letter {
   color: var(--orange);
   font-family: 'Neue Montreal Medium';
-  font-size: 0.85rem;
+  font-size:var(--very-small-font-size);
   line-height: 1.2;
   background: none;
   border: none;
@@ -155,7 +160,7 @@ text-decoration: none;
 .letter-section-header {
   color: var(--orange);
   font-family: 'Neue Montreal Medium';
-  font-size: 0.875rem;
+  font-size: var(--very-small-font-size);
   border-bottom: 1px solid var(--orange);
   position: absolute;
   width: 1px;

@@ -61,10 +61,11 @@ export default function Writers() {
                 to={`/writers/${writer._id}`}
                 className="writers-txt-wrapper"
               >
-                <div className="writers-txt-wrapper" >
+                <div className="writers-arrow" >
                   <p className="txt-writers-container-authors">
-                    {writer.lastName} {writer.firstName} <span className="txt-gender-container">→</span>
+                    {writer.lastName} {writer.firstName}
                   </p>
+                  <p className="txt-gender-container">→</p>
                 </div>
               </Link>
             </div>

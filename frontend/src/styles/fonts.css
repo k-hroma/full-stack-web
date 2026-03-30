@@ -1,7 +1,6 @@
 @font-face {
   font-family: 'Neue Montreal Regular';
   src: url('../assets/fonts/NeueMontreal-Regular.woff2') format('woff2');
-  
 }
 
 @font-face {
@@ -10,7 +9,7 @@
 }
 
 @font-face {
-  font-family: 'Neue Montreal Light ';
+  font-family: 'Neue Montreal Light';
   src: url('../assets/fonts/NeueMontreal-Light.woff2') format('woff2');
 }
 
@@ -21,17 +20,17 @@
 
 @font-face {
   font-family: 'Neue Montreal Bold';
-  src: url('../assets/fonts/NeueMontreal-Bold.woff2') format('woff2');
+  src: url('../assets/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Neue Montreal Semi Bold Italic';
+  src: url('../assets/fonts/PPNeueMontreal-SemiBolditalic.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Neue Montreal Thin';
   src: url('../assets/fonts/PPNeueMontreal-Thin.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Neue Montreal Thin Italic';
-  src: url('../assets/fonts/PPNeueMontreal-Italic.woff2') format('woff2');
 }
 
 @font-face {

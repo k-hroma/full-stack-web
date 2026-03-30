@@ -21,7 +21,7 @@ export const BookDetailModal = ({
   const getButtonState = () => {
     if (isInCart) return { text: 'En carrito', disabled: true };
     if (book.stock === 0) return { text: 'Sin stock', disabled: true };
-    return { text: 'Me interesa', disabled: false };
+    return { text: 'Agregar', disabled: false };
   };
 
   const buttonState = getButtonState();

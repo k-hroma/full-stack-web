@@ -1,10 +1,10 @@
 import { BookDetailModal } from '../bookDetailModal/BookDetailModal';
 import { useCart } from '../../hooks/useCart';
-import '../../styles/pages/public/writer-bio-card.css'
 import { useEffect, useState } from 'react';
 import type { Writer } from '../../types/writer';
 import { getBooksByAuthor } from '../../api';
 import type { Book } from '../../types';
+import '../../styles/pages/public/writer-bio-card.css'
 
 interface WriterBioCardProps {
   writer: Writer;

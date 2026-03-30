@@ -6,9 +6,9 @@ export default function ContactPage() {
     <section className="about-us-container">
       <div className="bg-img-container">
         <div className='about-us-txt-container'>
-          <p>somos una librería virtual, marika y lesbiana</p>
+          <p>Somos una librería virtual, marika y lesbiana</p>
           <p>vendemos libros y fanzines</p>
-          <Link className='contactanos' to='/contacto'>contactanos:</Link>
+          <Link className='contactanos' to='/contacto'>Contactanos:</Link>
           <p className='contacto'>@lapalaciolibros</p>
           <p className='contacto'>lapalaciolibros@gmail.<span className='contact-dot-com'>com</span></p>
           <p className='contact-com'>com</p>
