@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import express from 'express';
 import type { Application, Request, Response } from 'express';
 import cors from 'cors';
+import type { CorsOptions } from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
@@ -15,6 +16,8 @@ import { handleErrors } from './middlewares/handleErrors.js';
 import { bookRouter } from './routes/bookRouter.js';
 import { authRouter } from './routes/authRouter.js';
 import { writerRouter } from "./routes/writerRouter.js";
+
+type CorsCallback = (err: Error | null, allow?: boolean) => void;
 
 /**
  * Instancia principal de Express.
@@ -111,8 +114,30 @@ if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
  * 
  * @security credentials: true permite cookies httpOnly en cross-origin.
  */
+
+/*
 const corsOptions = {
   origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+};
+
+*/
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+const corsOptions: CorsOptions = {
+  origin: (origin: string | undefined, callback: CorsCallback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
