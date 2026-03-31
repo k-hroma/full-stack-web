@@ -204,3 +204,5 @@ utils/
 [ ] Setup de rutas públicas en router/
 [ ] Crear store/authStore (Zustand)
 [ ] Implementar página Login con services/authService
+
+//probando error en git
