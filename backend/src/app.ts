@@ -130,17 +130,19 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://librerialapalacio.vercel.app/",
+  "https://librerialapalacio.vercel.app",
 ];
 
 const corsOptions: CorsOptions = {
   origin: (origin: string | undefined, callback: CorsCallback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  // Permitir requests sin origin (como Postman) o que estén en la lista
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, true);
+  } else {
+    console.warn(`🚫 CORS bloqueado para origen: ${origin}`);
+    callback(null, false); // ← null, false en vez de new Error
+  }
+},
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
