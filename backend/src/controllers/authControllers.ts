@@ -220,7 +220,7 @@ const loginUser = async (
     res.cookie("refreshToken", refreshTokenPlain, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: REFRESH_TOKEN_EXPIRES_IN_MS,
       path: "/auth/refresh",
     });
@@ -228,7 +228,7 @@ const loginUser = async (
     res.cookie("tokenFamily", tokenFamily, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: REFRESH_TOKEN_EXPIRES_IN_MS,
       path: "/auth/refresh",
     });
@@ -305,14 +305,14 @@ const refreshAccessToken = async (
       res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         path: "/auth/refresh",
       });
       
       res.clearCookie("tokenFamily", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         path: "/auth/refresh",
       });
       
@@ -368,7 +368,7 @@ const refreshAccessToken = async (
     res.cookie("refreshToken", newRefreshTokenPlain, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: REFRESH_TOKEN_EXPIRES_IN_MS,
       path: "/auth/refresh",
     });
@@ -376,7 +376,7 @@ const refreshAccessToken = async (
     res.cookie("tokenFamily", tokenFamily, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: REFRESH_TOKEN_EXPIRES_IN_MS,
       path: "/auth/refresh",
     });
@@ -427,14 +427,14 @@ const logoutUser = async (
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       path: "/auth/refresh",
     });
 
     res.clearCookie("tokenFamily", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       path: "/auth/refresh",
     });
 

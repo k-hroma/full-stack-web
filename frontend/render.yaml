@@ -1,0 +1,14 @@
+# render.yaml
+services:
+  - type: web
+    name: lapalaciolibros-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://backend-libreria-api-8run.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -27,6 +27,8 @@ type CorsCallback = (err: Error | null, allow?: boolean) => void;
  */
 const app: Application = express();
 
+// Confía en el proxy de Render para obtener IP real del cliente
+app.set('trust proxy', 1);
 // ============================================================================
 // CONFIGURACIÓN DE SEGURIDAD (Helmet + Rate Limiting)
 // ============================================================================
@@ -74,7 +76,7 @@ const generalLimiter = rateLimit({
  */
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // 5 intentos de login/register por IP
+  max: 10, // 10 intentos de login/register por IP
   skipSuccessfulRequests: true, // No cuenta los logins exitosos
   standardHeaders: true,
   legacyHeaders: false,
@@ -128,6 +130,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
   "http://localhost:3000",
+  "https://frontend-libreria-api.vercel.app",
 ];
 
 const corsOptions: CorsOptions = {
