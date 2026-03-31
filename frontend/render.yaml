@@ -7,7 +7,7 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://backend-libreria-api-8run.onrender.com
+        value: https://backend-libreria-lapalacio-api-rest.onrender.com
     routes:
       - type: rewrite
         source: /*
