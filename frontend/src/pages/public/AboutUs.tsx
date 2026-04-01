@@ -4,8 +4,8 @@
  */
 
 import { ExternalLink } from '../../components/common/ExternalLink';
-import '../../styles/pages/public/about-us.css';
 import AboutUsBanner from '../../components/banners/AboutUsBanner';
+import '../../styles/pages/public/about-us.css';
 
 export default function AboutUs() {
   const team = [

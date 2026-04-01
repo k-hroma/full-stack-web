@@ -13,7 +13,6 @@
   padding: 8.5rem 1.5rem;
 }
 
-/* Más ancho y menos padding vertical */
 .register-page__container {
   width: 100%;
   max-width: 520px;
@@ -22,7 +21,6 @@
   padding: 2.5rem 3rem;
 }
 
-/* Título mucho más sutil */
 .register-page__title {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 1.5rem;
@@ -34,7 +32,6 @@
   text-transform: uppercase;
 }
 
-/* Error compacto */
 .register-page__error {
   background-color: rgba(255, 118, 220, 0.1);
   color: var(--brown);
@@ -59,7 +56,7 @@
   gap: 0.25rem;
 }
 
-/* Labels más pequeños y espaciados */
+
 .register-page__label {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.6875rem;
@@ -68,7 +65,6 @@
   letter-spacing: 0.12em;
 }
 
-/* Inputs más compactos */
 .register-page__input {
   font-family: 'Neue Montreal Regular', sans-serif;
   font-size: 1rem;
@@ -104,7 +100,7 @@
   cursor: not-allowed;
 }
 
-/* Requisitos en grid de 2 columnas para aprovechar el ancho */
+
 .register-page__password-requirements {
   list-style: none;
   margin-top: 0.625rem;
@@ -147,7 +143,6 @@
   opacity: 0.5;
 }
 
-/* Error de match más sutil */
 .register-page__match-error {
   font-family: 'Neue Montreal Light', sans-serif;
   font-size: 0.6875rem;
@@ -165,7 +160,7 @@
   font-size: 0.875rem;
 }
 
-/* Botón más pequeño y sutil */
+
 .register-page__button {
   font-family: 'Neue Montreal Regular', sans-serif;
   font-size: 0.75rem;

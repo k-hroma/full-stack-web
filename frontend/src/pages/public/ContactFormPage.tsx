@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 import ContactPage from './ContactPage';
-import '../../styles/pages/public/contact-form.css'
 import emailjs from '@emailjs/browser';
+import '../../styles/pages/public/contact-form.css'
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
 const EMAILJS_TEMPLATE_ID_CONTACT = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CONTACT || '';

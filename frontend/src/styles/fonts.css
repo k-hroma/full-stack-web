@@ -1,39 +1,47 @@
 @font-face {
   font-family: 'Neue Montreal Regular';
   src: url('../assets/fonts/NeueMontreal-Regular.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Neue Montreal Medium';
   src: url('../assets/fonts/NeueMontreal-Medium.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Neue Montreal Light';
   src: url('../assets/fonts/NeueMontreal-Light.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Neue Montreal Light Italic';
   src: url('../assets/fonts/NeueMontreal-LightItalic.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Neue Montreal Bold';
   src: url('../assets/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Neue Montreal Semi Bold Italic';
   src: url('../assets/fonts/PPNeueMontreal-SemiBolditalic.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'Neue Montreal Thin';
   src: url('../assets/fonts/PPNeueMontreal-Thin.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'PPEditorialNew';
   src: url('../assets/fonts/PPEditorialNew-Ultralight.woff2') format('woff2');
+  font-display: swap;
 }
