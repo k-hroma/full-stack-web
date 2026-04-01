@@ -10,7 +10,7 @@
 }
 
 .bg-footer {
-  background-image: url(../../assets/img/bg-footer.png);
+  background-image: var(--bg-footer-url);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

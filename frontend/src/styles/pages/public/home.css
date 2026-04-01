@@ -7,7 +7,7 @@
 }
 
 .home-bg-img-container {
-  background-image: url('../../../assets/img/Header.svg');
+  background-image: var(--bg-hero-url);
   background-position: center;
   background-size: cover;
   width: 100%;

@@ -6,7 +6,7 @@
 }
 
 .bg-img-container {
-  background-image: url('../../../assets/img/bgAboutUs.svg');
+  background-image: var(--bg-contact-url);
   background-position: center;
   background-size: cover;
   width: 100%;
