@@ -31,13 +31,8 @@ export const cld = new Cloudinary({
 export const getOptimizedImageUrl = (publicId: string, width?: number, height?: number): string => {
   const cloudName = CLOUDINARY_CLOUD_NAME;
   
-  // LIMPIAR publicId de espacios
-  const cleanPublicId = publicId.trim();
-  
   // Transformaciones
-  const transforms = [];
-  transforms.push('q_auto');
-  transforms.push('f_auto');
+  const transforms: string[] = ['q_auto', 'f_auto'];
   
   if (width) {
     const h = height || width;
@@ -46,10 +41,8 @@ export const getOptimizedImageUrl = (publicId: string, width?: number, height?: 
   
   const transformString = transforms.join(',');
   
-  // Construir URL con concatenación
-  const baseUrl = 'https://res.cloudinary.com/';
-  const path = '/image/upload/';
-  return baseUrl + cloudName + path + transformString + '/' + cleanPublicId;
+  // URL manual - SIN ESPACIOS
+  return `https://res.cloudinary.com/${cloudName}/image/upload/${transformString}/${publicId}`;
 };
 
 /**
