@@ -26,13 +26,13 @@ const bgBorders = [
   '#7D94A3', '#954300', '#DBD0C1', '#0A9E50',
 ];
 
-export default function BookCard({
+const BookCard = ({
   index,
   book,
   isInCart,
   onAddToCart,
   onViewMore
-}: BookCardProps) {
+}: BookCardProps) => {
   const bgColor = bgColors[index % bgColors.length];
   const bgBorder = bgBorders[index % bgBorders.length];
 
@@ -97,3 +97,5 @@ export default function BookCard({
     </div>
   );
 }
+
+export { BookCard }
