@@ -1,9 +1,10 @@
 import { useForm } from '../../hooks/useForm';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useSearch } from '../../hooks/useSearch';
 import type { CreateBookInput, Book } from '../../types';
 import { searchBooks, getBooksByCategory, createBook, updateBook, deleteBook, getBooks } from '../../api/books';
+import { ImageUpload } from '../../components/ImageUpload/ImageUpload';
 import '../../styles/pages/admin/admin-books-management.css';
 
 
@@ -227,6 +228,10 @@ export default function AdminBooksManagementPage() {
     }
   };
 
+  const handleImageChange = useCallback((url: string) => {
+    setFormData(prev => ({ ...prev, img: url }));
+  }, [setFormData]);
+
   return (
     <div className="admin-books-dashboard">
       <div className="admin-books-dashboard__container">
@@ -431,24 +436,18 @@ export default function AdminBooksManagementPage() {
               <h2 className="admin-dashboard__section-title">Imagen de portada</h2>
 
               <div className="admin-dashboard__field">
-                <label className="admin-dashboard__label" htmlFor="img">
-                  URL de la imagen
+                <label className="admin-dashboard__label">
+                  Imagen del libro
                 </label>
-                <input
-                  className="admin-dashboard__input"
-                  type="url"
-                  id="img"
-                  name="img"
-                  placeholder="https://ejemplo.com/imagen.jpg"
+                <ImageUpload
                   value={img}
-                  onChange={handleChange}
+                  onChange={handleImageChange}
+                  disabled={isSubmitting}
                 />
+                <small className="admin-dashboard__hint" style={{ color: '#666', marginTop: '0.5rem', display: 'block' }}>
+                  Seleccioná una imagen desde tu computadora. Se subirá automáticamente a Cloudinary.
+                </small>
               </div>
-              {img && (
-                <div className="admin-dashboard__image-preview">
-                  <img src={img} alt="Vista previa" />
-                </div>
-              )}
             </div>
 
             {/* Sección: Categorización */}

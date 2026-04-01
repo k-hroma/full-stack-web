@@ -1,6 +1,5 @@
-
-
 import { useState } from 'react';
+import { optimizeImageUrl, generateSrcSet } from '../../utils/cloudinaryHelpers';
 import '../../styles/components/optimized-image.css';
 
 interface Props {
@@ -14,6 +13,12 @@ interface Props {
 export function OptimizedImage({ src, alt, width, height, priority = false }: Props) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
+
+  // Optimizar URL si es Cloudinary
+  const optimizedSrc = optimizeImageUrl(src, { width, height });
+
+  // Generar srcset solo para Cloudinary (para imágenes responsive)
+  const srcSet = generateSrcSet(src, [width, width * 2]);
 
   // Fallback simple si falla
   if (error) {
@@ -34,7 +39,9 @@ export function OptimizedImage({ src, alt, width, height, priority = false }: Pr
 
       {/* Imagen real */}
       <img
-        src={src}
+        src={optimizedSrc}
+        srcSet={srcSet || undefined}
+        sizes={`${width}px`}
         alt={alt}
         width={width}
         height={height}
@@ -42,6 +49,7 @@ export function OptimizedImage({ src, alt, width, height, priority = false }: Pr
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
       />
     </div>
   );
