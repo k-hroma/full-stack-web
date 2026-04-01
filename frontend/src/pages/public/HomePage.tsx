@@ -8,12 +8,10 @@ import headerBg from '../../assets/img/optimized/header-hero.webp'
 export default function HomePage() {
   return (
     <section className='home-container'>
-      <div className="home-bg-img-container">
-        <img
-          src={headerBg}
-          alt="Banner principal"
-          className="home-hero-img"
-        />
+      <div
+        className="home-bg-img-container"
+        style={{ '--bg-hero-url': `url(${headerBg})` } as React.CSSProperties}
+      >
       </div>
       <LatestBooks />
       <Writers />

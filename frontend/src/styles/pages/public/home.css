@@ -1,12 +1,15 @@
-.home-bg-img-container {
+
+.home-container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  height: auto;
 }
 
-.home-hero-img {
+.home-bg-img-container {
+  background-image: var(--bg-hero-url);
+  background-position: center;
+  background-size: cover;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  min-height: 500px;
+  height: 100vh;
 }
