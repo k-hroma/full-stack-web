@@ -6,7 +6,7 @@
 import { Cloudinary } from '@cloudinary/url-gen';
 
 // Tu cloud name de Cloudinary
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'ds8ww3in3';
 
 // Upload preset UNSIGNED 
 export const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -31,8 +31,13 @@ export const cld = new Cloudinary({
 export const getOptimizedImageUrl = (publicId: string, width?: number, height?: number): string => {
   const cloudName = CLOUDINARY_CLOUD_NAME;
   
+  // LIMPIAR publicId de espacios
+  const cleanPublicId = publicId.trim();
+  
   // Transformaciones
-  const transforms: string[] = ['q_auto', 'f_auto'];
+  const transforms = [];
+  transforms.push('q_auto');
+  transforms.push('f_auto');
   
   if (width) {
     const h = height || width;
@@ -41,8 +46,10 @@ export const getOptimizedImageUrl = (publicId: string, width?: number, height?: 
   
   const transformString = transforms.join(',');
   
-  // URL manual - SIN ESPACIO antes de cloudName
-  return `https://res.cloudinary.com/${cloudName}/image/upload/${transformString}/${publicId}`;
+  // Construir URL con concatenación
+  const baseUrl = 'https://res.cloudinary.com/';
+  const path = '/image/upload/';
+  return baseUrl + cloudName + path + transformString + '/' + cleanPublicId;
 };
 
 /**
