@@ -19,7 +19,6 @@ const AllLatestBooks = lazy(() => import('../pages/public/AllLatestBooks'));
 const CatalogPage = lazy(() => import('../pages/public/CatalogPage'));
 const ResultsPage = lazy(() => import('../pages/public/ResultsSearchPage'));
 const Fanzines = lazy(() => import('../pages/public/Fanzines'));
-const CartPage = lazy(() => import('../pages/public/CartPage'));
 const LoginPage = lazy(() => import('../pages/public/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/public/RegisterPage'));
 const OnlyBooks = lazy(() => import('../pages/public/OnlyBooks'));
@@ -46,14 +45,6 @@ export const routes: RouteObject[] = [
         element: (
           <PageWrapper>
             <HomePage />
-          </PageWrapper>
-        ),
-      },
-      {
-        path: 'cart',
-        element: (
-          <PageWrapper>
-            <CartPage />
           </PageWrapper>
         ),
       },
