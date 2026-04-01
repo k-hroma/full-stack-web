@@ -3,8 +3,8 @@
  * @module components/banners/BooksGenders
  */
 
-import gender from '../../assets/img/optimized/banner.png';
-import gendermobile from '../../assets/img/optimized/bannerSmall.png';
+import gender from '../../assets/img/optimized/banner.webp';
+import gendermobile from '../../assets/img/optimized/bannerSmall.webp';
 import '../../styles/components/book-genders.css';
 
 const BooksGenders = () => {

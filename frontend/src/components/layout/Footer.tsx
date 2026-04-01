@@ -6,7 +6,7 @@
 import { Link } from 'react-router-dom';
 import { ExternalLink } from '../common/ExternalLink';
 import '../../styles/layout/footer.css'
-import bgFooter from '../../assets/img/optimized/bg-footer.png'
+import bgFooter from '../../assets/img/optimized/bg-footer.webp';
 
 export function Footer() {
   return (
