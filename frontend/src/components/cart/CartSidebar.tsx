@@ -1,13 +1,14 @@
 /**
  * CartSidebar - Drawer lateral del carrito de compras
+ * Usa CSS visibility en lugar de mount/unmount para preservar el estado del formulario.
  * @module components/cart/CartSidebar
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useCart } from '../../hooks/useCart';
 import type { Book } from '../../types';
 import emailjs from '@emailjs/browser';
-import '../../styles/components/cart-sidebar.css'
+import '../../styles/components/cart-sidebar.css';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
     totalPrice,
     removeFromCart,
     updateQuantity,
-    clearCart
+    clearCart,
   } = useCart();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,24 +36,38 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
   const [customerEmail, setCustomerEmail] = useState('');
   const [showEmailForm, setShowEmailForm] = useState(false);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') onClose();
-  };
+  // Tecla Escape cierra el sidebar
+  useEffect(() => {
+    if (!isOpen) return;
 
-  const generateOrderText = (): string => {
-    const lines = items.map(item =>
-      `- ${item.book.title} (${item.quantity}x) - $${item.book.price * item.quantity}`
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Bloquear scroll del body cuando el sidebar está abierto
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
+  const generateOrderText = useCallback((): string => {
+    const lines = items.map(
+      item => `- ${item.book.title} (${item.quantity}x) - $${item.book.price * item.quantity}`
     );
     return `Hola! Quiero comprar:\n\n${lines.join('\n')}\n\nTotal: $${totalPrice}`;
-  };
+  }, [items, totalPrice]);
 
-  const generateWhatsAppMessage = (): string => {
-    return encodeURIComponent(generateOrderText());
-  };
+  const generateWhatsAppMessage = useCallback(
+    () => encodeURIComponent(generateOrderText()),
+    [generateOrderText]
+  );
 
-  const sendEmail = async (e: React.SubmitEvent) => {
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!customerName || !customerEmail) return;
 
     setIsSubmitting(true);
@@ -93,20 +108,23 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
     ? `https://wa.me/${WHATSAPP_NUMBER}?text=${generateWhatsAppMessage()}`
     : '#';
 
-  if (!isOpen) return null;
-
+  // ── CSS-based visibility: NO hay early return por isOpen ──────────────────
+  // El componente siempre está montado → el estado del formulario persiste.
   return (
-    <div
-      className="cart-sidebar__overlay"
-      onClick={onClose}
-      onKeyDown={handleKeyDown}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Carrito de compras"
-    >
+    <>
+      {/* Overlay: visible solo cuando isOpen */}
+      <div
+        className={`cart-sidebar__overlay ${isOpen ? 'cart-sidebar__overlay--open' : ''}`}
+        onClick={onClose}
+        aria-hidden={!isOpen}
+      />
+
       <aside
-        className="cart-sidebar"
-        onClick={e => e.stopPropagation()}
+        className={`cart-sidebar ${isOpen ? 'cart-sidebar--open' : 'cart-sidebar--closed'}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Carrito de compras"
+        aria-hidden={!isOpen}
       >
         {/* Header */}
         <div className="cart-sidebar__header">
@@ -131,10 +149,9 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
             </button>
           </div>
         ) : showEmailForm ? (
-          /* FORMULARIO EMAIL */
+          /* FORMULARIO EMAIL — estado persiste al cerrar/abrir */
           <div className="cart-sidebar__form-container">
             <h3 className='cart-sidebar__form-subtitle'>Detalle de la compra</h3>
-            {/*Agregar fecha*/}
 
             <form onSubmit={sendEmail} className="cart-sidebar__form">
               <div className="form-group">
@@ -178,7 +195,6 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   <span>Total: </span>
                   <span>${totalPrice}</span>
                 </div>
-
               </div>
 
               {submitStatus === 'success' && (
@@ -186,7 +202,6 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   ✅ ¡Pedido enviado! Te contactaremos pronto.
                 </div>
               )}
-
               {submitStatus === 'error' && (
                 <div className="alert alert--error">
                   ❌ Error al enviar. Intentá de nuevo o usá WhatsApp.
@@ -214,7 +229,6 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
           </div>
         ) : (
           <>
-            {/* Items */}
             <div className="cart-sidebar__items">
               {items.map(({ book, quantity }) => (
                 <CartItem
@@ -227,16 +241,13 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               ))}
             </div>
 
-            {/* Footer */}
             <div className="cart-sidebar__footer">
               <div className="cart-sidebar__total">
                 <span>Total</span>
                 <span>${totalPrice}</span>
               </div>
 
-              {/* Opciones de checkout - AMBAS */}
               <div className="cart-sidebar__checkout">
-                {/* WhatsApp */}
                 <a
                   href={whatsappUrl}
                   target="_blank"
@@ -246,8 +257,6 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 >
                   WhatsApp
                 </a>
-
-                {/* Email - abre formulario */}
                 <button
                   onClick={() => setShowEmailForm(true)}
                   className="cart-sidebar__button cart-sidebar__button--email"
@@ -258,21 +267,18 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 </button>
               </div>
 
-              <button
-                onClick={clearCart}
-                className="cart-sidebar__clear"
-              >
+              <button onClick={clearCart} className="cart-sidebar__clear">
                 Vaciar carrito
               </button>
             </div>
           </>
         )}
       </aside>
-    </div>
+    </>
   );
 }
 
-// Componente interno: Item del carrito
+// ─── CartItem ─────────────────────────────────────────────────────────────────
 interface CartItemProps {
   book: Book;
   quantity: number;
@@ -283,12 +289,7 @@ interface CartItemProps {
 function CartItem({ book, quantity, onUpdateQuantity, onRemove }: CartItemProps) {
   return (
     <div className="cart-item">
-      <img
-        src={book.img}
-        alt={book.title}
-        className="cart-item__image"
-      />
-
+      <img src={book.img} alt={book.title} className="cart-item__image" />
       <div className="cart-item__details">
         <h3 className="cart-item__title">{book.title}</h3>
         <p className="cart-item__author">{book.firstName} {book.lastName}</p>

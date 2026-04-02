@@ -3,44 +3,55 @@
  * @module styles/components/cart-sidebar
  */
 
-/* Overlay */
+/* ─── Overlay ──────────────────────────────────────────────────────────────── */
 .cart-sidebar__overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   z-index: 200;
-  display: flex;
-  justify-content: flex-end;
-  animation: fadeIn 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.cart-sidebar__overlay--open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-/* Sidebar */
+/* ─── Sidebar — GPU-accelerated, siempre montado ──────────────────────────── */
 .cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
   width: 100%;
   max-width: 420px;
   background: var(--beige);
   height: 100vh;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 201;
+  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.4s;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+/* Estado cerrado */
+.cart-sidebar--closed {
+  transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
 }
 
-/* Header */
+/* Estado abierto */
+.cart-sidebar--open {
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
 .cart-sidebar__header {
   display: flex;
   justify-content: space-between;
@@ -79,7 +90,7 @@
   background: rgba(149, 67, 0, 0.05);
 }
 
-/* Empty state */
+/* ─── Empty state ──────────────────────────────────────────────────────────── */
 .cart-sidebar__empty {
   flex: 1;
   display: flex;
@@ -117,14 +128,14 @@
   color: var(--beige);
 }
 
-/* Items container */
+/* ─── Items container ──────────────────────────────────────────────────────── */
 .cart-sidebar__items {
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem 2rem;
 }
 
-/* Cart Item - Estilo editorial */
+/* ─── Cart Item ────────────────────────────────────────────────────────────── */
 .cart-item {
   display: flex;
   gap: 1rem;
@@ -171,7 +182,6 @@
   margin: 0.5rem 0 0 0;
 }
 
-/* Actions - Cantidad y eliminar */
 .cart-item__actions {
   display: flex;
   justify-content: space-between;
@@ -238,7 +248,7 @@
   transform: scale(1.1);
 }
 
-/* Footer */
+/* ─── Footer ───────────────────────────────────────────────────────────────── */
 .cart-sidebar__footer {
   padding: 2rem;
   border-top: 1px solid rgba(149, 67, 0, 0.1);
@@ -270,7 +280,6 @@
   letter-spacing: -0.02em;
 }
 
-/* Checkout buttons - Estilo outline minimalista */
 .cart-sidebar__checkout {
   display: flex;
   flex-direction: column;
@@ -303,7 +312,6 @@
   color: var(--beige);
 }
 
-/* Variantes sutiles para WhatsApp y Email - sin colores chillones */
 .cart-sidebar__button--whatsapp:hover {
   border-color: var(--green);
   background: var(--green);
@@ -316,7 +324,6 @@
   color: var(--beige);
 }
 
-/* Clear button - Muy sutil */
 .cart-sidebar__clear {
   width: 100%;
   background: none;
@@ -337,28 +344,29 @@
   opacity: 1;
 }
 
-/* Scrollbar personalizada para el listado */
-.cart-sidebar__items::-webkit-scrollbar {
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+.cart-sidebar__items::-webkit-scrollbar,
+.cart-sidebar__form-container::-webkit-scrollbar {
   width: 4px;
 }
 
-.cart-sidebar__items::-webkit-scrollbar-track {
+.cart-sidebar__items::-webkit-scrollbar-track,
+.cart-sidebar__form-container::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.cart-sidebar__items::-webkit-scrollbar-thumb {
+.cart-sidebar__items::-webkit-scrollbar-thumb,
+.cart-sidebar__form-container::-webkit-scrollbar-thumb {
   background: rgba(149, 67, 0, 0.2);
   border-radius: 2px;
 }
 
-.cart-sidebar__items::-webkit-scrollbar-thumb:hover {
+.cart-sidebar__items::-webkit-scrollbar-thumb:hover,
+.cart-sidebar__form-container::-webkit-scrollbar-thumb:hover {
   background: rgba(149, 67, 0, 0.4);
 }
 
-
-/* ==================== FORMULARIO EMAIL ==================== */
-
-/* Contenedor del formulario */
+/* ─── Formulario Email ─────────────────────────────────────────────────────── */
 .cart-sidebar__form-container {
   flex: 1;
   overflow-y: auto;
@@ -376,15 +384,12 @@
   margin-bottom: 1.5rem;
 }
 
-
-/* Formulario */
 .cart-sidebar__form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-/* Grupos de campos */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -426,7 +431,6 @@
   cursor: not-allowed;
 }
 
-/* Resumen del pedido en el formulario */
 .cart-sidebar__order-summary {
   background: rgba(149, 67, 0, 0.03);
   border: 1px solid rgba(149, 67, 0, 0.08);
@@ -475,8 +479,12 @@
   letter-spacing: -0.02em;
 }
 
+/* ─── Alertas ──────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
-/* Alertas */
 .alert {
   padding: 1rem;
   border-radius: 8px;
@@ -498,14 +506,13 @@
   border: 1px solid rgba(234, 67, 53, 0.15);
 }
 
-/* Acciones del formulario */
+/* ─── Form Actions ─────────────────────────────────────────────────────────── */
 .form-actions {
   display: flex;
   gap: 0.75rem;
   margin-top: 0.5rem;
 }
 
-/* Botones */
 .btn {
   flex: 1;
   padding: 0.875rem 1.5rem;
@@ -543,22 +550,4 @@
   background: var(--orange);
   border-color: var(--orange);
   transform: translateY(-2px);
-}
-
-/* Scrollbar para el formulario */
-.cart-sidebar__form-container::-webkit-scrollbar {
-  width: 4px;
-}
-
-.cart-sidebar__form-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.cart-sidebar__form-container::-webkit-scrollbar-thumb {
-  background: rgba(149, 67, 0, 0.2);
-  border-radius: 2px;
-}
-
-.cart-sidebar__form-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(149, 67, 0, 0.4);
 }

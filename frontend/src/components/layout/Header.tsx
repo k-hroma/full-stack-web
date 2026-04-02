@@ -1,5 +1,5 @@
 // Header.tsx
-import { useState, useRef, useEffect } from 'react'; // Agregar useRef y useEffect
+import { useState, useRef, useEffect, memo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
@@ -12,6 +12,118 @@ import lineicon from '../../assets/icons/line-nav-search.svg';
 import { Cart, Search as SearchIcon, X, Menu, Alien } from '@boxicons/react';
 import '../../styles/layout/header.css';
 
+// ─── CartButton: se re-renderiza SOLO cuando cambia itemCount o isAdmin ───────
+interface CartButtonProps {
+  itemCount: number;
+  isAdmin: boolean;
+  onClick: () => void;
+}
+
+const CartButton = memo(function CartButton({ itemCount, isAdmin, onClick }: CartButtonProps) {
+  if (isAdmin) return null;
+  return (
+    <button
+      onClick={onClick}
+      className="header__icon-btn header__cart-btn"
+      aria-label={`Carrito con ${itemCount} items`}
+    >
+      <Cart fill="#954300" />
+      {itemCount > 0 && (
+        <span className="header__cart-badge">{itemCount}</span>
+      )}
+    </button>
+  );
+});
+
+// ─── UserMenu: aislado para no re-renderizar el header completo ───────────────
+interface UserMenuProps {
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  userName?: string;
+  userEmail?: string;
+  isConfirmLogout: boolean;
+  onConfirmLogout: () => void;
+  onCancelLogout: () => void;
+  onLogout: () => void;
+  menuRef: React.RefObject<HTMLDivElement | null>;
+}
+
+const UserMenu = memo(function UserMenu({
+  isAuthenticated,
+  isAdmin,
+  userName,
+  userEmail,
+  isConfirmLogout,
+  onConfirmLogout,
+  onCancelLogout,
+  onLogout,
+  menuRef,
+}: UserMenuProps) {
+  return (
+    <div className="header__user-menu" ref={menuRef}>
+      {isAuthenticated ? (
+        <button
+          className="header__icon-btn header__auth-icon"
+          onClick={onConfirmLogout}
+          aria-label="Opciones de usuario"
+        >
+          <Alien fill="#954300" />
+        </button>
+      ) : (
+        <Link
+          to="/login"
+          className="header__icon-btn header__auth-icon"
+          aria-label="Iniciar sesión"
+        >
+          <Alien fill="#954300" />
+        </Link>
+      )}
+
+      {isAuthenticated && isConfirmLogout && (
+        <div className="header-logput-toast">
+          <div className="header__logout-actions">
+            <div className='action-btn-header-logout-confirm'>
+              <p className='header-logout-user-name'>{userName}</p>
+              <button
+                className="toast-user-close"
+                onClick={onCancelLogout}
+                aria-label="Cerrar menú"
+              >
+                x
+              </button>
+            </div>
+            <p>{userEmail}</p>
+          </div>
+
+          <div className='admin__header_links_wrapper'>
+            {isAdmin && (
+              <>
+                <Link to="/admin" className='header__admin-links' onClick={onCancelLogout}>
+                  Dashboard
+                </Link>
+                <Link to="/admin/dashboard-books" className='header__admin-links' onClick={onCancelLogout}>
+                  Gestión de libros
+                </Link>
+                <Link to="/admin/dashboard-writers" className='header__admin-links' onClick={onCancelLogout}>
+                  Gestión de Escritores
+                </Link>
+                <Link to="/admin/register-admin" className='header__admin-links' onClick={onCancelLogout}>
+                  Gestión de usuarios
+                </Link>
+              </>
+            )}
+          </div>
+
+          <button className="header__logout-btn--confirm" onClick={onLogout}>
+            Salir
+          </button>
+        </div>
+      )}
+    </div>
+  );
+});
+
+// ─── Header principal ─────────────────────────────────────────────────────────
 export function Header() {
   const { isAuthenticated, isAdmin, user, logout } = useAuth();
   const { itemCount } = useCart();
@@ -22,54 +134,51 @@ export function Header() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isConfirmLogout, setIsConfirmLogout] = useState(false);
 
-  // Referencia al contenedor del usuario para detectar clics fuera
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await logout();
-    setIsConfirmLogout(false); // Cerrar el dropdown
-    navigate('/');
-  };
-
-  const confirmLogout = () => {
-    setIsConfirmLogout(true);
-  };
-
-  const cancelLogout = () => {
     setIsConfirmLogout(false);
-  };
+    navigate('/');
+  }, [logout, navigate]);
 
-  // Efecto para cerrar el dropdown cuando se hace clic fuera
+  const confirmLogout = useCallback(() => setIsConfirmLogout(true), []);
+  const cancelLogout = useCallback(() => setIsConfirmLogout(false), []);
+  const openCart = useCallback(() => setIsCartOpen(true), []);
+  const closeCart = useCallback(() => setIsCartOpen(false), []);
+  const openMenu = useCallback(() => setIsMenuOpen(true), []);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+  const toggleSearch = useCallback(() => setIsSearchExpanded(prev => !prev), []);
+
   useEffect(() => {
+    if (!isConfirmLogout) return;
+
     function handleClickOutside(event: MouseEvent) {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsConfirmLogout(false);
       }
     }
 
-    if (isConfirmLogout) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isConfirmLogout]);
 
   return (
     <>
       <header className="header">
+        {/* AnimatedNav es memo → nunca se re-renderiza */}
         <AnimatedNav />
+
         <div className="header__container">
-          {/* Izquierda: Menú Hamburguesa */}
+          {/* Izquierda */}
           <div className="header__section header__section--left">
             <button
               className="header__icon-btn"
-              onClick={() => setIsMenuOpen(true)}
+              onClick={openMenu}
               aria-label="Abrir menú"
             >
               <Menu fill='#954300' />
@@ -85,101 +194,26 @@ export function Header() {
               onClick={handleClick}
             >
               <span className="header__logo-hit-area">
-                <img
-                  src={lpicon}
-                  alt="La Palacio"
-                  width="51"
-                  height="56"
-                />
+                <img src={lpicon} alt="La Palacio" width="51" height="56" />
               </span>
             </Link>
           </div>
 
-          {/* Derecha: Icono User (siempre visible), Admin (si aplica), Search y Cart */}
+          {/* Derecha */}
           <div className="header__section header__section--right">
+            {/* UserMenu aislado → el resto del header no se re-renderiza al abrir dropdown */}
+            <UserMenu
+              isAuthenticated={isAuthenticated}
+              isAdmin={isAdmin}
+              userName={user?.name}
+              userEmail={user?.email}
+              isConfirmLogout={isConfirmLogout}
+              onConfirmLogout={confirmLogout}
+              onCancelLogout={cancelLogout}
+              onLogout={handleLogout}
+              menuRef={userMenuRef}
+            />
 
-            {/* Contenedor del Usuario con el Dropdown */}
-            <div className="header__user-menu" ref={userMenuRef}>
-              {/* Icono de Usuario - SIEMPRE VISIBLE */}
-              {isAuthenticated ? (
-                <button
-                  className="header__icon-btn header__auth-icon"
-                  onClick={confirmLogout}
-                  aria-label="Opciones de usuario"
-                >
-                  <Alien fill="#954300" />
-                </button>
-              ) : (
-                <Link
-                  to="/login"
-                  className="header__icon-btn header__auth-icon"
-                  aria-label="Iniciar sesión"
-                >
-                  <Alien fill="#954300" />
-                </Link>
-              )}
-
-              {/* ASIDE/DROPDOWN */}
-              {isAuthenticated && isConfirmLogout && (
-                <div className="header-logput-toast">
-                  <div className="header__logout-actions">
-                    <div className='action-btn-header-logout-confirm'>
-                      <p className='header-logout-user-name'>{user?.name}</p>
-                      <button
-                        className="toast-user-close"
-                        onClick={cancelLogout}
-                        aria-label="Cerrar menú"
-                      >
-                        x
-                      </button>
-                    </div>
-                    <p>{user?.email}</p>
-                  </div>
-                  {/* Solo para admins*/}
-                  <div className='admin__header_links_wrapper'>
-                    {isAuthenticated && isAdmin && (
-                      <>
-                        <Link
-                          to="/admin" className='header__admin-links'
-                          onClick={() => setIsConfirmLogout(false)}
-                        >
-                          Dashboard
-                        </Link>
-                        <Link
-                          to="/admin/dashboard-books" className='header__admin-links'
-                          onClick={() => setIsConfirmLogout(false)}
-
-                        >
-                          Gestión de libros
-                        </Link>
-                        <Link
-                          to="/admin/dashboard-writers" className='header__admin-links'
-                          onClick={() => setIsConfirmLogout(false)}
-
-                        >
-                          Gestión de Escritores
-                        </Link>
-                        <Link
-                          to="/admin/register-admin" className='header__admin-links'
-                          onClick={() => setIsConfirmLogout(false)}
-
-                        >
-                          Gestión de usuarios
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                  <button
-                    className="header__logout-btn--confirm"
-                    onClick={handleLogout}
-                  >
-                    Salir
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Línea divisoria */}
             <img
               className="header__divider"
               src={lineicon}
@@ -188,8 +222,6 @@ export function Header() {
               aria-hidden="true"
             />
 
-            {/* Search: Versión desktop siempre visible, móvil colapsable */}
-
             <div className={`header__search-wrapper ${isSearchExpanded ? 'is-expanded' : ''}`}>
               <div className="header__search-desktop">
                 <SearchBooks />
@@ -197,7 +229,7 @@ export function Header() {
 
               <button
                 className="header__icon-btn header__search-toggle"
-                onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+                onClick={toggleSearch}
                 aria-label={isSearchExpanded ? "Cerrar búsqueda" : "Abrir búsqueda"}
               >
                 {isSearchExpanded ? <X fill="#954300" /> : <SearchIcon fill="#954300" />}
@@ -210,35 +242,30 @@ export function Header() {
               )}
             </div>
 
-            {/* Cart */}
-            {!isAdmin && (<button
-              onClick={() => setIsCartOpen(true)}
-              className="header__icon-btn header__cart-btn"
-              aria-label={`Carrito con ${itemCount} items`}
-            >
-              <Cart fill="#954300" />
-              {itemCount > 0 && (
-                <span className="header__cart-badge">{itemCount}</span>
-              )}
-            </button>)}
-
+            {/* CartButton aislado → solo se re-renderiza cuando cambia itemCount */}
+            <CartButton
+              itemCount={itemCount}
+              isAdmin={isAdmin}
+              onClick={openCart}
+            />
           </div>
         </div>
-      </header >
+      </header>
+
       <HamburguerMenu
         isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
+        onClose={closeMenu}
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout}
         userName={user?.name}
       />
+
       {!isAdmin && (
         <CartSidebar
           isOpen={isCartOpen}
-          onClose={() => setIsCartOpen(false)}
+          onClose={closeCart}
         />
       )}
-
     </>
   );
 }
