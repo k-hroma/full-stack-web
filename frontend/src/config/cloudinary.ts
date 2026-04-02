@@ -22,25 +22,45 @@ export const cld = new Cloudinary({
 });
 
 /**
+ * Valores válidos de calidad para Cloudinary
+ */
+export type CloudinaryQuality =
+  | 'auto'
+  | 'auto:best'
+  | 'auto:good'
+  | 'auto:eco'
+  | 'auto:low'
+  | 'best'
+  | 'good'
+  | 'eco'
+  | 'low';
+
+/**
  * Genera la URL de una imagen transformada (optimizada)
  * @param publicId - ID de la imagen en Cloudinary (ej: "book_covers/abc123")
- * @param width - Ancho deseado (opcional)
- * @param height - Alto deseado (opcional)
+ * @param width    - Ancho deseado (opcional)
+ * @param height   - Alto deseado (opcional)
+ * @param quality  - Calidad deseada (default: 'auto:good')
  * @returns URL optimizada con formato WebP/avif automático
  */
-export const getOptimizedImageUrl = (publicId: string, width?: number, height?: number): string => {
+export const getOptimizedImageUrl = (
+  publicId: string,
+  width?: number,
+  height?: number,
+  quality: CloudinaryQuality = 'auto:good',
+): string => {
   const cloudName = CLOUDINARY_CLOUD_NAME;
-  
-  // Transformaciones
-  const transforms: string[] = ['q_auto', 'f_auto'];
-  
+
+  // Transformaciones base: calidad y formato automáticos
+  const transforms: string[] = [`q_${quality}`, 'f_auto'];
+
   if (width) {
     const h = height || width;
     transforms.push(`c_fill,w_${width},h_${h}`);
   }
-  
+
   const transformString = transforms.join(',');
-  
+
   // URL manual - SIN ESPACIOS
   return `https://res.cloudinary.com/${cloudName}/image/upload/${transformString}/${publicId}`;
 };

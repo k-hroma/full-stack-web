@@ -6,6 +6,7 @@
 import type { Book } from '../../types/book'
 import { useState } from "react";
 import { OptimizedImage } from '../common/OptimizedImage';
+import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import '../../styles/components/book-card.css'
 
 interface BookCardProps {
@@ -25,6 +26,9 @@ const bgBorders = [
   '#954300', '#DBD0C1', '#CDB0EA', '#DBD0C1',
   '#7D94A3', '#954300', '#DBD0C1', '#0A9E50',
 ];
+
+const CARD_W = 130;
+const CARD_H = 195;
 
 const BookCard = ({
   index,
@@ -46,6 +50,11 @@ const BookCard = ({
 
   const buttonState = getButtonState();
 
+  // Generar URLs para 1x y 2x explícitamente (mejor que dejar que el auto-srcset
+  // calcule el doble del ancho sin controlar la calidad)
+  const src1x = optimizeImageUrl(book.img, { width: CARD_W, height: CARD_H, quality: 'auto:good' });
+  const src2x = optimizeImageUrl(book.img, { width: CARD_W * 2, height: CARD_H * 2, quality: 'auto:good' });
+
   return (
     <div className='item-book-container'>
       <div
@@ -61,9 +70,15 @@ const BookCard = ({
           <OptimizedImage
             src={book.img}
             alt={book.title}
-            width={130}
-            height={195}
+            width={CARD_W}
+            height={CARD_H}
             priority={index < 4}
+            quality="auto:good"
+            srcSet={[
+              { url: src1x, descriptor: '1x' },
+              { url: src2x, descriptor: '2x' },
+            ]}
+            sizes={`${CARD_W}px`}
           />
         </div>
       </div>

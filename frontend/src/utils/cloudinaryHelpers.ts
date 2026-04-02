@@ -3,7 +3,7 @@
  * @module utils/cloudinaryHelpers
  */
 
-import { getOptimizedImageUrl, extractPublicId } from '../config/cloudinary';
+import { getOptimizedImageUrl, extractPublicId, type CloudinaryQuality } from '../config/cloudinary';
 
 /**
  * Opciones para optimización de imágenes
@@ -11,42 +11,67 @@ import { getOptimizedImageUrl, extractPublicId } from '../config/cloudinary';
 interface OptimizeOptions {
   width?: number;
   height?: number;
-  quality?: 'auto' | 'best' | 'good' | 'eco' | 'low';
+  quality?: CloudinaryQuality;
 }
 
 /**
  * Optimiza una URL de imagen (Cloudinary o externa)
- * Si es Cloudinary: aplica transformaciones
- * Si es externa (imgbb, etc.): devuelve la URL original
+ * Si es Cloudinary: aplica transformaciones con calidad y formato automático.
+ * Si es externa (imgbb, etc.): devuelve la URL original.
  */
 export const optimizeImageUrl = (url: string, options: OptimizeOptions = {}): string => {
-  const { width = 300, height } = options;
-  
-  // Intentar extraer public_id de Cloudinary
+  const { width = 300, height, quality = 'auto:good' } = options;
+
   const publicId = extractPublicId(url);
-  
+
   if (publicId) {
-    // Es Cloudinary - aplicar transformaciones
-    return getOptimizedImageUrl(publicId, width, height);
+    return getOptimizedImageUrl(publicId, width, height, quality);
   }
-  
-  // No es Cloudinary (imgbb, etc.) - devolver original
+
+  // No es Cloudinary — devolver original sin modificar
   return url;
 };
 
 /**
- * Genera srcset para imágenes responsive
- * Solo funciona con Cloudinary
+ * Descriptor de una entrada del atributo srcset
  */
-export const generateSrcSet = (url: string, widths: number[] = [150, 300, 600]): string => {
+export interface SrcSetEntry {
+  url: string;
+  descriptor: string; // e.g. '1x', '2x', '320w', '640w'
+}
+
+/**
+ * Genera un array de SrcSetEntry para imágenes responsive.
+ * Solo funciona con Cloudinary; devuelve [] para otras URLs.
+ *
+ * @param url     - URL de la imagen (Cloudinary o externa)
+ * @param widths  - Anchos a generar (default: [150, 300, 600])
+ * @param height  - Alto a aplicar en todas las variantes (opcional)
+ * @param quality - Calidad a aplicar en todas las variantes (default: 'auto:good')
+ */
+export const generateSrcSet = (
+  url: string,
+  widths: number[] = [150, 300, 600],
+  height?: number,
+  quality: CloudinaryQuality = 'auto:good',
+): SrcSetEntry[] => {
   const publicId = extractPublicId(url);
-  
+
   if (!publicId) {
-    // No es Cloudinary, no podemos generar srcset
-    return '';
+    return [];
   }
-  
-  return widths
-    .map(w => `${getOptimizedImageUrl(publicId, w)} ${w}w`)
-    .join(', ');
+
+  return widths.map((w) => ({
+    url: getOptimizedImageUrl(publicId, w, height, quality),
+    descriptor: `${w}w`,
+  }));
+};
+
+/**
+ * Convierte un array de SrcSetEntry en el string listo para el atributo srcset.
+ * Acepta tanto SrcSetEntry[] como un string heredado (lo devuelve tal cual).
+ */
+export const srcSetToString = (srcSet: SrcSetEntry[] | string): string => {
+  if (typeof srcSet === 'string') return srcSet;
+  return srcSet.map(({ url, descriptor }) => `${url} ${descriptor}`).join(', ');
 };
