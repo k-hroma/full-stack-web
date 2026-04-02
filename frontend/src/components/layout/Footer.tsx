@@ -6,14 +6,11 @@
 import { Link } from 'react-router-dom';
 import { ExternalLink } from '../common/ExternalLink';
 import '../../styles/layout/footer.css'
-import bgFooter from '../../assets/img/optimized/bg-footer.webp';
 
 export function Footer() {
   return (
     <footer
-      className="footer-container"
-      style={{ '--bg-footer-url': `url(${bgFooter})` } as React.CSSProperties}
-    >
+      className="footer-container">
       <div className="bg-footer" />
 
       <div className="footer-content">

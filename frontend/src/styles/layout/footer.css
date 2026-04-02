@@ -10,7 +10,7 @@
 }
 
 .bg-footer {
-  background-image: var(--bg-footer-url);
+  background-image: url('../../assets/img/optimized/bg-footer.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -20,7 +20,7 @@
   z-index: 2;
 
   @media (max-width: 425px) {
-    background-image: url(../../assets/img/bg-footer-mobile.svg);
+    background-image: url('../../assets/img/optimized/bg-footer-mobile.webp');
     background-size: 140%;
     background-position: center;
     background-position-x: right;

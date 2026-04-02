@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom'
 import '../../styles/pages/public/contact-page.css'
-import bgAboutUs from '../../assets/img/optimized/bgAboutUs.webp'
+
 
 export default function ContactPage() {
   return (
-    <section
-      className="about-us-container"
-      style={{ '--bg-contact-url': `url(${bgAboutUs})` } as React.CSSProperties}
-    >
+    <section className="about-us-container">
       <div className="bg-img-container">
         <div className='about-us-txt-container'>
           <p>Somos una librería virtual, marika y lesbiana</p>

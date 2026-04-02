@@ -6,7 +6,7 @@
 }
 
 .bg-img-container {
-  background-image: var(--bg-contact-url);
+  background-image: url('../../../assets/img/optimized/bgAboutUs.webp');
   background-position: center;
   background-size: cover;
   width: 100%;

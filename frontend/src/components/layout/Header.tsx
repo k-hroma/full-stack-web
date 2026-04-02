@@ -8,9 +8,8 @@ import { AnimatedNav } from '../navbar/AnimatedNav';
 import { HamburguerMenu } from '../navbar/HamburguerMenu';
 import { SearchBooks } from '../search/Search';
 import lpicon from '../../assets/img/optimized/lapalacio-logo.svg';
-import usericon from '../../assets/img/optimized/user-loguin-logo.webp';
 import lineicon from '../../assets/icons/line-nav-search.svg';
-import { Cart, Search as SearchIcon, X, Menu } from '@boxicons/react';
+import { Cart, Search as SearchIcon, X, Menu, Alien } from '@boxicons/react';
 import '../../styles/layout/header.css';
 
 export function Header() {
@@ -108,7 +107,7 @@ export function Header() {
                   onClick={confirmLogout}
                   aria-label="Opciones de usuario"
                 >
-                  <img src={usericon} alt="Usuario" width="25" height="25" />
+                  <Alien fill="#954300" />
                 </button>
               ) : (
                 <Link
@@ -116,7 +115,7 @@ export function Header() {
                   className="header__icon-btn header__auth-icon"
                   aria-label="Iniciar sesión"
                 >
-                  <img src={usericon} alt="Usuario" width="25" height="25" />
+                  <Alien fill="#954300" />
                 </Link>
               )}
 

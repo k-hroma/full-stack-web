@@ -7,7 +7,7 @@
 }
 
 .home-bg-img-container {
-  background-image: var(--bg-hero-url);
+  background-image: url('../../../assets/img/optimized/header-hero.webp');
   background-position: center;
   background-size: cover;
   width: 100%;
