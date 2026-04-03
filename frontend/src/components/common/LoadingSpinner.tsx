@@ -24,15 +24,3 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     </div>
   );
 };
-
-// Variante Skeleton para contenido específico
-export const SkeletonCard: React.FC = () => (
-  <div className="skeleton-card">
-    <div className="skeleton-card__image"></div>
-    <div className="skeleton-card__content">
-      <div className="skeleton-card__title"></div>
-      <div className="skeleton-card__text"></div>
-      <div className="skeleton-card__text skeleton-card__text--short"></div>
-    </div>
-  </div>
-);

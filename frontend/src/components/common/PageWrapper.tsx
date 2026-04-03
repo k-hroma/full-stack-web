@@ -4,6 +4,7 @@
  */
 
 import { Suspense, type ReactNode } from 'react';
+import { LoadingSpinner } from './LoadingSpinner';
 
 interface PageWrapperProps {
   children: ReactNode;
@@ -11,7 +12,9 @@ interface PageWrapperProps {
 
 export function PageWrapper({ children }: PageWrapperProps) {
   return (
-    <Suspense fallback={<div>Cargando página...</div>}>
+    <Suspense fallback={<div className="loading-fallback">
+      <LoadingSpinner fullScreen={false} text="Cargando" />
+    </div>}>
       {children}
     </Suspense>
   );
