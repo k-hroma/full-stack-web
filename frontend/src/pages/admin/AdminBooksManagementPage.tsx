@@ -1,7 +1,6 @@
 import { useForm } from '../../hooks/useForm';
 import { Link } from 'react-router-dom';
 import { useState, useCallback } from 'react';
-import { useSearch } from '../../hooks/useSearch';
 import type { CreateBookInput, Book } from '../../types';
 import { searchBooks, getBooksByCategory, createBook, updateBook, deleteBook, getBooks } from '../../api/books';
 import { ImageUpload } from '../../components/ImageUpload/ImageUpload';
@@ -81,7 +80,8 @@ export default function AdminBooksManagementPage() {
 
   const [activeTab, setActiveTab] = useState<'create' | 'edit'>('create');
 
-  const { setResults, setSearchTerm, results } = useSearch();
+  const [results, setResults] = useState<Book[]>([]);
+
 
   const [inputValue, setInputValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -179,7 +179,7 @@ export default function AdminBooksManagementPage() {
       const results = await searchBooks(inputValue.trim());
 
       if (results.length > 0) {
-        setSearchTerm(inputValue.trim());
+        setInputValue(inputValue.trim());
         setResults(results);
         setInputValue('');
         setErrorMsg('');
@@ -570,6 +570,7 @@ export default function AdminBooksManagementPage() {
                   </button>
                 </div>
               )}
+
             </div>
 
             {/*Botones de búsqueda por categoría */}
@@ -601,18 +602,17 @@ export default function AdminBooksManagementPage() {
                   🏠 Mostrar en Home
                 </button>
 
-                {activeCategory !== 'all' && (
-                  <button
-                    className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
-                    onClick={() => {
-                      setActiveCategory('all');
-                      setResults([]);
-                      setErrorMsg('');
-                    }}
-                  >
-                    ❌ Limpiar filtros
-                  </button>
-                )}
+                <button
+                  className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
+                  onClick={() => {
+                    setActiveCategory('all');
+                    setResults([]);
+                    setErrorMsg('');
+                  }}
+                >
+                  ❌ Limpiar filtros
+                </button>
+
               </div>
             </div>
 
@@ -635,9 +635,7 @@ export default function AdminBooksManagementPage() {
                 <p>
                   {activeCategory !== 'all'
                     ? `No hay libros en esta categoría`
-                    : inputValue
-                      ? `No se encontraron resultados`
-                      : 'Realizá una búsqueda para encontrar libros, seleccioná una categoría o ver todos'}
+                    : 'Realizá una búsqueda para encontrar libros, seleccioná una categoría o ver todos'}
                 </p>
               </div>
             ) : (

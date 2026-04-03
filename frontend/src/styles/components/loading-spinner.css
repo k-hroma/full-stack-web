@@ -1,0 +1,214 @@
+/* components/common/LoadingSpinner.css */
+
+/* Spinner Principal */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-family: 'Neue Montreal Regular', sans-serif;
+}
+
+.loading-container--fullscreen {
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.loading-container:not(.loading-container--fullscreen) {
+  min-height: auto;
+  padding: 2rem 0;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Tamaños */
+.loading-spinner--small {
+  --spinner-size: 24px;
+  --dot-size: 8px;
+}
+
+.loading-spinner--medium {
+  --spinner-size: 40px;
+  --dot-size: 12px;
+}
+
+.loading-spinner--large {
+  --spinner-size: 64px;
+  --dot-size: 16px;
+}
+
+/* Orbita animada */
+.loading-spinner__orbit {
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  position: relative;
+  animation: rotate 2s linear infinite;
+}
+
+.loading-spinner__dot {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.loading-spinner__dot::before {
+  content: '';
+  display: block;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  background-color: var(--brown, #954300);
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Segundo punto desfasado */
+.loading-spinner__dot::after {
+  content: '';
+  display: block;
+  width: calc(var(--dot-size) * 0.6);
+  height: calc(var(--dot-size) * 0.6);
+  background-color: var(--orange, #F7560F);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pulse 1.5s ease-in-out infinite 0.75s;
+  opacity: 0.7;
+}
+
+/* Texto */
+.loading-spinner__text {
+  font-family: 'Neue Montreal Regular', sans-serif;
+  font-size: var(--small-x-font-size, 1rem);
+  color: var(--brown, #954300);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: fadeInOut 2s ease-in-out infinite;
+  font-weight: 400;
+}
+
+/* Animaciones */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.3);
+    opacity: 0.6;
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   SKELETON PARA CONTENIDO
+   ============================================ */
+
+.skeleton-card {
+  background: var(--beige, #E2E2E2);
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 300px;
+  animation: skeleton-pulse 2s ease-in-out infinite;
+}
+
+.skeleton-card__image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(
+    90deg,
+    var(--dark-beige, #DBD0C1) 25%,
+    var(--beige, #E2E2E2) 50%,
+    var(--dark-beige, #DBD0C1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+.skeleton-card__content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-card__title {
+  height: 1.5rem;
+  width: 70%;
+  background: var(--dark-beige, #DBD0C1);
+  border-radius: 2px;
+  animation: skeleton-pulse 2s ease-in-out infinite;
+}
+
+.skeleton-card__text {
+  height: 0.875rem;
+  width: 100%;
+  background: var(--dark-beige, #DBD0C1);
+  border-radius: 2px;
+  opacity: 0.6;
+  animation: skeleton-pulse 2s ease-in-out infinite 0.3s;
+}
+
+.skeleton-card__text--short {
+  width: 60%;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .loading-spinner__text {
+    font-size: 0.875rem;
+  }
+  
+  .loading-spinner--large {
+    --spinner-size: 48px;
+    --dot-size: 14px;
+  }
+}

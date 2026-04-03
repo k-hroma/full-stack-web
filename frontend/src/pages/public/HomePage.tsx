@@ -1,8 +1,8 @@
 import { BooksGenders } from '../../components/banners/BooksGenders'
-import '../../styles/pages/public/home.css'
-import ContactPage from './ContactPage'
 import { LatestBooks } from './LatestBooks'
+import ContactPage from './ContactPage'
 import Writers from './Writers'
+import '../../styles/pages/public/home.css'
 
 
 export default function HomePage() {

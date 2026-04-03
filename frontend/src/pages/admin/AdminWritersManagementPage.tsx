@@ -1,7 +1,6 @@
 import { useForm } from '../../hooks/useForm';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useWriterSearch } from '../../hooks/useWriterSearch';
 import type { CreateWriterInput, Writer } from '../../types/writer';
 import { createWriter, updateWriter, deleteWriter, searchWriters, getWriters, getWritersByCategory } from '../../api/writers';
 import '../../styles/pages/admin/admin-writers-management.css';
@@ -28,7 +27,8 @@ export default function AdminWritersManagementPage() {
 
   const [activeTab, setActiveTab] = useState<'create' | 'edit'>('create');
 
-  const { setWriterResults, setWriterSearchTerm, writerResults } = useWriterSearch();
+  const [writerResults, setWriterResults] = useState<Writer[]>([]);
+
 
   const [inputValue, setInputValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -129,7 +129,7 @@ export default function AdminWritersManagementPage() {
       console.log(searchResults)
 
       if (searchResults.length > 0) {
-        setWriterSearchTerm(inputValue.trim());
+        setInputValue(inputValue.trim());
         setWriterResults(searchResults);
         setInputValue('');
         setErrorMsg('');
@@ -407,18 +407,16 @@ export default function AdminWritersManagementPage() {
                   ⭐ Recomendados
                 </button>
 
-                {activeCategory !== 'all' && (
-                  <button
-                    className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
-                    onClick={() => {
-                      setActiveCategory('all');
-                      setWriterResults([]);
-                      setErrorMsg('');
-                    }}
-                  >
-                    ❌ Limpiar filtros
-                  </button>
-                )}
+                <button
+                  className="admin-dashboard__category-btn admin-dashboard__category-btn--clear"
+                  onClick={() => {
+                    setActiveCategory('all');
+                    setWriterResults([]);
+                    setErrorMsg('');
+                  }}
+                >
+                  ❌ Limpiar filtros
+                </button>
               </div>
             </div>
 

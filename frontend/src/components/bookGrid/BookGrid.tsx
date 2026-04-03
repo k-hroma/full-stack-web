@@ -10,6 +10,7 @@ import { getBooks } from '../../api';
 import { useCart } from '../../hooks/useCart';
 import { useModal } from '../../hooks/useModal';
 import { BookCard } from '../bookCard/BookCard';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 import type { Book, BookFilters } from '../../types/book';
 import '../../styles/pages/public/grid-books.css';
 
@@ -60,7 +61,9 @@ const BookGrid = ({
     loadBooks();
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (isLoading) return <div className="link-return">Cargando...</div>;
+  if (isLoading) return <div className="page-loading-container">
+    <LoadingSpinner fullScreen={false} text="Cargando" />
+  </div>;
   if (error) return <div>{error}</div>;
 
   return (

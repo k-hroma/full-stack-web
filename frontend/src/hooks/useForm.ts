@@ -28,7 +28,6 @@ export function useForm<T extends Record<string, unknown>>(initialValues: T) {
       ...prev,
       [name]: newValue,
     }));
-    console.log("Form data updated:", { ...formData, [name]: newValue });
   };
 
   const resetForm = () => setFormData(initialValues);

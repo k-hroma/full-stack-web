@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getWriters } from "../../api/writers";
 import type { Writer } from "../../types/writer";
 import '../../styles/pages/public/writers.css'
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 
 export default function AllWriters() {
   const [writers, setWriters] = useState<Writer[]>([])
@@ -51,7 +52,9 @@ export default function AllWriters() {
     }
   };
 
-  if (isLoading) return <div className='link-return-writers'>Cargando...</div>;
+  if (isLoading) return <div className="page-loading-container">
+    <LoadingSpinner fullScreen={false} text="Cargando" />
+  </div>;
   if (error) return <div>{error}</div>;
 
   return (

@@ -12,6 +12,7 @@ import { BookDetailModal } from '../../components/bookDetailModal/BookDetailModa
 import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import type { Book } from '../../types/book';
 import '../../styles/pages/public/grid-books.css'
+import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 
 // Dimensiones que usa BookCard (deben coincidir con CARD_W / CARD_H en BookCard.tsx)
 const CARD_W = 130;
@@ -103,7 +104,9 @@ const LatestBooks = () => {
     setSelectedBook(null);
   };
 
-  if (isLoading) return <div className='link-return'>Cargando...</div>;
+  if (isLoading) return <div className='page-loading-container'>
+    <LoadingSpinner fullScreen={false} text="Cargando" />
+  </div>;
   if (error) return <div>{error}</div>;
 
   return (

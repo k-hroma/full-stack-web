@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getWriterById } from "../../api/writers";
 import type { Writer } from "../../types/writer";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import Writers from "../../pages/public/Writers"
 import WriterBioCard from "../../components/writerCard/WriterBioCard";
 
@@ -47,7 +48,9 @@ export default function WriterBioPage() {
     loadWriter();
   }, [id]);
 
-  if (isLoading) return <div className='link-return-writers'>Cargando...</div>;
+  if (isLoading) return <div className='page-loading-container'>
+    <LoadingSpinner fullScreen={false} text="Cargando" />
+  </div>;
   if (error) return <div>{error}</div>;
   if (!writer) return <div>No se encontró el Esrcitorx</div>;
 
