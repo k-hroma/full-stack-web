@@ -25,17 +25,21 @@ const CartButton = memo(function CartButton({ itemCount, isAdmin, onClick }: Car
     <button
       onClick={onClick}
       className="header__icon-btn header__cart-btn"
-      aria-label={`Carrito con ${itemCount} items`}
+      aria-label={
+        itemCount > 0
+          ? `Ver carrito de compras (${itemCount} ${itemCount === 1 ? 'producto' : 'productos'})`
+          : 'Ver carrito de compras'
+      }
     >
-      <Cart fill="#954300" />
+      <Cart fill="#954300" aria-hidden="true" />
       {itemCount > 0 && (
-        <span className="header__cart-badge">{itemCount}</span>
+        <span className="header__cart-badge" aria-hidden="true">{itemCount}</span>
       )}
     </button>
   );
 });
 
-// ─── UserMenu: aislado para no re-renderizar el header completo ───────────────
+// ─── UserMenu ─────────────────────────────────────────────────────────────────
 interface UserMenuProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
@@ -65,29 +69,31 @@ const UserMenu = memo(function UserMenu({
         <button
           className="header__icon-btn header__auth-icon"
           onClick={onConfirmLogout}
-          aria-label="Opciones de usuario"
+          aria-label="Opciones de cuenta de usuario"
+          aria-expanded={isConfirmLogout}
+          aria-haspopup="true"
         >
-          <Alien fill="#954300" />
+          <Alien fill="#954300" aria-hidden="true" />
         </button>
       ) : (
         <Link
           to="/login"
           className="header__icon-btn header__auth-icon"
-          aria-label="Iniciar sesión"
+          aria-label="Iniciar sesión en tu cuenta"
         >
-          <Alien fill="#954300" />
+          <Alien fill="#954300" aria-hidden="true" />
         </Link>
       )}
 
       {isAuthenticated && isConfirmLogout && (
-        <div className="header-logput-toast">
+        <div className="header-logput-toast" role="dialog" aria-label="Menú de usuario">
           <div className="header__logout-actions">
             <div className='action-btn-header-logout-confirm'>
               <p className='header-logout-user-name'>{userName}</p>
               <button
                 className="toast-user-close"
                 onClick={onCancelLogout}
-                aria-label="Cerrar menú"
+                aria-label="Cerrar menú de usuario"
               >
                 x
               </button>
@@ -179,9 +185,11 @@ export function Header() {
             <button
               className="header__icon-btn"
               onClick={openMenu}
-              aria-label="Abrir menú"
+              aria-label="Abrir menú de navegación"
+              aria-expanded={isMenuOpen}
+              aria-haspopup="true"
             >
-              <Menu fill='#954300' />
+              <Menu fill='#954300' aria-hidden="true" />
             </button>
           </div>
 
@@ -190,7 +198,7 @@ export function Header() {
             <Link
               to="/"
               className="header__logo-link"
-              aria-label="Ir al inicio"
+              aria-label="La Palacio Libros — ir al inicio"
               onClick={handleClick}
             >
               <span className="header__logo-hit-area">
@@ -201,7 +209,6 @@ export function Header() {
 
           {/* Derecha */}
           <div className="header__section header__section--right">
-            {/* UserMenu aislado → el resto del header no se re-renderiza al abrir dropdown */}
             <UserMenu
               isAuthenticated={isAuthenticated}
               isAdmin={isAdmin}
@@ -222,7 +229,10 @@ export function Header() {
               aria-hidden="true"
             />
 
-            <div className={`header__search-wrapper ${isSearchExpanded ? 'is-expanded' : ''}`}>
+            <div
+              className={`header__search-wrapper ${isSearchExpanded ? 'is-expanded' : ''}`}
+              role="search"
+            >
               <div className="header__search-desktop">
                 <SearchBooks />
               </div>
@@ -230,9 +240,13 @@ export function Header() {
               <button
                 className="header__icon-btn header__search-toggle"
                 onClick={toggleSearch}
-                aria-label={isSearchExpanded ? "Cerrar búsqueda" : "Abrir búsqueda"}
+                aria-label={isSearchExpanded ? "Cerrar buscador" : "Abrir buscador de libros"}
+                aria-expanded={isSearchExpanded}
               >
-                {isSearchExpanded ? <X fill="#954300" /> : <SearchIcon fill="#954300" />}
+                {isSearchExpanded
+                  ? <X fill="#954300" aria-hidden="true" />
+                  : <SearchIcon fill="#954300" aria-hidden="true" />
+                }
               </button>
 
               {isSearchExpanded && (
@@ -242,7 +256,6 @@ export function Header() {
               )}
             </div>
 
-            {/* CartButton aislado → solo se re-renderiza cuando cambia itemCount */}
             <CartButton
               itemCount={itemCount}
               isAdmin={isAdmin}

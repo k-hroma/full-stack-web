@@ -4,7 +4,7 @@
  */
 
 import type { Book } from '../../types/book'
-import { useState } from "react";
+import { useState, memo } from "react";
 import { OptimizedImage } from '../common/OptimizedImage';
 import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import '../../styles/components/book-card.css'
@@ -30,13 +30,22 @@ const bgBorders = [
 const CARD_W = 130;
 const CARD_H = 195;
 
-const BookCard = ({
+/**
+ * Tamaños responsive de la card:
+ * - Hasta 450px de viewport: ~50% de la pantalla (2 columnas)
+ * - Hasta 660px: ~33vw (3 columnas)
+ * - Hasta 880px: ~25vw (4 columnas)
+ * - Por encima: tamaño fijo de 130px
+ */
+const CARD_SIZES = '(max-width: 450px) 50vw, (max-width: 660px) 33vw, (max-width: 880px) 25vw, 130px';
+
+export const BookCard = memo(function BookCard({
   index,
   book,
   isInCart,
   onAddToCart,
   onViewMore
-}: BookCardProps) => {
+}: BookCardProps) {
   const bgColor = bgColors[index % bgColors.length];
   const bgBorder = bgBorders[index % bgBorders.length];
 
@@ -50,8 +59,6 @@ const BookCard = ({
 
   const buttonState = getButtonState();
 
-  // Generar URLs para 1x y 2x explícitamente (mejor que dejar que el auto-srcset
-  // calcule el doble del ancho sin controlar la calidad)
   const src1x = optimizeImageUrl(book.img, { width: CARD_W, height: CARD_H, quality: 'auto:good' });
   const src2x = optimizeImageUrl(book.img, { width: CARD_W * 2, height: CARD_H * 2, quality: 'auto:good' });
 
@@ -78,7 +85,7 @@ const BookCard = ({
               { url: src1x, descriptor: '1x' },
               { url: src2x, descriptor: '2x' },
             ]}
-            sizes={`${CARD_W}px`}
+            sizes={CARD_SIZES}
           />
         </div>
       </div>
@@ -99,18 +106,25 @@ const BookCard = ({
             className={`item-book-btn btn-primary ${buttonState.className}`}
             onClick={onAddToCart}
             disabled={buttonState.disabled}
+            aria-label={
+              isInCart
+                ? `${book.title} ya está en el carrito`
+                : book.stock === 0
+                  ? `${book.title} sin stock`
+                  : `Agregar ${book.title} al carrito`
+            }
           >
             {buttonState.text}
           </button>
           <button
             className='item-book-btn btn-outline'
-            onClick={onViewMore}>
+            onClick={onViewMore}
+            aria-label={`Ver más detalles de ${book.title}`}
+          >
             Ver más +
           </button>
         </div>
       </div>
     </div>
   );
-}
-
-export { BookCard }
+});

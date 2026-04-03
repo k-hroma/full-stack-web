@@ -4,15 +4,25 @@
   top: 0;
   left: 0;
   z-index: 10;
-  width: 200%; 
+  width: 200%;
+  /* Altura fija para evitar layout shift mientras carga la imagen.
+     Ajustar al valor real de la imagen si difiere. */
+  height: 20px;
+  /* Color placeholder igual al fondo de la imagen animada */
+  background-color: var(--brown, #954300);
   animation: move 30s linear infinite;
   will-change: transform;
   min-width: 2000px;
+  /* Evita que la nav se expanda si las imágenes tardan */
+  overflow: hidden;
 }
 
 .animated-nav-img {
   width: 50%;
-  height: auto;
+  height: 100%;
+  /* object-fit para mantener proporciones dentro del contenedor fijo */
+  object-fit: cover;
+  display: block;
 }
 
 @keyframes move {

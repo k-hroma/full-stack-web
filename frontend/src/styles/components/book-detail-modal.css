@@ -87,8 +87,8 @@
 }
 
 .modal-image-border {
-  border: 10px solid #5BA8F7; /* Azul característico de la imagen */
-  background: #2a2a2a; /* Fondo oscuro detrás del libro */
+  border: 10px solid #5BA8F7;
+  background: #2a2a2a;
   padding: 2rem;
   width: 100%;
   max-width: 400px;
@@ -102,11 +102,31 @@
   width: 70%;
 }
 
+.modal-image-skeleton {
+  width: 100%;
+  max-width: 300px;
+  height: 450px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .modal-image {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: cover;
+  /* aspectRatio and objectFit applied inline via style prop */
 }
 
 /* Sección de Información */
@@ -173,17 +193,13 @@
   font-family: 'Neue Montreal Regular', sans-serif;
   font-size: var(--very-small-font-size);
   cursor: pointer;
-  transition: transform o.3s ease;
-
-
+  transition: transform 0.3s ease;
 }
 
 .modal-interest-btn:hover:not(:disabled) {
-
   transform: translateY(-1px) translateX(1px);
   background-color: var(--pink);
   color: var(--beige);
-
 }
 
 .modal-interest-btn.in-cart {
@@ -274,7 +290,6 @@
 @media (max-width: 900px) {
   .modal-content {
     grid-template-columns: 1fr;
-
   }
   
   .modal-image-section {

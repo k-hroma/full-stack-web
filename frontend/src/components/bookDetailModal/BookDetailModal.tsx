@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Book } from '../../types/book';
 import '../../styles/components/book-detail-modal.css';
 
@@ -16,6 +17,8 @@ export const BookDetailModal = ({
   onAddToCart,
   isInCart
 }: BookDetailModalProps) => {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   if (!isOpen || !book) return null;
 
   const getButtonState = () => {
@@ -36,10 +39,25 @@ export const BookDetailModal = ({
           <div className="modal-image-section">
             <div className="modal-image-border">
               <div className="modal-image-wrapper">
+                {!imgLoaded && (
+                  <div
+                    className="modal-image-skeleton"
+                    aria-hidden="true"
+                    style={{ width: 300, height: 450 }}
+                  />
+                )}
                 <img
                   src={book.img}
                   alt={book.title}
                   className="modal-image"
+                  width={300}
+                  height={450}
+                  style={{
+                    aspectRatio: '2/3',
+                    objectFit: 'cover',
+                    display: imgLoaded ? 'block' : 'none',
+                  }}
+                  onLoad={() => setImgLoaded(true)}
                 />
               </div>
             </div>

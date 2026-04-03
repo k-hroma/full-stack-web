@@ -1,7 +1,7 @@
 /**
- * CatalogPage - Página de catálogo de libros
+ * LatestBooks - Sección de novedades en Home
  * Conecta con GET /books del backend
- * @module pages/public/CatalogPage
+ * @module pages/public/LatestBooks
  */
 
 import { useState, useEffect } from 'react';
@@ -9,10 +9,45 @@ import { getBooks } from '../../api';
 import { useCart } from '../../hooks/useCart';
 import { BookCard } from '../../components/bookCard/BookCard';
 import { BookDetailModal } from '../../components/bookDetailModal/BookDetailModal';
+import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import type { Book } from '../../types/book';
 import '../../styles/pages/public/grid-books.css'
 
+// Dimensiones que usa BookCard (deben coincidir con CARD_W / CARD_H en BookCard.tsx)
+const CARD_W = 130;
+const CARD_H = 195;
 
+// Cuántas imágenes precargamos con alta prioridad
+const PRELOAD_COUNT = 4;
+
+/**
+ * Inyecta <link rel="preload"> en el <head> para las primeras N imágenes de
+ * libros una vez que se conocen sus URLs. Devuelve un cleanup que los elimina
+ * si el componente se desmonta (evita fugas entre navegaciones SPA).
+ */
+function preloadBookImages(books: Book[]): () => void {
+  const links: HTMLLinkElement[] = [];
+
+  books.slice(0, PRELOAD_COUNT).forEach((book) => {
+    if (!book.img) return;
+
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    // Optimizar a las dimensiones reales que usará BookCard
+    link.href = optimizeImageUrl(book.img, { width: CARD_W, height: CARD_H, quality: 'auto:good' });
+    // fetchpriority="high" para que el navegador las trate como críticas
+    link.setAttribute('fetchpriority', 'high');
+    document.head.appendChild(link);
+    links.push(link);
+  });
+
+  return () => {
+    links.forEach((link) => {
+      if (document.head.contains(link)) document.head.removeChild(link);
+    });
+  };
+}
 
 const LatestBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -51,6 +86,13 @@ const LatestBooks = () => {
     loadBooks();
   }, []);
 
+  // Una vez que los libros están disponibles, precargar las primeras 4 portadas
+  useEffect(() => {
+    if (books.length === 0) return;
+    const cleanup = preloadBookImages(books);
+    return cleanup;
+  }, [books]);
+
   const handleViewMore = (book: Book) => {
     setSelectedBook(book);
     setIsModalOpen(true);
@@ -68,7 +110,6 @@ const LatestBooks = () => {
     <section className='books-container'>
       <div className="txt-section-container">
         <h2 className="section-title">Novedades</h2>
-
       </div>
       <div className="grid-container">
         {books.length === 0
@@ -91,9 +132,7 @@ const LatestBooks = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onAddToCart={() => {
-          if (selectedBook) {
-            addToCart(selectedBook);
-          }
+          if (selectedBook) addToCart(selectedBook);
         }}
         isInCart={selectedBook ? isInCart(selectedBook._id) : false}
       />
