@@ -3,14 +3,14 @@
  * @module components/bookCard/BookCard
  */
 
-import type { Book } from '../../types/book'
-import { useState, memo } from "react";
+import { useState, useMemo, memo } from 'react';
+import type { Book } from '../../types/book';
 import { OptimizedImage } from '../common/OptimizedImage';
 import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
-import '../../styles/components/book-card.css'
+import '../../styles/components/book-card.css';
 
 interface BookCardProps {
-  index: number
+  index: number;
   book: Book;
   isInCart: boolean;
   onAddToCart: () => void;
@@ -44,36 +44,37 @@ export const BookCard = memo(function BookCard({
   book,
   isInCart,
   onAddToCart,
-  onViewMore
+  onViewMore,
 }: BookCardProps) {
   const bgColor = bgColors[index % bgColors.length];
   const bgBorder = bgBorders[index % bgBorders.length];
 
   const [hover, setHover] = useState(false);
 
-  const getButtonState = () => {
+  // useMemo: buttonState solo se recalcula cuando isInCart o book.stock cambian.
+  // Sin memo, se recalculaba en cada render del padre (hover, scroll, etc.)
+  // aunque ninguno de sus inputs hubiera cambiado.
+  const buttonState = useMemo(() => {
     if (isInCart) return { text: 'En carrito', disabled: true, className: 'in-cart' };
     if (book.stock === 0) return { text: 'Sin stock', disabled: true, className: 'no-stock' };
     return { text: 'Agregar', disabled: false, className: 'add' };
-  };
-
-  const buttonState = getButtonState();
+  }, [isInCart, book.stock]);
 
   const src1x = optimizeImageUrl(book.img, { width: CARD_W, height: CARD_H, quality: 'auto:good' });
   const src2x = optimizeImageUrl(book.img, { width: CARD_W * 2, height: CARD_H * 2, quality: 'auto:good' });
 
   return (
-    <div className='item-book-container'>
+    <div className="item-book-container">
       <div
         style={{
           backgroundColor: bgColor,
-          border: `10px solid ${hover ? '#FF76DC' : bgBorder}`
+          border: `10px solid ${hover ? '#FF76DC' : bgBorder}`,
         }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className='cover-container'
+        className="cover-container"
       >
-        <div className='img-container'>
+        <div className="img-container">
           <OptimizedImage
             src={book.img}
             alt={book.title}
@@ -90,18 +91,18 @@ export const BookCard = memo(function BookCard({
         </div>
       </div>
 
-      <div className='info-container'>
-        <div className='info-txt-precio-container'>
-          <div className='txt-content'>
-            <p className='txt-title'>{book.title}</p>
-            <p className='txt-author'>{book.lastName} {book.firstName}</p>
+      <div className="info-container">
+        <div className="info-txt-precio-container">
+          <div className="txt-content">
+            <p className="txt-title">{book.title}</p>
+            <p className="txt-author">{book.lastName} {book.firstName}</p>
           </div>
-          <div className='precio-content'>
+          <div className="precio-content">
             <p>${book.price}</p>
           </div>
         </div>
 
-        <div className='actions-container'>
+        <div className="actions-container">
           <button
             className={`item-book-btn btn-primary ${buttonState.className}`}
             onClick={onAddToCart}
@@ -116,8 +117,9 @@ export const BookCard = memo(function BookCard({
           >
             {buttonState.text}
           </button>
+
           <button
-            className='item-book-btn btn-outline'
+            className="item-book-btn btn-outline"
             onClick={onViewMore}
             aria-label={`Ver más detalles de ${book.title}`}
           >

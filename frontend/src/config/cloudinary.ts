@@ -1,24 +1,33 @@
 /**
  * Configuración de Cloudinary
  * @module config/cloudinary
+ *
+ * IMPORTANTE: Todas las variables deben vivir en .env
+ * No uses fallbacks con valores reales aquí.
+ * Si falta una variable, querés que falle rápido y en voz alta.
  */
 
 import { Cloudinary } from '@cloudinary/url-gen';
 
-// Tu cloud name de Cloudinary
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'ds8ww3in3';
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
-// Upload preset UNSIGNED 
-export const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+if (!CLOUDINARY_CLOUD_NAME) {
+  throw new Error(
+    '[Cloudinary] Falta VITE_CLOUDINARY_CLOUD_NAME en el archivo .env\n' +
+    'Copiá .env.example a .env y completá los valores.'
+  );
+}
 
-// URL base para uploads
-export const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+// Upload preset UNSIGNED (para subir imágenes desde el admin)
+export const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string;
 
-// Instancia de Cloudinary para transformaciones
+// URL base para uploads directos
+export const CLOUDINARY_UPLOAD_URL =
+  `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+// Instancia del SDK (usada si en algún momento se necesitan transformaciones avanzadas)
 export const cld = new Cloudinary({
-  cloud: {
-    cloudName: CLOUDINARY_CLOUD_NAME,
-  },
+  cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
 });
 
 /**
@@ -36,12 +45,13 @@ export type CloudinaryQuality =
   | 'low';
 
 /**
- * Genera la URL de una imagen transformada (optimizada)
+ * Genera la URL de una imagen transformada y optimizada.
+ * Usamos la URL manual (sin SDK) para no depender del bundle del SDK en runtime.
+ *
  * @param publicId - ID de la imagen en Cloudinary (ej: "book_covers/abc123")
- * @param width    - Ancho deseado (opcional)
- * @param height   - Alto deseado (opcional)
+ * @param width    - Ancho deseado en px (opcional)
+ * @param height   - Alto deseado en px (opcional)
  * @param quality  - Calidad deseada (default: 'auto:good')
- * @returns URL optimizada con formato WebP/avif automático
  */
 export const getOptimizedImageUrl = (
   publicId: string,
@@ -49,9 +59,6 @@ export const getOptimizedImageUrl = (
   height?: number,
   quality: CloudinaryQuality = 'auto:good',
 ): string => {
-  const cloudName = CLOUDINARY_CLOUD_NAME;
-
-  // Transformaciones base: calidad y formato automáticos
   const transforms: string[] = [`q_${quality}`, 'f_auto'];
 
   if (width) {
@@ -59,21 +66,18 @@ export const getOptimizedImageUrl = (
     transforms.push(`c_fill,w_${width},h_${h}`);
   }
 
-  const transformString = transforms.join(',');
-
-  // URL manual - SIN ESPACIOS
-  return `https://res.cloudinary.com/${cloudName}/image/upload/${transformString}/${publicId}`;
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${transforms.join(',')}/${publicId}`;
 };
 
 /**
- * Extrae el public_id de una URL de Cloudinary
- * Útil para convertir URLs existentes en URLs transformadas
+ * Extrae el public_id de una URL de Cloudinary.
+ * Soporta URLs con y sin versión (v1234567890/).
+ *
  * @param url - URL completa de Cloudinary
  * @returns public_id o null si no es URL de Cloudinary
  */
 export const extractPublicId = (url: string): string | null => {
-  // Regex para extraer public_id de URLs tipo:
-  // https://res.cloudinary.com/cloudname/image/upload/v1234567890/book_covers/abc123.jpg
-  const match = url.match(/\/upload\/(?:v\d+\/)?(.+?)\.[^.]+$/);
+  if (!url?.includes('cloudinary.com')) return null;
+  const match = url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/);
   return match ? match[1].trim() : null;
 };
