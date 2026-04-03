@@ -4,8 +4,8 @@
  */
 
 import { Outlet } from 'react-router-dom';
+import { ScrollToTop } from '../common/ScrollToTop';
 import '../../styles/layout/admin-layout.css'
-import ScrollToTop from '../common/ScrollToTop';
 
 
 export function AdminLayout() {

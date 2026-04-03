@@ -61,7 +61,7 @@ export default function AllWriters() {
           <p className="txt-writers">
             Escritorxs
           </p>
-          <Link className="link-return-writers" to='/'>Volver</Link>
+          <Link className="link-return" to='/'>Volver</Link>
         </div>
 
         <div className="txt-writers-container">
