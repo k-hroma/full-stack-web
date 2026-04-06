@@ -39,7 +39,8 @@
 
 .txt-writers, .link-return {
   color: var(--brown);
-  font-family: 'Neue Montreal Medium';
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);
   
 }
@@ -50,7 +51,8 @@
 
 .link-writers-top {
   color: var(--light-brown);
-  font-family: 'Neue Montreal Medium';
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);
  
 }
@@ -70,7 +72,8 @@ margin-bottom: 0.5rem;
 .txt-writers-container-authors {
   display: flex;
   color: var(--pink);
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--super-large-font-size);
   align-items: baseline;
   line-height:90% ;
@@ -94,8 +97,9 @@ margin-bottom: 0.5rem;
 .txt-gender-container {
   display: flex;
   color: var(--orange);
+  font-family: var(--font-display);
+  font-weight: 200;
   font-size: var(--small-font-size);
-  font-family: 'PPEditorialNew';
   height: 100%;
   margin-left: 1rem;
   align-self: baseline;
@@ -131,7 +135,8 @@ margin-bottom: 0.5rem;
 
 .alphabet-letter {
   color: var(--orange);
-  font-family: 'Neue Montreal Medium';
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size:var(--very-small-font-size);
   line-height: 1.2;
   background: none;
@@ -158,7 +163,8 @@ margin-bottom: 0.5rem;
 /* Headers de sección por letra (opcional) */
 .letter-section-header {
   color: var(--orange);
-  font-family: 'Neue Montreal Medium';
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);
   border-bottom: 1px solid var(--orange);
   position: absolute;

@@ -32,16 +32,17 @@
 }
 
 .contact-title {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--large-font-size);
   line-height: 100%;
-  font-weight: 400;
   color: var(--brown);
   margin: 0;
 }
 
 .contact-subtitle {
-  font-family: 'Neue Montreal Medium', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);
   color: var(--brown);
   margin: 0;
@@ -49,7 +50,8 @@
 }
 
 .contact-note {
-  font-family: 'Neue Montreal Medium', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);;
   color: var(--brown);
   margin-top: -0.5rem;
@@ -80,7 +82,8 @@
   border: none;
   border-bottom: 1px solid var(--orange);
   padding: 0.5rem 0;
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--very-small-font-size);
   color: var(--brown);
   outline: none;
@@ -108,7 +111,8 @@
 }
 
 .field-label {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--very-small-font-size);
   color: var(--orange);
 }
@@ -133,7 +137,8 @@
 .submit-btn {
   background-color: var(--brown);
   color: var(--beige);
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--very-small-font-size);
   padding: 0.35rem 2.5rem;
   border: none;

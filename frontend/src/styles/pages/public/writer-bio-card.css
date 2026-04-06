@@ -8,7 +8,8 @@
 }
 
 .featured-quote {
-  font-family:'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   color: var(--orange);
   font-size: var(--super-large-font-size);
   padding: 4rem 6rem 1rem 6rem;
@@ -16,7 +17,8 @@
 }
 
 .writer-sub-quote {
-  font-family:'Neue Montreal Medium';
+  font-family: var(--font-sans);
+  font-weight: 500;
   color: var(--orange);
   font-size: var(--very-small-font-size);
   text-align: center;
@@ -38,7 +40,8 @@ border-color: var(--green);
 .writer-bio-wrapper{
   display: flex;
   width: 100%;
-  font-family:'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   color: var(--brown);
   font-size: var(--large-font-size);
   letter-spacing:-1%;
@@ -74,7 +77,8 @@ border-color: var(--green);
 }
 
 .writer-titles-btn {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   border: none;
   background-color: transparent;
   cursor: pointer;

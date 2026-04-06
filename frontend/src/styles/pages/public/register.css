@@ -22,7 +22,8 @@
 }
 
 .register-page__title {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: 1.5rem;
   color: var(--brown);
   text-align: center;
@@ -38,7 +39,8 @@
   padding: 0.625rem 1rem;
   border-radius: 6px;
   margin-bottom: 1.25rem;
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.8125rem;
   text-align: center;
   border-left: 1px solid var(--pink);
@@ -58,7 +60,8 @@
 
 
 .register-page__label {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.6875rem;
   color: var(--light-brown);
   text-transform: uppercase;
@@ -66,7 +69,8 @@
 }
 
 .register-page__input {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   color: var(--brown);
   background-color: transparent;
@@ -81,7 +85,8 @@
 .register-page__input::placeholder {
   color: var(--light-brown);
   opacity: 0.4;
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.9375rem;
 }
 
@@ -110,7 +115,8 @@
 }
 
 .register-page__requirement {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.6875rem;
   color: var(--light-brown);
   display: flex;
@@ -144,7 +150,8 @@
 }
 
 .register-page__match-error {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.6875rem;
   color: var(--pink);
   margin-top: 0.375rem;
@@ -156,13 +163,15 @@
 
 .register-page__match-error::before {
   content: '×';
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.875rem;
 }
 
 
 .register-page__button {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.75rem;
   color: var(--brown);
   background-color: transparent;
@@ -207,13 +216,15 @@
 }
 
 .register-page__footer-text {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.8125rem;
   color: var(--light-brown);
 }
 
 .register-page__link {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.8125rem;
   color: var(--brown);
   text-decoration: none;

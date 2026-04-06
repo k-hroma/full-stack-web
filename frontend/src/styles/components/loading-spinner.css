@@ -6,7 +6,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
 }
 
 .loading-container--fullscreen {
@@ -90,7 +91,8 @@
 
 /* Texto */
 .loading-spinner__text {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--small-x-font-size, 1rem);
   color: var(--brown, #954300);
   letter-spacing: 0.1em;

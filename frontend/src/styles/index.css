@@ -4,7 +4,6 @@
  */
 
 /* Reset básico */
-
 *,
 *::before,
 *::after {
@@ -14,29 +13,37 @@
 }
 
 :root {
+  /* ─── Familias de fuente ───────────────────────────────────────────────── */
+  /*
+   * Ahora (correcto):
+   *   font-family: var(--font-sans);  font-weight: 400;  ← Regular
+   *   font-family: var(--font-sans);  font-weight: 700;  ← Bold
+   *   font-family: var(--font-sans);  font-weight: 500;  ← Medium
+   *   font-family: var(--font-sans);  font-weight: 300;  ← Light
+   */
+  --font-sans:    'Neue Montreal', sans-serif;
+  --font-display: 'PPEditorialNew', serif;
 
-  /*Fonts Sizes*/
-  --very-small-font-size: .875rem;
-  --small-x-font-size: 1rem;
-  --small-font-size: 1.5rem;
-  --large-font-size: 3rem;
-  --super-large-font-size:5rem;
+  /* ─── Tamaños de fuente ────────────────────────────────────────────────── */
+  --very-small-font-size:  0.875rem;
+  --small-x-font-size:     1rem;
+  --small-font-size:       1.5rem;
+  --large-font-size:       3rem;
+  --super-large-font-size: 5rem;
 
-
-  /*Colors*/
-  --brown: #954300;
-  --light-brown: #C3762A;
-  --pink: #FF76DC;
-  --orange: #F7560F;
-  --beige: #E2E2E2;
-  --dark-beige: #DBD0C1;
-  --light-violet:#CDB0EA;   
-  --green: #0a9e50;
-  --grey: #7d94a3;
-  
+  /* ─── Colores ──────────────────────────────────────────────────────────── */
+  --brown:        #954300;
+  --light-brown:  #C3762A;
+  --pink:         #FF76DC;
+  --orange:       #F7560F;
+  --beige:        #E2E2E2;
+  --dark-beige:   #DBD0C1;
+  --light-violet: #CDB0EA;
+  --green:        #0a9e50;
+  --grey:         #7d94a3;
 }
 
-#root{
+#root {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -47,7 +54,8 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
 }
 
 .page-loading-container {

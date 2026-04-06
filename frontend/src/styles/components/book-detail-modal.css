@@ -54,7 +54,8 @@
   border:none;
   background: transparent;
   color: var(--brown);
-  font-family: 'Neue Montreal Light';
+  font-family: var(--font-sans);
+  font-weight: 300;
   font-size: var(--large-font-size);
   cursor: pointer;
   z-index: 10;
@@ -143,7 +144,8 @@
 }
 
 .modal-category {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--small-x-font-size);
   color: var(--light-brown);
   display: block;
@@ -151,7 +153,8 @@
 }
 
 .modal-title {
-  font-family: 'Neue Montreal Light';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--super-large-font-size);
   color: var(--brown);
   line-height: 90%;
@@ -159,7 +162,8 @@
 }
 
 .modal-author {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--small-font-size);
   color: var(--brown);  
   margin: 0;
@@ -177,20 +181,24 @@
 }
 
 .modal-price {
-  font-family: 'PPEditorialNew', serif;
+  font-family: var(--font-display);
+  font-weight: 200;
   font-size: var(--large-font-size);
   color: var(--pink);
 
 }
 
 .modal-interest-btn {
-  flex: 0.5;
-  padding: 0.35rem 1rem;
-  border-radius: 2rem;
+  align-self: center;
+  flex: 0.4;
+  padding: 0.65rem;
+  border-radius: 2rem; 
   border:none;
   background: var(--brown);
   color: var(--beige);
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.05em;
   font-size: var(--very-small-font-size);
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -222,7 +230,8 @@
 }
 
 .metadata-item {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--small-x-font-size);
   line-height: 120%;
   color: var(--brown);
@@ -244,7 +253,8 @@
 }
 
 .description-label {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--small-x-font-size);
   color: var(--brown);
   margin: 0 0 0.5rem 0;
@@ -255,7 +265,8 @@
 }
 
 .description-text {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--small-font-size);
   line-height: 120%;
   color: var(--brown);

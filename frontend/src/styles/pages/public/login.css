@@ -24,12 +24,12 @@
 
 
 .login-page__title {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1.5rem;
   color: var(--brown);
   text-align: center;
   margin-bottom: 2rem;
-  font-weight: 300;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -41,7 +41,8 @@
   padding: 0.625rem 1rem;
   border-radius: 6px;
   margin-bottom: 1.25rem;
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 300;
   font-size: 0.8125rem;
   text-align: center;
   border-left: 1px solid var(--pink);
@@ -61,7 +62,8 @@
 
 /* Labels más pequeños */
 .login-page__label {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.6875rem;
   color: var(--light-brown);
   text-transform: uppercase;
@@ -70,7 +72,8 @@
 
 /* Inputs transparentes - SIEMPRE transparentes */
 .login-page__input {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   color: var(--brown);
   background-color: transparent !important; /* Forzar transparente */
@@ -91,7 +94,8 @@
 .login-page__input::placeholder {
   color: var(--light-brown);
   opacity: 0.4;
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.9375rem;
 }
 
@@ -125,7 +129,8 @@
 
 /* Botón más sutil */
 .login-page__button {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.75rem;
   color: var(--brown);
   background-color: transparent;
@@ -170,13 +175,15 @@
 }
 
 .login-page__footer-text {
-  font-family: 'Neue Montreal Light', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.8125rem;
   color: var(--light-brown);
 }
 
 .login-page__link {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.8125rem;
   color: var(--brown);
   text-decoration: none;

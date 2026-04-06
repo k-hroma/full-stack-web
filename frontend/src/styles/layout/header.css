@@ -108,7 +108,8 @@
 }
 
 .header__admin-btn {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.6875rem;
   color: var(--brown);
   text-decoration: none;
@@ -137,7 +138,8 @@
 }
 
 .header__admin-links {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   letter-spacing: 0.05em;
   cursor: pointer;
@@ -187,7 +189,8 @@
   color: var(--brown);
   padding: 1rem 1rem;
   border-radius: 8px;
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.875rem;
   box-shadow: 0 4px 12px rgba(149, 67, 0, 0.1);
   display: flex;
@@ -216,7 +219,8 @@
 }
 
 .header__logout-btn--confirm {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   color: var(--orange);
   background: transparent;
@@ -232,7 +236,8 @@
 }
 
 .header__logout-btn--confirm {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   letter-spacing: 0.05em;
   cursor: pointer;
@@ -299,7 +304,8 @@
 }
 
 .header__logout-btn {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.6875rem;
   color: var(--brown);
   background-color: transparent;
@@ -340,9 +346,9 @@
   right: -2px;
   background: var(--orange);
   color: var(--beige);
-  font-family: 'Neue Montreal Medium', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 0.625rem;
-  font-weight: 500;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;

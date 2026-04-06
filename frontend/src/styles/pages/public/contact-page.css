@@ -20,7 +20,8 @@
   padding-bottom: 8rem;
   padding-left: 2rem;
   color: var(--beige);
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--large-font-size);
   line-height: 100%;
 
@@ -123,7 +124,8 @@
 
 .link-about-us{
   color: var(--beige);
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;;
   font-size: var(--very-small-font-size);
   padding-top: .8rem;
 }

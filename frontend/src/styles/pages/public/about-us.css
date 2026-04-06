@@ -19,9 +19,9 @@
 
 /* Título principal */
 .quienes-somos__title {
-  font-family: 'Neue Montreal Regular';
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--super-large-font-size);
-  font-weight: 100;
   color: var(--pink);
   margin-bottom: 3rem;
   margin-top: 4.43rem;
@@ -44,9 +44,9 @@
 }
 
 .team-title {
-  font-family: 'Neue Montreal Regular', sans-serif;
-  font-size: var(--small-font-size);
+  font-family: var(--font-sans);
   font-weight: 400;
+  font-size: var(--small-font-size);
   color: var(--green);
   margin: 0;
   text-decoration: underline;
@@ -67,14 +67,16 @@
 }
 
 .member-name {
-  font-family: 'Neue Montreal Medium', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);
   color: var(--pink);
   text-transform: lowercase;
 }
 
 .member-role {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: var(--very-small-font-size);
   line-height: 120%;
   color: var(--green);
@@ -99,8 +101,9 @@
   gap: 2rem;
 }
 
-.description-text {
-  font-family: 'Neue Montreal Regular', sans-serif;
+.description-about-text {
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: var(--large-font-size);
   line-height: 110%;
   color: var(--green);
@@ -115,6 +118,12 @@
   text-decoration-thickness: 1px;
 }
 
+.description-link {
+  color: var(--green);
+  text-decoration: underline;
+}
+
+
 /* ============================================
    RESPONSIVE - Tablet
    ============================================ */
@@ -124,7 +133,7 @@
     gap: 4rem;
   }
 
-  .description-text {
+  .description-about-text {
     font-size: 2rem;
   }
 }

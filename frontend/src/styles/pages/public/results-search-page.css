@@ -14,10 +14,15 @@
   padding-right: 2rem;
   padding-top: 8.5rem;
   padding-bottom: 1.5rem;
+    @media (max-width: 796px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 5rem;
+  }
 }
 
 .section-title, .link-return  {
-  font-family: "Neue Montreal Medium";
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 14px;
   line-height: 130%;

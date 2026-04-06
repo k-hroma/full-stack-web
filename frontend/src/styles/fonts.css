@@ -1,47 +1,85 @@
+/**
+ * Fuentes de la aplicación
+ * @module styles/fonts
+
+ * Mapa de pesos:
+ *   100 → Thin
+ *   300 → Light  /  300 italic → Light Italic
+ *   400 → Regular (peso base del body)
+ *   500 → Medium
+ *   600 italic → Semi Bold Italic
+ *   700 → Bold
+ **/
+
+/* ─── Neue Montreal — familia unificada ──────────────────────────────────── */
+
 @font-face {
-  font-family: 'Neue Montreal Regular';
+  font-family: 'Neue Montreal';
   src: url('../assets/fonts/NeueMontreal-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Neue Montreal Medium';
-  src: url('../assets/fonts/NeueMontreal-Medium.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Montreal Light';
-  src: url('../assets/fonts/NeueMontreal-Light.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Montreal Light Italic';
-  src: url('../assets/fonts/NeueMontreal-LightItalic.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Montreal Bold';
-  src: url('../assets/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Montreal Semi Bold Italic';
-  src: url('../assets/fonts/PPNeueMontreal-SemiBolditalic.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Montreal Thin';
+  font-family: 'Neue Montreal';
   src: url('../assets/fonts/PPNeueMontreal-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/NeueMontreal-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/NeueMontreal-LightItalic.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/NeueMontreal-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/PPNeueMontreal-SemiBolditalic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── PP Editorial New — familia de display ──────────────────────────────── */
+/*
+ * Solo se declara el peso Ultralight (el único utilizado en la app).
+ */
 
 @font-face {
   font-family: 'PPEditorialNew';
   src: url('../assets/fonts/PPEditorialNew-Ultralight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
   font-display: swap;
 }

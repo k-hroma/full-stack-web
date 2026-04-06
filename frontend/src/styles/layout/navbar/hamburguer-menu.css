@@ -107,7 +107,8 @@
   display: flex;
   text-decoration: none;
   color: var(--orange);
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 5rem;
   line-height: 1;
   margin-bottom: 0.5rem;
@@ -117,7 +118,7 @@
 
 .hamburguer-menu__link:hover {
   color: var(--pink);
-  transform: translateY(-3px) translateX(10px);
+  transform: translateY(-2px) translateX(1px);
 }
 
 /* Submenú container */
@@ -134,7 +135,8 @@
 .hamburguer-menu__sublink {
   text-decoration: none;
   color: var(--orange);
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1.2rem;
   line-height: 1.6;
   transition: color 0.3s ease;
@@ -160,7 +162,8 @@
 
 /* Botón de Login (nuevo) */
 .hamburguer-menu__auth-btn {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   color: var(--orange);
   background: transparent;
@@ -192,7 +195,8 @@
 
 /* Botón de Logout */
 .hamburguer-menu__logout {
-  font-family: 'Neue Montreal Regular', sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
   font-size: 1rem;
   color: var(--orange);
   background: transparent;

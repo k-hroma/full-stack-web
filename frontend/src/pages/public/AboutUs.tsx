@@ -55,17 +55,17 @@ export default function AboutUs() {
 
             {/* Columna derecha - Descripción */}
             <div className="quienes-somos__description">
-              <p className="description-text">
+              <p className="description-about-text">
                 La Palacio es una librería <em>online</em>, marika y lesbiana.
                 Recomendamos y vendemos libros nuevos, libros usados, fanzines y otras publicaciones gráficas.
               </p>
 
-              <p className="description-text">
+              <p className="description-about-text">
                 Participamos en ferias, festivales y eventos culturales, y formamos parte de la red de librerías y editoriales independientes de Argentina.
               </p>
 
-              <p className="description-text">
-                Junto a <ExternalLink href="https://www.instagram.com/elhecho_editorial" className="description-text">
+              <p className="description-about-text">
+                Junto a <ExternalLink href="https://www.instagram.com/elhecho_editorial" className="description-link">
                   @elhecho_editorial
                 </ExternalLink>, editamos y publicamos textos que consideramos referencias importantes en la literatura, la teoría y las artes.
               </p>
