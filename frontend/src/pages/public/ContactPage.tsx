@@ -11,8 +11,7 @@ export default function ContactPage() {
           <p>vendemos libros y fanzines</p>
           <Link className='contactanos' to='/contacto'>Contactanos:</Link>
           <p className='contacto'>@lapalaciolibros</p>
-          <p className='contacto'>lapalaciolibros@gmail.<span className='contact-dot-com'>com</span></p>
-          <p className='contact-com'>com</p>
+          <p className='contacto'>lapalaciolibros@gmail.com</p>
           <Link className='link-about-us' to='/nosotrxs'>ver más de nosotrxs +</Link>
         </div>
       </div>

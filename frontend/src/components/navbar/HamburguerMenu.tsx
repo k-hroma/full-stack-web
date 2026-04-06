@@ -78,7 +78,7 @@ const HamburguerMenu = ({
                   to='/admin'
                   onClick={onClose}
                 >
-                  Dasboard
+                  Dashboard
                 </Link>
 
               </div>

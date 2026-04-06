@@ -93,34 +93,6 @@
   }
 }
 
-/* El ".com" se oculta un poco antes (420px) para evitar el corte feo */
-.contact-dot-com {
-  @media (max-width: 420px) {
-    display: none;
-  }
-}
-
-/* El "com" solo aparece en línea nueva debajo de 420px */
-.contact-com {
-  color: var(--brown);
-  font-size: 2.2rem;
-  line-height: 100%;
-  margin: 0; /* Resetear márgenes por si acaso */
-  padding: 0;
-  
-  @media (max-width: 420px) {
-    font-size: 1.85rem; /* Match con .contacto */
-    display: block;
-  }
-  
-  @media (max-width: 360px) {
-    font-size: 1.7rem; /* Match con .contacto */
-  }
-  
-  @media (min-width: 421px) {
-    display: none;
-  }
-}
 
 .link-about-us{
   color: var(--beige);
