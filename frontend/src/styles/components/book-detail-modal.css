@@ -186,6 +186,7 @@
 .modal-price-section {
   display: flex;
   justify-content: space-between;
+  align-items: last baseline;
   gap: 1.5rem;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
@@ -200,13 +201,8 @@
   color: var(--pink);
 }
 
-.btn-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .modal-interest-btn {
-  align-self: center;
+  justify-content: baseline;
   flex: 0.4;
   width: fit-content;
   padding: 0.45rem 3rem;
