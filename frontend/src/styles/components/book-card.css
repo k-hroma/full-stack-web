@@ -1,6 +1,6 @@
 /**
  * Estilos de BookCard
- * @module styles/components/bookCard/BookCard
+ * @module styles/components/book-card
  */
 
 .item-book-container {
@@ -82,10 +82,6 @@
   color: var(--brown);
 }
 
-.details-section {
-  margin-top: auto;
-}
-
 .txt-author {
   font-family: var(--font-sans);
   font-weight: 500;
@@ -106,17 +102,15 @@
 .item-book-btn {
   flex: 1;
   padding: 0.35rem 1rem;
-  border-radius: 2rem; 
+  border-radius: 2rem;
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: var(--very-small-font-size);
   text-align: center;
-  text-decoration: none;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   color: var(--beige);
-  position: relative;
   overflow: hidden;
 }
 
@@ -146,7 +140,6 @@
 /* Estados especiales */
 .btn-primary.in-cart {
   background-color: var(--orange);
-  color: var(--beige);
   cursor: default;
 }
 

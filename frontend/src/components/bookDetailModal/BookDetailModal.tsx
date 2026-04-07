@@ -8,7 +8,7 @@ import type { Book } from '../../types/book';
 import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import '../../styles/components/book-detail-modal.css';
 
-// Dimensiones de la imagen en el modal
+// Tamaño exacto del contenedor de imagen dentro del modal
 const MODAL_W = 300;
 const MODAL_H = 450;
 
@@ -27,29 +27,18 @@ export const BookDetailModal = ({
   onAddToCart,
   isInCart,
 }: BookDetailModalProps) => {
-  // useState SIEMPRE antes del early return (regla de hooks)
+  // Hook declarado antes del early return (regla de hooks)
   const [imgLoaded, setImgLoaded] = useState(false);
 
   if (!isOpen || !book) return null;
 
-  // ─── URLs optimizadas de Cloudinary ───────────────────────────────────────
-  // Se calculan solo cuando el modal está abierto (después del guard de arriba).
-  // 1x: 300×450 — tamaño exacto del contenedor del modal
-  // 2x: 600×900 — para pantallas de alta densidad (Retina)
-  // f_auto: Cloudinary elige WebP/AVIF según el browser
-  const imgSrc = optimizeImageUrl(book.img, {
-    width: MODAL_W,
-    height: MODAL_H,
-    quality: 'auto:good',
-  });
-  const imgSrc2x = optimizeImageUrl(book.img, {
-    width: MODAL_W * 2,
-    height: MODAL_H * 2,
-    quality: 'auto:good',
-  });
+  // URLs optimizadas de Cloudinary.
+  // Para c_fit, pasar solo el ancho es suficiente: Cloudinary preserva el aspect ratio original.
+  // El height se pasa solo como referencia proporcional para que el bounding box sea correcto.
+  const imgSrc = optimizeImageUrl(book.img, { width: MODAL_W, height: MODAL_H, quality: 'auto:good' });
+  const imgSrc2x = optimizeImageUrl(book.img, { width: MODAL_W * 2, height: MODAL_H * 2, quality: 'auto:good' });
   const imgSrcSet = `${imgSrc} 1x, ${imgSrc2x} 2x`;
 
-  // ─── Estado del botón ─────────────────────────────────────────────────────
   const buttonText = isInCart ? 'En carrito' : book.stock === 0 ? 'Sin stock' : 'Agregar';
   const buttonDisabled = isInCart || book.stock === 0;
 
@@ -81,9 +70,10 @@ export const BookDetailModal = ({
                   height={MODAL_H}
                   loading="eager"
                   decoding="sync"
+                  fetchPriority="high"
                   style={{
                     aspectRatio: '2/3',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     display: imgLoaded ? 'block' : 'none',
                   }}
                   onLoad={() => setImgLoaded(true)}
@@ -101,21 +91,25 @@ export const BookDetailModal = ({
             </div>
 
             <div className="modal-price-section">
-              <span className="modal-price">${book.price.toLocaleString()}</span>
-              <button
-                className={`modal-interest-btn ${isInCart ? 'in-cart' : ''} ${book.stock === 0 ? 'no-stock' : ''}`}
-                onClick={onAddToCart}
-                disabled={buttonDisabled}
-                aria-label={
-                  isInCart
-                    ? `${book.title} ya está en el carrito`
-                    : book.stock === 0
-                      ? `${book.title} sin stock`
-                      : `Agregar ${book.title} al carrito`
-                }
-              >
-                {buttonText}
-              </button>
+              <div>
+                <span className="modal-price">${book.price.toLocaleString('es-ES')}</span>
+              </div>
+              <div className='btn-container'>
+                <button
+                  className={`modal-interest-btn ${isInCart ? 'in-cart' : ''} ${book.stock === 0 ? 'no-stock' : ''}`}
+                  onClick={onAddToCart}
+                  disabled={buttonDisabled}
+                  aria-label={
+                    isInCart
+                      ? `${book.title} ya está en el carrito`
+                      : book.stock === 0
+                        ? `${book.title} sin stock`
+                        : `Agregar ${book.title} al carrito`
+                  }
+                >
+                  {buttonText}
+                </button>
+              </div>
             </div>
 
             <div className="modal-metadata">

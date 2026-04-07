@@ -6,7 +6,6 @@
 import { useState, useMemo, memo } from 'react';
 import type { Book } from '../../types/book';
 import { OptimizedImage } from '../common/OptimizedImage';
-import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import '../../styles/components/book-card.css';
 
 interface BookCardProps {
@@ -17,29 +16,34 @@ interface BookCardProps {
   onViewMore: () => void;
 }
 
-const bgColors = [
+const BG_COLORS = [
   '#CDB0EA', '#383838', '#954300', '#CDB0EA',
   '#DBD0C1', '#CDB0EA', '#0A9E50', '#7D94A3',
 ];
 
-const bgBorders = [
+const BG_BORDERS = [
   '#954300', '#DBD0C1', '#CDB0EA', '#DBD0C1',
   '#7D94A3', '#954300', '#DBD0C1', '#0A9E50',
 ];
 
-// Dimensiones base usadas solo para calcular las URLs de Cloudinary y el srcSet.
-// El layout real lo dicta el CSS (cover-container → aspect-ratio: 2/3, fluid).
-const CARD_W = 130;
-const CARD_H = 195;
+// Dimensiones base para los hints de <img> y el cálculo del srcSet en Cloudinary.
+// El tamaño visual real lo dicta el CSS (cover-container → aspect-ratio, img-container → height 70%).
+// Se usa un valor base representativo del tamaño más habitual de la card en desktop.
+// OptimizedImage genera automáticamente variantes ×2 y ×3 para pantallas de alta densidad.
+const CARD_W = 200;
+const CARD_H = 300;
 
 /**
- * Tamaños responsive de la card:
- * - Hasta 450px de viewport: ~50% de la pantalla (2 columnas)
- * - Hasta 660px: ~33vw (3 columnas)
- * - Hasta 880px: ~25vw (4 columnas)
- * - Por encima: tamaño fijo de 130px
+ * Tamaños responsive de la card (usados por el browser para elegir la entrada del srcSet):
+ * - Hasta 450px de viewport : ~50vw  (2 columnas  → ~225px)
+ * - Hasta 660px             : ~33vw  (3 columnas  → ~220px)
+ * - Hasta 880px             : ~25vw  (4 columnas  → ~220px)
+ * - Por encima              : 200px fijo
+ *
+ * Con srcSet [200w, 400w, 600w] el browser siempre tiene una entrada adecuada,
+ * incluso en DPR=2 o DPR=3 en móvil.
  */
-const CARD_SIZES = '(max-width: 450px) 50vw, (max-width: 660px) 33vw, (max-width: 880px) 25vw, 130px';
+const CARD_SIZES = '(max-width: 450px) 50vw, (max-width: 660px) 33vw, (max-width: 880px) 25vw, 200px';
 
 export const BookCard = memo(function BookCard({
   index,
@@ -48,8 +52,8 @@ export const BookCard = memo(function BookCard({
   onAddToCart,
   onViewMore,
 }: BookCardProps) {
-  const bgColor = bgColors[index % bgColors.length];
-  const bgBorder = bgBorders[index % bgBorders.length];
+  const bgColor = BG_COLORS[index % BG_COLORS.length];
+  const bgBorder = BG_BORDERS[index % BG_BORDERS.length];
 
   const [hover, setHover] = useState(false);
 
@@ -59,26 +63,19 @@ export const BookCard = memo(function BookCard({
     return { text: 'Agregar', disabled: false, className: 'add' };
   }, [isInCart, book.stock]);
 
-  const src1x = optimizeImageUrl(book.img, { width: CARD_W, height: CARD_H, quality: 'auto:good' });
-  const src2x = optimizeImageUrl(book.img, { width: CARD_W * 2, height: CARD_H * 2, quality: 'auto:good' });
-
   return (
     <div className="item-book-container">
       <div
+        className="cover-container"
         style={{
           backgroundColor: bgColor,
           border: `10px solid ${hover ? '#FF76DC' : bgBorder}`,
         }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="cover-container"
       >
-        {/*
-         * img-container define el área interior (78% del cover).
-         * OptimizedImage con fluid=true se adapta al 100% de ese div,
-         * respetando siempre la proporción 2/3 heredada del cover-container.
-         */}
         <div className="img-container">
+          {/* srcSet generado automáticamente por OptimizedImage (130w / 260w) */}
           <OptimizedImage
             src={book.img}
             alt={book.title}
@@ -87,10 +84,6 @@ export const BookCard = memo(function BookCard({
             fluid
             priority={index < 4}
             quality="auto:good"
-            srcSet={[
-              { url: src1x, descriptor: '1x' },
-              { url: src2x, descriptor: '2x' },
-            ]}
             sizes={CARD_SIZES}
           />
         </div>
