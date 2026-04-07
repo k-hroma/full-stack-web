@@ -315,31 +315,44 @@
 @media (max-width: 900px) {
   .modal-container{
     overflow-y: auto;
+    scroll-behavior: smooth;
+    width: 100%;
   }
   .modal-content {
     grid-template-columns: 1fr;
-    overflow-y: auto;
+    height: auto; /* Permitir que crezca con el contenido */
+    min-height: 100%;
   }
 
   .modal-image-section {
     padding: 3.5rem 1rem 3rem;
     width: 100%;
+    align-items: flex-start;
+    flex-shrink: 0;
   }
 
 
   .modal-image-border {
     padding: 1.5rem;
+    max-width: 300px;
   }
 
   .modal-info-section {
     padding: 3rem 1rem;
-    overflow-y: hidden;
+    overflow-y: visible;
+    height: auto;
   }
 
   .modal-title {
     font-size: var(--large-font-size);
   }
 }
+
+.description-text {
+    max-height: none;
+    overflow-y: visible;
+}
+
 
 @media (max-width: 600px) {
   .modal-overlay {
