@@ -29,6 +29,13 @@ interface Props {
    * Ejemplo: "(max-width: 768px) 100vw, 130px"
    */
   sizes?: string;
+  /**
+   * Cuando es true, el wrapper ocupa el 100% del contenedor padre en lugar de
+   * usar dimensiones fijas en píxeles. Útil en grillas responsive donde el
+   * tamaño lo dicta el CSS del padre (BookCard).
+   * width/height siguen usándose para los hints del <img> y el cálculo del srcSet.
+   */
+  fluid?: boolean;
 }
 
 export function OptimizedImage({
@@ -40,31 +47,36 @@ export function OptimizedImage({
   quality = 'auto:good',
   srcSet,
   sizes,
+  fluid = false,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
-  // Optimizar URL principal (aplica calidad + formato automático si es Cloudinary)
   const optimizedSrc = optimizeImageUrl(src, { width, height, quality });
 
-  // Resolver srcSet:
-  //   1. Usar el array manual si fue pasado explícitamente.
-  //   2. Si no, auto-generar 1x/2x para URLs de Cloudinary (vacío para otras).
   const autoSrcSet = generateSrcSet(src, [width, width * 2], height, quality);
   const resolvedSrcSetStr = srcSetToString(srcSet ?? autoSrcSet);
 
   const resolvedSizes = sizes ?? `${width}px`;
 
+  // En modo fluid el tamaño lo gobierna el CSS del padre; en modo fijo usamos
+  // las dimensiones exactas en píxeles para reservar el espacio y evitar CLS.
+  const wrapperStyle = fluid ? undefined : { width, height };
+  const wrapperClass = `image-wrapper${fluid ? ' fluid' : ''}`;
+
   if (error) {
     return (
-      <div className="image-fallback" style={{ width, height }}>
+      <div
+        className={`image-fallback${fluid ? ' fluid' : ''}`}
+        style={fluid ? undefined : { width, height }}
+      >
         📚
       </div>
     );
   }
 
   return (
-    <div className="image-wrapper" style={{ width, height }}>
+    <div className={wrapperClass} style={wrapperStyle}>
       {!loaded && <div className="image-skeleton" aria-hidden="true" />}
 
       <img

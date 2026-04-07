@@ -27,6 +27,8 @@ const bgBorders = [
   '#7D94A3', '#954300', '#DBD0C1', '#0A9E50',
 ];
 
+// Dimensiones base usadas solo para calcular las URLs de Cloudinary y el srcSet.
+// El layout real lo dicta el CSS (cover-container → aspect-ratio: 2/3, fluid).
 const CARD_W = 130;
 const CARD_H = 195;
 
@@ -51,9 +53,6 @@ export const BookCard = memo(function BookCard({
 
   const [hover, setHover] = useState(false);
 
-  // useMemo: buttonState solo se recalcula cuando isInCart o book.stock cambian.
-  // Sin memo, se recalculaba en cada render del padre (hover, scroll, etc.)
-  // aunque ninguno de sus inputs hubiera cambiado.
   const buttonState = useMemo(() => {
     if (isInCart) return { text: 'En carrito', disabled: true, className: 'in-cart' };
     if (book.stock === 0) return { text: 'Sin stock', disabled: true, className: 'no-stock' };
@@ -74,12 +73,18 @@ export const BookCard = memo(function BookCard({
         onMouseLeave={() => setHover(false)}
         className="cover-container"
       >
+        {/*
+         * img-container define el área interior (78% del cover).
+         * OptimizedImage con fluid=true se adapta al 100% de ese div,
+         * respetando siempre la proporción 2/3 heredada del cover-container.
+         */}
         <div className="img-container">
           <OptimizedImage
             src={book.img}
             alt={book.title}
             width={CARD_W}
             height={CARD_H}
+            fluid
             priority={index < 4}
             quality="auto:good"
             srcSet={[
