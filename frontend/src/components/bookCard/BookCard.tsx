@@ -100,10 +100,10 @@ export const BookCard = memo(function BookCard({
         <div className="info-txt-precio-container">
           <div className="txt-content">
             <p className="txt-title">{book.title}</p>
-            <p className="txt-author">{book.lastName} {book.firstName}</p>
+            <p className="txt-author">{book.firstName} {book.lastName}</p>
           </div>
           <div className="precio-content">
-            <p>${book.price}</p>
+            <p>${book.price.toLocaleString('es-ES')}</p>
           </div>
         </div>
 

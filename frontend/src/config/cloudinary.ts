@@ -63,7 +63,7 @@ export const getOptimizedImageUrl = (
 
   if (width) {
     const h = height || width;
-    transforms.push(`c_fill,w_${width},h_${h}`);
+    transforms.push(`c_fit,w_${width},h_${h}`);
   }
 
   return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${transforms.join(',')}/${publicId}`;
