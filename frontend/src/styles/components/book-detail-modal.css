@@ -313,6 +313,9 @@
 /* ── Responsive ──────────────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
+  .modal-container{
+    overflow-y: auto;
+  }
   .modal-content {
     grid-template-columns: 1fr;
     overflow-y: auto;
@@ -330,6 +333,7 @@
 
   .modal-info-section {
     padding: 3rem 1rem;
+    overflow-y: hidden;
   }
 
   .modal-title {
