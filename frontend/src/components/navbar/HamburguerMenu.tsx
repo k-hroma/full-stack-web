@@ -85,7 +85,7 @@ const HamburguerMenu = ({
             }
 
             <Link className='hamburguer-menu__link' to='/catalogo' onClick={onClose}>
-              Publicaciones
+              Catálogo
             </Link>
 
             <div className='hamburguer-menu__submenu'>

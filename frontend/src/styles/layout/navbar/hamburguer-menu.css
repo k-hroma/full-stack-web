@@ -140,12 +140,11 @@
   font-size: 1.2rem;
   line-height: 1.6;
   transition: color 0.3s ease;
-  transition: transform 0.5s ease;
+
 }
 
 .hamburguer-menu__sublink:hover {
   color: var(--pink);
-  transform: translateY(-3px) translateX(10px);
 }
 
 /* ============================================
@@ -181,7 +180,7 @@
 }
 
 .hamburguer-menu__auth-btn:hover {
-  color: var(--beige);
+  color: var(--brown);
   border: 1px solid var(--pink);
   background: var(--pink);
 }
