@@ -2,7 +2,7 @@
 
 **Full Stack en producción** para una librería independiente. Backend API REST con autenticación avanzada · React SPA con gestión de sesión sin localStorage.
 
-🔗 [Demo en vivo](https://librerialapalacio.vercel.app) · [Backend en Render](https://backend-libreria-lapalacio-api-rest.onrender.com)
+🔗 [Frontend en Vercel](https://librerialapalacio.vercel.app) · [Backend en Render](https://backend-libreria-lapalacio-api-rest.onrender.com)
 
 ---
 
