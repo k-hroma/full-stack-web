@@ -113,12 +113,12 @@
   line-height: 1;
   margin-bottom: 0.5rem;
   transition: color 0.3s ease;
-  transition: transform 0.5s ease;
+
 }
 
 .hamburguer-menu__link:hover {
   color: var(--pink);
-  transform: translateY(-2px) translateX(1px);
+
 }
 
 /* Submenú container */
@@ -165,26 +165,25 @@
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 1rem;
-  color: var(--orange);
-  background: transparent;
+  color: var(--brown);
+  background: var(--orange);
   border: 1px solid var(--orange);
-  border-radius: 50px;
-  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  padding: 0.35rem 1rem;
   cursor: pointer;
-  text-transform: lowercase;
   letter-spacing: 0.05em;
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: transform 0.5s ease;
+
 }
 
 .hamburguer-menu__auth-btn:hover {
-  color: var(--pink);
-  transform: translateX(10px);
+  color: var(--beige);
   border: 1px solid var(--pink);
+  background: var(--pink);
 }
 
 .hamburguer-menu__auth-btn::after {
@@ -201,23 +200,21 @@
   color: var(--orange);
   background: transparent;
   border: 1px solid var(--orange);
-  border-radius: 50px;
-  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  padding: 0.35rem 1rem;
   cursor: pointer;
-  text-transform: lowercase;
   letter-spacing: 0.05em;
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: transform 0.5s ease;
+  
 
 }
 
 .hamburguer-menu__logout:hover {
   color: var(--pink);
-  transform: translateX(-10px);
   border: 1px solid var(--pink);
 }
 
