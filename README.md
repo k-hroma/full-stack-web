@@ -1,216 +1,196 @@
-# 📚 Sistema de Gestión Editorial
+# La Palacio — Sistema de Gestión Editorial
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen.svg)](https://www.mongodb.com/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+**Full Stack en producción** para una librería independiente. Backend API REST con autenticación avanzada · React SPA con gestión de sesión sin localStorage.
 
-&gt; **Backend API REST** para gestión de catálogo editorial con autenticación JWT, roles de usuario y validación estricta de datos.
-
-## 🎯 Contexto del Proyecto
-
-Sistema desarrollado para una **librería independiente** con comunidad activa en Instagram, que necesitaba digitalizar su catálogo de libros y fanzines. El proyecto incluye panel de administración para gestión de inventario y búsqueda avanzada para clientes.
-
-**Duración:** 6 semanas  
-**Rol:** Full Stack Developer  
-**Equipo:** 1 Developer + 1 UX/UI Designer (Figma)
+🔗 [Demo en vivo](https://librerialapalacio.vercel.app) · [Backend en Render](https://backend-libreria-lapalacio-api-rest.onrender.com)
 
 ---
 
-## ✨ Features Principales
+## El problema que resuelve
 
-### 🔐 Autenticación y Autorización
+Una librería independiente con catálogo de libros y fanzines manejaba su inventario manualmente. Necesitaba digitalizar el catálogo, habilitar búsqueda para clientes y dar a su equipo un panel de administración seguro. El desafío técnico principal: construir un sistema de autenticación robusto para un contexto donde el backend vive en un servidor y el frontend en otro dominio (Render + Vercel), sin comprometer seguridad.
 
-- Registro/login con JWT (access tokens)
-- Refresh Tokens con rotación y detección de reutilización
-- Almacenamiento seguro de refresh tokens (hash + expiración)
-- Invalidación automática ante posible compromiso de seguridad
-- Sistema de roles: `admin` vs `user`
-- Middleware de protección de rutas RBAC
-- Password hashing con bcrypt (salt rounds: 10)
+---
 
-### 📖 Gestión de Catálogo
+## Stack
 
-- CRUD completo de libros (solo admin)
-- Búsqueda full-text por título, autor, editorial
-- Filtros por categorías: novedades, fanzines
-- Validación de ISBN (10 y 13 dígitos)
-- Normalización automática de datos (uppercase, trim)
+| Capa          | Tecnología                           | Por qué                                                |
+| ------------- | ------------------------------------ | ------------------------------------------------------ |
+| Backend       | Node.js 20 + Express + TypeScript    | ESM nativo, tipado estricto                            |
+| Base de datos | MongoDB Atlas + Mongoose             | Flexibilidad para catálogo editorial variable          |
+| Validación    | Zod 4                                | Runtime validation + type inference sincronizados      |
+| Auth          | JWT + bcryptjs + cookie-parser       | Access tokens en memoria + refresh en httpOnly cookies |
+| Frontend      | React 19 + Vite + TypeScript         | React 19 estable, build optimizado                     |
+| Imágenes      | Cloudinary                           | Upload desde panel admin sin backend propio            |
+| Deploy        | Vercel (frontend) + Render (backend) | Free tier con config de producción real                |
 
-### 🛡️ Seguridad y Validación
+---
 
-- Rotación de refresh tokens con detección de token reuse
-- Revocación automática de sesiones comprometidas
-- Cookies httpOnly para refresh tokens
-- Validación estricta con Zod (type-safe)
-- Sanitización de errores para producción
-- Rate limiting ready (estructura preparada)
-- `select: false` en campos sensibles (password)
+## Funcionalidades
 
-#### 🔁 Estrategia de Refresh Tokens
+**Catálogo público**
 
-Este proyecto implementa un sistema de refresh tokens inspirado en flujos OAuth 2.0 modernos:
+- Listado de libros, fanzines y novedades con filtros combinados
+- Búsqueda full-text (título, autor, editorial) con fallback regex
+- Perfil de autor/escritorx con biografía y libros relacionados
+- Carrito de compras (estado en memoria con Context API)
 
-- Refresh tokens de un solo uso (one-time use)
-- Persistencia en servidor con comparación por hash
-- Rotación automática en cada solicitud de refresh
-- Detección de reutilización que invalida todas las sesiones
+**Panel de administración** (solo admin)
 
-### 🏗️ Arquitectura
+- CRUD completo de libros y escritorxs
+- Upload de imágenes de portada vía Cloudinary
+- Registro de nuevos administradores (solo desde cuenta admin)
+- Dashboard con estado del catálogo
+
+**Autenticación**
+
+- Login/registro con JWT de 15 minutos
+- Sesión persistente con refresh tokens de 7 días
+- Logout individual y logout de todos los dispositivos
+
+---
+
+## Decisiones técnicas
+
+### 1. Refresh Token Rotation con Token Family (OAuth 2.0 pattern)
+
+El sistema de sesión implementa el patrón recomendado por OWASP para refresh tokens:
+
+- El refresh token **no se guarda en la BD** — se guarda su hash bcrypt
+- Cada sesión tiene un `tokenFamily` (UUID) que identifica la cadena de renovaciones
+- Cada uso del refresh token genera uno nuevo; el anterior queda marcado como `replacedByTokenHash`
+- Si se detecta reutilización de un token ya consumido → **todas las sesiones de esa familia se revocan automáticamente**
+- Índice TTL en MongoDB elimina tokens expirados sin cron job
 
 ```
-src/
-├── config/          # Conexión DB (patrón Singleton)
-├── controllers/     # Lógica de negocio HTTP
-├── middlewares/     # Auth, RBAC, error handling
-├── models/          # Schemas Mongoose + tipos
-├── routes/          # Definición de endpoints
-├── schemas/         # Validación Zod
-├── types/           # Interfaces TypeScript
-└── scripts/         # Seeders (primer admin)
+Login → refresh_token_plain + token_family en cookies httpOnly
+        hash(refresh_token_plain) en BD
+
+Refresh → busca por token_family, verifica hash, genera nuevo par
+          si replacedByTokenHash existe → ataque detectado, revocar todo
 ```
 
+**Por qué importa:** Si un atacante roba el refresh token de un usuario, el primer uso legítimo del usuario detecta la reutilización y cierra todas las sesiones. Sin esto, el atacante mantiene acceso indefinido.
+
+### 2. Access token en memoria (no localStorage)
+
+```typescript
+// client.ts — store fuera del DOM
+let accessToken: string | null = null;
+```
+
+El access token nunca toca `localStorage` ni `sessionStorage`. Vive en una variable de módulo. Esto elimina el vector de ataque XSS más común: scripts maliciosos inyectados no pueden leer el token.
+
+El refresh token vive en una **cookie httpOnly** — inaccesible desde JavaScript por spec del navegador.
+
+### 3. Cola de requests durante refresh (concurrency handling)
+
+```typescript
+let isRefreshing = false;
+let refreshSubscribers: Array<(token: string) => void> = [];
+```
+
+Si 5 requests simultáneos reciben 401, solo **uno** llama a `/auth/refresh`. Los otros 4 se suscriben y reciben el nuevo token cuando el primero resuelve. Sin esto: 5 refresh simultáneos, condición de carrera en las cookies, comportamiento undefined.
+
+### 4. External Store Pattern con `useSyncExternalStore`
+
+El estado de autenticación vive **fuera de React** en un store a nivel de módulo. `doRefresh()` se ejecuta al importar el módulo — antes del primer render de cualquier componente. Elimina el "flash de no-autenticado" al recargar la página con sesión activa.
+
+`useSyncExternalStore` es la API interna que usan Zustand y Jotai. Implementarlo directamente demuestra comprensión del modelo de sincronización de React.
+
+### 5. Cache con invalidación por prefijo
+
+```typescript
+// Clave estable independiente del orden de propiedades
+const sorted = Object.fromEntries(
+  Object.entries(filters).sort(([a], [b]) => a.localeCompare(b)),
+);
+// books:list:{"fanzine":true} === books:list:{"fanzine":true} siempre
+```
+
+Las búsquedas nunca se cachean (cada input de usuario requiere resultado fresco). Las mutaciones invalidan `books:*` completo. TTL diferenciado: 5 min para listas, 10 min para items individuales.
+
+### 6. Seguridad en capa de configuración
+
+- **CORS fail-fast:** Si `FRONTEND_URL` no está en producción, la app tira error al arrancar (no silenciosamente usa localhost)
+- **Sanitización de errores:** Errores 5xx devuelven mensaje genérico en producción; 4xx pasan el mensaje original
+- **Audit log sin PII:** Los logs de seguridad registran `userId`, IP, timestamp — nunca email ni nombre
+- **Rate limiting diferenciado:** 100 req/15min general, 10 req/15min en endpoints de auth (con `skipSuccessfulRequests: true`)
+
+### 7. Búsqueda en dos estrategias
+
+```
+1. MongoDB $text index → resultados rankeados por relevancia (rápido)
+2. Si sin resultados → regex con escapeRegExp() + maxTimeMS(5000)
+                       ↑ previene ReDoS    ↑ previene starvation del servidor
+```
+
+`escapeRegExp` neutraliza input como `(.*)+` que podría causar backtracking exponencial en el motor de regex.
+
+### 8. TypeScript con flags avanzados
+
+```json
+"noUncheckedIndexedAccess": true,    // array[0] es T | undefined, no T
+"exactOptionalPropertyTypes": true,   // { a?: string } ≠ { a: string | undefined }
+"strict": true
+```
+
+Estos flags son más estrictos que la configuración por defecto de `strict` y eliminan categorías completas de bugs en tiempo de compilación.
+
 ---
 
-## 🚀 Tecnologías
+## Valor social y cultural del proyecto
 
-| Capa              | Tecnología       | Propósito                                                      |
-| ----------------- | ---------------- | -------------------------------------------------------------- |
-| **Runtime**       | Node.js 20       | Entorno de ejecución                                           |
-| **Framework**     | Express 5.2.1    | API REST                                                       |
-| **Lenguaje**      | TypeScript 5.9.3 | Tipado estricto (`strict: true`, `exactOptionalPropertyTypes`) |
-| **Base de datos** | MongoDB Atlas    | Persistencia NoSQL                                             |
-| **ODM**           | Mongoose 9.2.0   | Modelado de datos + validaciones                               |
-| **Validación**    | Zod 4            | Runtime validation + type inference                            |
-| **Auth**          | JWT + bcrypt     | Tokens firmados + hashing seguro                               |
-| **DevOps**        | tsx              | Ejecución TypeScript sin compilado                             |
+La librería es un espacio cultural independiente en Buenos Aires con foco en publicaciones de disidencias, fanzines y literatura fuera del circuito comercial. Digitalizar su catálogo no es solo una solución técnica: es infraestructura para visibilidad de editoriales y autores que no llegan a las plataformas mainstream.
+
+El sistema de categorías (libros / fanzines / novedades) responde directamente a la lógica de curaduría de la librería, no a un modelo genérico de e-commerce.
 
 ---
 
-## 📋 API Endpoints
-
-### Autenticación
-
-| Método | Endpoint         | Descripción               | Auth       |
-| ------ | ---------------- | ------------------------- | ---------- |
-| `POST` | `/auth/register` | Registro de usuarios      | Pública    |
-| `POST` | `/auth/login`    | Login + JWT               | Pública    |
-| `POST` | `/auth/admin`    | Crear admin (solo admins) | JWT + Role |
-
-### Libros
-
-| Método   | Endpoint              | Descripción                        | Auth        |
-| -------- | --------------------- | ---------------------------------- | ----------- |
-| `GET`    | `/books`              | Listar libros (filtros opcionales) | Pública     |
-| `GET`    | `/books/search?term=` | Búsqueda full-text                 | Pública     |
-| `POST`   | `/books`              | Crear libro                        | JWT + Admin |
-| `PATCH`  | `/books/:id`          | Actualizar libro                   | JWT + Admin |
-| `DELETE` | `/books/:id`          | Eliminar libro                     | JWT + Admin |
-
----
-
-## 🛠️ Instalación y Uso
-
-### Prerrequisitos
-
-- Node.js 20+
-- MongoDB Atlas (o local)
-- Variables de entorno configuradas
-
-### 1. Clonar y instalar
+## Setup local
 
 ```bash
-git clone https://github.com/tu-usuario/libreria-backend.git
-cd libreria-backend
+# Backend
+cd backend
 npm install
-```
+cp .env.example .env   # configurar MONGO_URI, JWT_SECRET, FRONTEND_URL
+npm run seed:admin     # crear primer administrador
+npm run dev
 
-### 2. Configurar variables de entorno
-
-cp .env.example .env
-
-# Luego editar .env con tus valores:
-
-PORT=3000
-MONGO_URI=mongodb+srv://usuario:password@cluster.mongodb.net/libreria
-JWT_SECRET=tu_clave_secreta_de_al_menos_32_caracteres
-FIRST_ADMIN_EMAIL=admin@libreria.com
-FIRST_ADMIN_PASSWORD=TuPasswordSeguro123!
-FIRST_ADMIN_NAME=Administrador Principal
-
-### 3. Crear primer administrador
-
-```bash
-npm run seed:admin
-```
-
-### 4. Iniciar en desarrollo
-
-```bash
+# Frontend
+cd frontend
+npm install
+cp .env.example .env   # configurar VITE_API_URL
 npm run dev
 ```
 
-### 5. Compilar para producción
+**Variables de entorno requeridas (backend):**
 
-```bash
-npm run build
-npm start
-```
+| Variable               | Descripción                                        |
+| ---------------------- | -------------------------------------------------- |
+| `MONGO_URI`            | Connection string de MongoDB Atlas                 |
+| `JWT_SECRET`           | Mínimo 32 caracteres aleatorios                    |
+| `FRONTEND_URL`         | URL del frontend en producción (requerido en prod) |
+| `FIRST_ADMIN_EMAIL`    | Para el script de seed inicial                     |
+| `FIRST_ADMIN_PASSWORD` | Mínimo 8 caracteres                                |
 
-🧪 Decisiones Técnicas Destacadas
+**Health check:** `GET /health` devuelve estado de la app y conexión a BD (usado por Render para monitoreo).
 
-1. TypeScript Strict Mode -> Tipado exhaustivo que elimina undefined accidentales y fuerza manejo de casos edge.
-   {
-   "strict": true,
-   "exactOptionalPropertyTypes": true,
-   "noUncheckedIndexedAccess": true
-   }
+---
 
-2. Patrón Singleton para MongoDB
-   // Evita reconexiones en entornos serverless (Vercel, AWS Lambda)
-   let isConnected = false;
-   if (isConnected) return existingConnection;
+## Próximos pasos
 
-3. Zod + TypeScript Integration -> Validación en runtime que coincide 100% con el tipado en compile time.
+- [ ] Tests unitarios con Vitest (priority: controladores de auth y `DataCache`)
+- [ ] Tests de integración con supertest (endpoints `/auth/login`, `/auth/refresh`, token reuse detection)
+- [ ] Paginación en `GET /books` (`?page=&limit=` con `meta` en respuesta)
+- [ ] Sistema de logs estructurados (Winston/Pino)
+- [ ] Documentación OpenAPI con Swagger
 
-```
-const schema = z.object({ email: z.email() });
-type Input = z.infer<typeof schema>; // TypeScript conoce el tipo
-```
+---
 
-4. Manejo Centralizado de Errores
+## Autora
 
-// Diferencia entre errores 4xx (cliente) y 5xx (servidor)
-// Sanitización de mensajes en producción
-// Logging detallado solo en desarrollo
+**Rocío Mendonca** — Full Stack Developer  
+[LinkedIn](https://www.linkedin.com/in/rocio-mendonca/) · [GitHub](https://github.com/k-hroma)
 
-🎨 Frontend
-El frontend fue desarrollado en React + Vite con diseño profesional en Figma:
-⚡ Build ultra-rápido con Vite
-🎨 Implementación pixel-perfect de diseño Figma
-📱 Responsive design
-🔗 Consume esta API REST
-
-📈 Métricas del Proyecto
-
-| Aspecto                  | Detalle                        |
-| ------------------------ | ------------------------------ |
-| **Cobertura de tipos**   | 100% TypeScript strict         |
-| **Endpoints**            | 8 rutas RESTful                |
-| **Middlewares**          | 3 capas (auth, roles, errores) |
-| **Modelos**              | 2 colecciones (users, books)   |
-| **Validaciones**         | 3 schemas Zod                  |
-| **Tiempo de desarrollo** | 6 semanas                      |
-
-🚧 Próximos Pasos (Roadmap)
-
-[ ] Agregar rate limiting con express-rate-limit
-[ ] Sistema de logs estructurados (Winston/Pino)
-[ ] Tests unitarios con Vitest
-[ ] CI/CD con GitHub Actions
-[ ] Implementar paginación en listado de libros
-
-👨‍💻 Autor
-Croma - Full Stack Developer
-https://www.linkedin.com/in/rocio-mendonca/
-https://github.com/k-hroma
+_Full Stack con Node.js, React y TypeScript. Formación en comunicación social y artes audiovisuales. Enfoque en proyectos de cultura, derechos humanos y organizaciones de impacto social._
