@@ -8,7 +8,7 @@ import { BookGrid } from '../../components/bookGrid/BookGrid';
 export default function CatalogPage() {
   return (
     <BookGrid
-      title="Impresos"
+      title="Catálogo"
       showBackLink={true}
     />
   );
