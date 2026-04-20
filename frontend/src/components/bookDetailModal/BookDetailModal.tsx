@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import type { Book } from '../../types/book';
+import { getBookColors } from '../../utils/bookColors';
 import { optimizeImageUrl } from '../../utils/cloudinaryHelpers';
 import '../../styles/components/book-detail-modal.css';
 
@@ -27,10 +28,17 @@ export const BookDetailModal = ({
   onAddToCart,
   isInCart,
 }: BookDetailModalProps) => {
+
   // Hook declarado antes del early return (regla de hooks)
   const [imgLoaded, setImgLoaded] = useState(false);
 
   if (!isOpen || !book) return null;
+
+  const { bgColor, borderColor: baseBorderColor } = getBookColors(book._id);
+  let borderColor = baseBorderColor;
+  if (borderColor === '#DBD0C1') {
+    borderColor = '#FF76DC';
+  };
 
   // URLs optimizadas de Cloudinary.
   // Para c_fit, pasar solo el ancho es suficiente: Cloudinary preserva el aspect ratio original.
@@ -51,7 +59,11 @@ export const BookDetailModal = ({
 
           {/* Columna izquierda — Imagen */}
           <div className="modal-image-section">
-            <div className="modal-image-border">
+            <div className="modal-image-border"
+              style={{
+                backgroundColor: bgColor,
+                border: `10px solid ${borderColor}`,
+              }}>
               <div className="modal-image-wrapper">
                 {!imgLoaded && (
                   <div

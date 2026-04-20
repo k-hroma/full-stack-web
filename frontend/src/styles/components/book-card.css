@@ -76,8 +76,8 @@
 .txt-title {
   margin: 0;
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: var(--small-x-font-size);
+  font-weight: 500;
+  font-size: 1.25rem;
   line-height: 100%;
   color: var(--brown);
 }
@@ -87,7 +87,7 @@
   font-weight: 500;
   font-size: var(--small-x-font-size);
   line-height: 130%;
-  color: var(--brown);
+  color: var(--light-brown);
   margin: 0 0 0.75rem 0;
 }
 

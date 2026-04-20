@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import animatednav from '../../assets/img/optimized/animated-nav.webp';
+import animatednav from '../../assets/img/optimized/animated-nav.png';
 import '../../styles/layout/navbar/animated-nav.css'
 
 export const AnimatedNav = memo(function AnimatedNav() {

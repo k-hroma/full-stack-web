@@ -141,11 +141,15 @@ const BookGrid = ({
     <section className="books-container">
       <div className="txt-section-container">
         <h2 className="section-title">{title}</h2>
-        {showBackLink && (
+        {showBackLink ?
           <Link className="link-return" to="/">
             Volver
           </Link>
-        )}
+          :
+          <Link className="link-return" to="/novedades">
+            Ver más →
+          </Link>
+        }
       </div>
 
       <div className="grid-container">

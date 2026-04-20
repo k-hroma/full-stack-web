@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useCart } from '../../hooks/useCart';
 import type { Book } from '../../types';
+import { Trash } from '@boxicons/react';
 import emailjs from '@emailjs/browser';
 import '../../styles/components/cart-sidebar.css';
 
@@ -319,7 +320,9 @@ function CartItem({ book, quantity, onUpdateQuantity, onRemove }: CartItemProps)
             className="cart-item__remove"
             aria-label="Eliminar del carrito"
           >
-            🗑️
+            <Trash
+              fill="#954300"
+              size="sm" />
           </button>
         </div>
       </div>

@@ -6,6 +6,7 @@
 import { useState, useMemo, memo } from 'react';
 import type { Book } from '../../types/book';
 import { OptimizedImage } from '../common/OptimizedImage';
+import { getBookColors } from '../../utils/bookColors';
 import '../../styles/components/book-card.css';
 
 interface BookCardProps {
@@ -15,16 +16,6 @@ interface BookCardProps {
   onAddToCart: () => void;
   onViewMore: () => void;
 }
-
-const BG_COLORS = [
-  '#CDB0EA', '#383838', '#954300', '#CDB0EA',
-  '#DBD0C1', '#CDB0EA', '#0A9E50', '#7D94A3',
-];
-
-const BG_BORDERS = [
-  '#954300', '#DBD0C1', '#CDB0EA', '#DBD0C1',
-  '#7D94A3', '#954300', '#DBD0C1', '#0A9E50',
-];
 
 // Dimensiones base para los hints de <img> y el cálculo del srcSet en Cloudinary.
 // El tamaño visual real lo dicta el CSS (cover-container → aspect-ratio, img-container → height 70%).
@@ -52,8 +43,9 @@ export const BookCard = memo(function BookCard({
   onAddToCart,
   onViewMore,
 }: BookCardProps) {
-  const bgColor = BG_COLORS[index % BG_COLORS.length];
-  const bgBorder = BG_BORDERS[index % BG_BORDERS.length];
+
+  const { bgColor, borderColor } = getBookColors(book._id);
+
 
   const [hover, setHover] = useState(false);
 
@@ -69,10 +61,11 @@ export const BookCard = memo(function BookCard({
         className="cover-container"
         style={{
           backgroundColor: bgColor,
-          border: `10px solid ${hover ? '#FF76DC' : bgBorder}`,
+          border: `10px solid ${hover ? '#FF76DC' : borderColor}`,
         }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
+        onClick={onViewMore}
       >
         <div className="img-container">
           {/* srcSet generado automáticamente por OptimizedImage (130w / 260w) */}

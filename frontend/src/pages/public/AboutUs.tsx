@@ -56,8 +56,8 @@ export default function AboutUs() {
             {/* Columna derecha - Descripción */}
             <div className="quienes-somos__description">
               <p className="description-about-text">
-                La Palacio es una librería <em>online</em>, marika y lesbiana.
-                Recomendamos y vendemos libros nuevos, libros usados, fanzines y otras publicaciones gráficas.
+                La Palacio es una librería online, marika y lesbiana.
+                Recomendamos y vendemos libros nuevos, usados, fanzines y otras publicaciones gráficas.
               </p>
 
               <p className="description-about-text">

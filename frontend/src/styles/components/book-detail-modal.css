@@ -86,7 +86,7 @@
 }
 
 .modal-image-border {
-  border: 10px solid #5BA8F7;
+  border: 10px solid;
   background: #2a2a2a;
   padding: 2rem;
   width: 100%;
