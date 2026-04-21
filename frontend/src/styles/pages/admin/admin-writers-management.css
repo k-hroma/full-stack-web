@@ -359,6 +359,7 @@
   font-style: italic;
   margin: 0 0 12px 0;
   line-height: 1.4;
+  white-space: pre-wrap;
 }
 
 .admin-writer-card__bio {
@@ -366,6 +367,7 @@
   color: #666;
   line-height: 1.5;
   margin: 12px 0 0 0;
+  white-space: pre-wrap;
 }
 
 .admin-writer-card__badges {

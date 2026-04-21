@@ -17,7 +17,7 @@
   justify-content: space-between;
   padding-left: 2rem;
   padding-right: 2rem;
-  padding-top:6.5rem;
+  padding-top:10rem;
   padding-bottom: 1.5rem;
   @media (max-width: 796px) {
     padding-left: 1rem;

@@ -3,7 +3,7 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--dark-beige);
-  padding-top: 6.5rem;
+  padding-top: 10rem;
   padding-bottom: 8rem;
   @media(max-width: 768px) {
   padding-bottom: 5rem;
