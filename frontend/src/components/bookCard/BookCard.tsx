@@ -44,7 +44,7 @@ export const BookCard = memo(function BookCard({
   onViewMore,
 }: BookCardProps) {
 
-  const { bgColor, borderColor } = getBookColors(book._id);
+  const { bgColor, borderColor } = getBookColors(index);
 
 
   const [hover, setHover] = useState(false);

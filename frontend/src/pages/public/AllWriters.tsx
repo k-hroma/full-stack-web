@@ -11,17 +11,7 @@ import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { ErrorState } from '../../components/common/ErrorState';
 import '../../styles/pages/public/writers.css';
 
-/**
- * Abecedario completo incluyendo Ñ para nombres en español.
- *
- * FUERA del componente: es una constante estática que nunca cambia.
- * Dentro del componente se recrearía como array nuevo en cada render,
- * lo que forzaría al browser a re-diffear 27 botones sin ningún motivo.
- */
-const ALPHABET = [
-  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-  'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-];
+
 
 /** Deduplica escritorxs por apellido+nombre (case-insensitive) y ordena por apellido. */
 function normalizeWriters(data: Writer[]): Writer[] {
@@ -65,10 +55,6 @@ export default function AllWriters() {
     loadWriters();
   }, [loadWriters]);
 
-  const scrollToLetter = (letter: string) => {
-    const element = document.getElementById(`letter-${letter}`);
-    if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   if (isLoading) return (
     <div className="page-loading-container">
@@ -116,20 +102,7 @@ export default function AllWriters() {
         </div>
       </div>
 
-      {/* Abecedario flotante */}
-      <nav className="alphabet-nav" aria-label="Navegar por letra">
-        {ALPHABET.map((letter) => (
-          <button
-            key={letter}
-            className="alphabet-letter"
-            onClick={() => scrollToLetter(letter)}
-            aria-label={`Ir a letra ${letter}`}
-            type="button"
-          >
-            {letter}
-          </button>
-        ))}
-      </nav>
+
     </section>
   );
 }

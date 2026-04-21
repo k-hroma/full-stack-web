@@ -15,6 +15,7 @@ const MODAL_H = 450;
 
 interface BookDetailModalProps {
   book: Book | null;
+  colorIndex: number;
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: () => void;
@@ -23,6 +24,7 @@ interface BookDetailModalProps {
 
 export const BookDetailModal = ({
   book,
+  colorIndex,
   isOpen,
   onClose,
   onAddToCart,
@@ -34,11 +36,8 @@ export const BookDetailModal = ({
 
   if (!isOpen || !book) return null;
 
-  const { bgColor, borderColor: baseBorderColor } = getBookColors(book._id);
-  let borderColor = baseBorderColor;
-  if (borderColor === '#DBD0C1') {
-    borderColor = '#FF76DC';
-  };
+  const { bgColor, borderColor } = getBookColors(colorIndex);
+
 
   // URLs optimizadas de Cloudinary.
   // Para c_fit, pasar solo el ancho es suficiente: Cloudinary preserva el aspect ratio original.

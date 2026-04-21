@@ -1,6 +1,6 @@
 .admin-dashboard {
   min-height: auto;
-  background: #f5f5f5;  
+
   padding: 1.5rem;
 }
 
@@ -9,15 +9,16 @@
   justify-content: space-around;
   padding: 24px;
   border-bottom: 1px solid #e0e0e0;
+  border-radius: 1rem;
   background: #fafafa;
   
 }
 
 .admin-dashboard__title {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
-  margin: 0 0 16px 0;
+  margin: 0 0 0 0;
  
 }
 

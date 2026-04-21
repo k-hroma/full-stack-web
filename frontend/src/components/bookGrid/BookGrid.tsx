@@ -163,7 +163,7 @@ const BookGrid = ({
               book={book}
               isInCart={isInCart(book._id)}
               onAddToCart={() => addToCart(book)}
-              onViewMore={() => openModal(book)}
+              onViewMore={() => openModal(book, index)}
             />
           ))
         )}

@@ -9,7 +9,8 @@ import type { Book } from '../types/book';
 export interface ModalContextType {
   selectedBook: Book | null;
   isOpen: boolean;
-  openModal: (book: Book) => void;
+  colorIndex: number;
+  openModal: (book: Book, colorIndex: number) => void;
   closeModal: () => void;
 }
 
