@@ -15,7 +15,7 @@ const MODAL_H = 450;
 
 interface BookDetailModalProps {
   book: Book | null;
-  colorIndex: number;
+  colorIndex?: number;
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: () => void;
@@ -24,7 +24,7 @@ interface BookDetailModalProps {
 
 export const BookDetailModal = ({
   book,
-  colorIndex,
+  colorIndex = 0,
   isOpen,
   onClose,
   onAddToCart,

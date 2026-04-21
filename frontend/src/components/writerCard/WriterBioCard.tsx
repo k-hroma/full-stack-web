@@ -77,11 +77,11 @@ export default function WriterBioCard({ writer }: WriterBioCardProps) {
               <p>Libros disponibles</p>
               {books.length > 0 ? (
                 <ul>
-                  {books.map((book) => (
+                  {books.map((book, index) => (
                     <li key={book._id}>
                       <button
                         className="writer-titles-btn"
-                        onClick={() => openModal(book)}
+                        onClick={() => openModal(book, index)}
                         aria-label={`Ver detalles de ${book.title}`}
                       >
                         {book.title}
