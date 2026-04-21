@@ -29,7 +29,6 @@ export default function AdminWritersManagementPage() {
 
   const [writerResults, setWriterResults] = useState<Writer[]>([]);
 
-
   const [inputValue, setInputValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -126,7 +125,14 @@ export default function AdminWritersManagementPage() {
     }
     try {
       const searchResults = await searchWriters(inputValue.trim());
-      console.log(searchResults)
+
+      // ====== DEBUG ======
+      console.log('=== DEBUG handleSearchSubmit ===');
+      console.log('bioDescription raw:', searchResults[0]?.bioDescription);
+      console.log('bioDescription JSON.stringify:', JSON.stringify(searchResults[0]?.bioDescription));
+      console.log('bioQuote raw:', searchResults[0]?.bioQuote);
+      console.log('bioQuote JSON.stringify:', JSON.stringify(searchResults[0]?.bioQuote));
+      // ===================
 
       if (searchResults.length > 0) {
         setInputValue(inputValue.trim());
@@ -163,6 +169,15 @@ export default function AdminWritersManagementPage() {
       } else {
         writers = await getWritersByCategory(category);
       }
+
+      // ====== DEBUG ======
+      console.log('=== DEBUG handleCategorySearch ===');
+      console.log('bioDescription raw:', writers[0]?.bioDescription);
+      console.log('bioDescription JSON.stringify:', JSON.stringify(writers[0]?.bioDescription));
+      console.log('bioQuote raw:', writers[0]?.bioQuote);
+      console.log('bioQuote JSON.stringify:', JSON.stringify(writers[0]?.bioQuote));
+      // ===================
+
       setWriterResults(writers);
 
       if (writers.length === 0) {

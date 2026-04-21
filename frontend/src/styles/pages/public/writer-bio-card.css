@@ -14,6 +14,11 @@
   font-size: var(--super-large-font-size);
   padding: 4rem 6rem 1rem 6rem;
   text-align: center;
+  
+}
+
+.featured-quote {
+  white-space: pre-wrap;
 }
 
 .writer-sub-quote {
@@ -65,6 +70,10 @@ border-color: var(--green);
 
 .writer-bio-name-last-name p:nth-child(2n) {
   line-height: 99%;
+}
+
+.writer-bio-description p {
+  white-space: pre-wrap;
 }
 
 .writer-books-titles {
