@@ -3,8 +3,7 @@
 .image-wrapper {
   position: relative;
   overflow: hidden;
-  background: var(--dark-beige);
-  /* Reservar el espacio exacto para evitar layout shift */
+  background: transparent;
   flex-shrink: 0;
 }
 
