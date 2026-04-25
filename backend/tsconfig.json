@@ -1,44 +1,209 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
+    // ============================================================================
+    // FILE LAYOUT (Estructura de archivos)
+    // ============================================================================
+
+    /**
+     * Directorio raíz del código fuente.
+     * TypeScript solo compila archivos dentro de esta carpeta.
+     * Evita que archivos sueltos en la raíz del repo entren por accidente.
+     */
     "rootDir": "./src",
+
+    /**
+     * Directorio de salida para el JavaScript compilado.
+     * En producción se ejecuta `node dist/main.js`, no `ts-node src/main.ts`.
+     * Debe estar sincronizado con el script "start" de package.json.
+     */
     "outDir": "./dist",
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    // ============================================================================
+    // ENVIRONMENT SETTINGS (Entorno de ejecución)
+    // ============================================================================
 
-    // Other Outputs
+    /**
+     * Genera código ESM nativo compatible con Node.js.
+     * "nodenext" respeta la resolución de módulos de Node 20+, incluyendo
+     * extensiones .js obligatorias en los imports y el campo "exports" de package.json.
+     */
+    "module": "nodenext",
+
+    /**
+     * Estrategia de resolución de módulos alineada con Node.js.
+     * Diferente a "node" (CommonJS): entiende import maps, subpath imports,
+     * y la diferencia entre archivos .js y .mjs en ESM.
+     */
+    "moduleResolution": "nodenext",
+
+    /**
+     * Target de JavaScript emitido: ESNext.
+     * Node 20 soporta casi todo ES2023/ES2024 nativamente, así que no transpilamos
+     * features modernas (async/await, optional chaining, etc.) a código legacy.
+     * Esto reduce el tamaño del bundle y mejora el stack trace en producción.
+     */
+    "target": "esnext",
+
+    /**
+     * Tipos globales cargados automáticamente.
+     * ["node"] inyecta process, Buffer, __dirname, etc. en el scope global.
+     * Si estuviera vacío ([]), process.env daría error de compilación.
+     * No incluimos "jest" ni "vitest" aquí para evitar colisión de globals.
+     */
+    "types": ["node"],
+
+    // ============================================================================
+    // OUTPUT FILES (Archivos generados)
+    // ============================================================================
+
+    /**
+     * Genera archivos .js.map para mapear el código compilado al fuente.
+     * CRÍTICO para producción: sin esto, los stack traces apuntan a líneas
+     * del .js compilado en vez del .ts original. Herramientas como Sentry
+     * necesitan source maps para agrupar errores correctamente.
+     */
     "sourceMap": true,
+
+    /**
+     * Genera archivos .d.ts (declaraciones de tipos).
+     * Necesario si este backend se publica como paquete npm o si otros
+     * proyectos lo importan. Aunque no sea librería, ayuda al IDE a
+     * inferir tipos cuando se importa desde dist/ en tests o scripts.
+     */
     "declaration": true,
+
+    /**
+     * Genera .d.ts.map. Permite "Go to Definition" desde un archivo .d.ts
+     * directo al .ts fuente. Mejora la experiencia de desarrollo cuando
+     * se navega código compilado o dependencias con declarations.
+     */
     "declarationMap": true,
 
-    // Stricter Typechecking Options
+    // ============================================================================
+    // STRICT TYPE CHECKING (Verificación estricta de tipos)
+    // ============================================================================
+
+    /**
+     * Activa el modo estricto completo. Es un "combo flag" que enciende:
+     * strictNullChecks, strictFunctionTypes, noImplicitAny, strictBindCallApply,
+     * strictPropertyInitialization, noImplicitThis, useUnknownInCatchVariables.
+     * 
+     * En producción, esto previene el 80% de los bugs de tipo que escapan
+     * al runtime. Nunca debería estar en false en un proyecto profesional.
+     */
+    "strict": true,
+
+    /**
+     * Fuerza a que el acceso por índice (array[0], obj[key]) devuelva T | undefined.
+     * Sin esto, TypeScript asume que el índice siempre existe, lo que causa
+     * crashes en producción cuando una query de MongoDB devuelve [].
+     * 
+     * Ejemplo: const first = results[0]; // tipo: Book | undefined
+     * Obliga a verificar: if (!first) throw new NotFoundError();
+     */
     "noUncheckedIndexedAccess": true,
+
+    /**
+     * Si una propiedad es opcional (user.name?: string), no permite asignarle
+     * undefined explícitamente. Distingue entre "no existe la clave" y
+     * "existe pero su valor es undefined". Crítico para APIs REST donde
+     * omitir un campo y enviar null/undefined tienen semánticas distintas.
+     */
     "exactOptionalPropertyTypes": true,
 
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
+    // ============================================================================
+    // CODE QUALITY (Calidad de código)
+    // ============================================================================
 
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
+    /**
+     * Si una función declara un tipo de retorno (ej: : string), todas las
+     * ramas de ejecución deben retornar explícitamente. Evita funciones
+     * que retornan undefined silenciosamente en un branch olvidado.
+     * 
+     * Ejemplo: if (x) return "a"; // Error: falta return en el else implícito
+     */
+    "noImplicitReturns": true,
+
+    /**
+     * Variables declaradas pero nunca usadas son errores de compilación.
+     * Limpia código muerto que confunde en code reviews y aumenta el bundle.
+     * En VS Code aparece como error, no solo warning.
+     */
+    "noUnusedLocals": true,
+
+    /**
+     * Parámetros de función no utilizados son errores.
+     * Obliga a usar _prefijo (ej: _req) o a eliminar parámetros innecesarios.
+     * Mantiene las firmas de funciones limpias y documentadas.
+     */
+    "noUnusedParameters": true,
+
+    /**
+     * Prohíbe el fallthrough en switch statements sin break/return.
+     * Bug clásico: case "admin": // sin break → case "user": también ejecuta.
+     * Si el fallthrough es intencional, se permite con // fallthrough comment.
+     */
+    "noFallthroughCasesInSwitch": true,
+
+    // ============================================================================
+    // MODULE SYNTAX (Sintaxis de módulos)
+    // ============================================================================
+
+    /**
+     * Fuerza a usar `import type` cuando un import se usa exclusivamente
+     * como tipo. En ESM, los imports ejecutan el módulo importado (side effects).
+     * Este flag evita que TypeScript mantenga imports de tipos en el JS emitido,
+     * previniendo imports circulares y carga innecesaria en runtime.
+     */
     "verbatimModuleSyntax": true,
+
+    /**
+     * Cada archivo debe ser compilable de forma independiente.
+     * Prohíbe dependencias de tipo entre archivos que no sean imports explícitos.
+     * Necesario para Babel, esbuild, swc y bundlers que transpilan en paralelo.
+     */
     "isolatedModules": true,
+
+    /**
+     * Requiere que los imports con side effects (ej: import 'dotenv/config')
+     * sean explícitos y no ambiguos. Evita que un import de tipo accidental
+     * dispare la ejecución de un módulo, o viceversa.
+     */
     "noUncheckedSideEffectImports": true,
+
+    /**
+     * Fuerza a que TODOS los archivos se traten como módulos ESM,
+     * incluso si no tienen imports ni exports.
+     * Sin esto, un archivo sin export podría ser tratado como script global,
+     * contaminando el scope global con sus declaraciones (peligroso en bundles).
+     */
     "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+
+    /**
+     * Saltea la verificación de tipos en archivos .d.ts de node_modules.
+     * Hace que `tsc` sea ~3x más rápido. Trade-off: puede ocultar
+     * incompatibilidades entre versiones de @types. En producción se acepta
+     * porque los tipos de terceros no son código que controlamos.
+     */
+    "skipLibCheck": true
+  },
+
+  // ============================================================================
+  // INCLUDE / EXCLUDE (Qué entra en la compilación)
+  // ============================================================================
+
+  /**
+   * Patrón de archivos que TypeScript compila.
+   * src = todos los .ts y .tsx dentro de src/ y subcarpetas.
+   * IMPORTANTE: no incluye tests, scripts de seed, ni archivos de config.
+   */
+   
+  "include": ["src/**/*"],
+
+  /**
+   * Archivos y carpetas excluidos de la compilación.
+   * node_modules: nunca se compila (los tipos se leen vía @types).
+   * dist: evita compilar el output sobre sí mismo si se ejecuta tsc dos veces.
+   */
+  "exclude": ["node_modules", "dist"]
 }
