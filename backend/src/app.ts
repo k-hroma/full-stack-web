@@ -4,6 +4,8 @@
  * @module app
  */
 
+
+
 import cookieParser from "cookie-parser";
 import express from 'express';
 import type { Application, Request, Response } from 'express';
@@ -51,43 +53,6 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false, // Desactivado para permitir imágenes de URLs externas
 }));
 
-/**
- * Rate Limiting general: Protección contra fuerza bruta y DDoS básicos.
- * Limita a 100 requests por IP cada 15 minutos para endpoints no críticos.
- * 
- * @constant {rateLimit.RateLimit} generalLimiter
- */
-const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // Límite por IP
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Too many requests from this IP, please try again later."
-  }
-});
-
-/**
- * Rate Limiting estricto: Para endpoints de autenticación.
- * Limita a 5 intentos por IP cada 15 minutos (login/register).
- * 
- * @constant {rateLimit.RateLimit} authLimiter
- */
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 10, // 10 intentos de login/register por IP
-  skipSuccessfulRequests: true, // No cuenta los logins exitosos
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Too many authentication attempts, please try again after 15 minutes."
-  }
-});
-
-// Aplicar rate limiting general a toda la app
-app.use(generalLimiter);
 
 // ============================================================================
 // CORS CONFIGURACIÓN DINÁMICA (Producción vs Desarrollo)
@@ -110,66 +75,42 @@ if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
 }
 
 /**
- * Configuración de CORS dinámica basada en variables de entorno.
- * En producción, solo permite el origen definido en FRONTEND_URL.
- * En desarrollo, permite localhost.
+ * CORS: En producción SOLO se permite FRONTEND_URL.
+ * Localhost NUNCA está en la lista de origenes permitidos en producción,
+ * porque cualquier proceso local del atacante podría escuchar en ese puerto
+ * y realizar requests con cookies válidas.
  * 
- * @security credentials: true permite cookies httpOnly en cross-origin.
+ * @security El array se construye dinámicamente según NODE_ENV.
+ *           Nunca hardcodear dominios de producción en el código fuente.
  */
+const isProduction = process.env.NODE_ENV === 'production';
 
-/*
-const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
-};
-
-*/
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "https://librerialapalacio.vercel.app",
-];
+const allowedOrigins = isProduction
+  ? [process.env.FRONTEND_URL].filter((o): o is string => Boolean(o))
+  : [
+      process.env.FRONTEND_URL,
+      "http://localhost:5173",
+      "http://localhost:3000",
+    ].filter((o): o is string => Boolean(o));
 
 const corsOptions: CorsOptions = {
   origin: (origin: string | undefined, callback: CorsCallback) => {
-  // Permitir requests sin origin (como Postman) o que estén en la lista
-  if (!origin || allowedOrigins.includes(origin)) {
-    callback(null, true);
-  } else {
-    console.warn(`🚫 CORS bloqueado para origen: ${origin}`);
-    callback(null, false); // ← null, false en vez de new Error
-  }
-},
+    // Permitir requests sin origin (como Postman, curl, o server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      if (!isProduction) {
+        console.warn(`🚫 CORS bloqueado para origen: ${origin}`);
+      }
+      callback(new Error(`Forbidden: origin '${origin}' not allowed`));
+    }
+  },
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
 };
 
 app.use(cors(corsOptions));
-
-// ============================================================================
-// MIDDLEWARES ESENCIALES (orden importante - se ejecutan secuencialmente)
-// ============================================================================
-
-/**
- * Parseo de JSON en request bodies.
- * Convierte Content-Type: application/json → req.body objeto JavaScript.
- * Límite de 10kb para prevenir ataques de payload masivo.
- */
-app.use(express.json({ limit: "10kb" }));
-
-/**
- * Parseo de cookies en request headers.
- * Convierte Cookie: header → req.cookies objeto JavaScript.
- * Necesario para leer refresh tokens en httpOnly cookies.
- * 
- * @security Las cookies httpOnly no son accesibles por JavaScript del cliente,
- *          protegiendo contra ataques XSS que intenten robar tokens.
- */
-app.use(cookieParser());
 
 // ============================================================================
 // HEALTH CHECK ENDPOINT (FASE 2: Estabilidad)
@@ -202,6 +143,53 @@ app.get('/health', (_req: Request, res: Response) => {
   res.status(isHealthy ? 200 : 503).json(healthCheck);
 });
 
+
+
+/**
+ * Rate Limiting general: Protección contra fuerza bruta y DDoS básicos.
+ * Limita a 100 requests por IP cada 15 minutos para endpoints no críticos.
+ * 
+ * @constant {rateLimit.RateLimit} generalLimiter
+ */
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 100, // Límite por IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many requests from this IP, please try again later."
+  }
+});
+
+
+// Aplicar rate limiting general a toda la app
+app.use(generalLimiter);
+
+
+// ============================================================================
+// MIDDLEWARES ESENCIALES (orden importante - se ejecutan secuencialmente)
+// ============================================================================
+
+/**
+ * Parseo de JSON en request bodies.
+ * Convierte Content-Type: application/json → req.body objeto JavaScript.
+ * Límite de 10kb para prevenir ataques de payload masivo.
+ */
+app.use(express.json({ limit: "10kb" }));
+
+/**
+ * Parseo de cookies en request headers.
+ * Convierte Cookie: header → req.cookies objeto JavaScript.
+ * Necesario para leer refresh tokens en httpOnly cookies.
+ * 
+ * @security Las cookies httpOnly no son accesibles por JavaScript del cliente,
+ *          protegiendo contra ataques XSS que intenten robar tokens.
+ */
+app.use(cookieParser());
+
+
+
 // ============================================================================
 // RUTAS DE LA API
 // ============================================================================
@@ -219,7 +207,7 @@ app.use("/books", bookRouter);
  * Todas las rutas internas se accederán con el prefijo /auth
  * (ej: /auth/login, /auth/register, /auth/refresh)
  */
-app.use("/auth", authLimiter, authRouter);
+app.use("/auth", authRouter);
 
 app.use("/writers", writerRouter);
 

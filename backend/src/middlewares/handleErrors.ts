@@ -49,6 +49,17 @@ const handleErrors = (
     statusCode = 400;
     message = error.message;
   }
+   /**
+   * Errores CORS: cuando el middleware cors() recibe callback(new Error(...)),
+   * Express lanza ese error sin statusCode ni status. Lo detectamos por el
+   * mensaje que nosotros controlamos para devolver 403 en vez de 500.
+   * 
+   * @security No leakeamos el origen bloqueado en la respuesta.
+   */
+  else if (error.message?.includes('not allowed by CORS')) {
+    statusCode = 403;
+    message = 'Forbidden';
+  }
 
   const isDevelopment = process.env.NODE_ENV === "development";
   

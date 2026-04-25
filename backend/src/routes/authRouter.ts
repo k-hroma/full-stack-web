@@ -5,6 +5,7 @@
  */
 
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import {
   registerUser,
   loginUser,
@@ -15,6 +16,26 @@ import {
 } from "../controllers/authControllers.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { requireRole } from "../middlewares/requireRole.js";
+
+/**
+ * Rate Limiting estricto: Solo para login y registro.
+ * Limita a 10 intentos por IP cada 15 minutos.
+ * Los intentos exitosos no cuentan (skipSuccessfulRequests).
+ * 
+ * @security No se aplica a /refresh, /logout ni /admin para evitar
+ *           bloquear sesiones legítimas o duplicar protecciones.
+ */
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 10,
+  skipSuccessfulRequests: true,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many authentication attempts, please try again after 15 minutes."
+  }
+});
 
 /**
  * Router de Express para rutas de autenticación.
@@ -32,7 +53,7 @@ const authRouter = Router();
  * @access Public
  * @body { name, email, password }
  */
-authRouter.post("/register", registerUser);
+authRouter.post("/register", authLimiter, registerUser);
 
 /**
  * @route POST /auth/login
@@ -41,7 +62,7 @@ authRouter.post("/register", registerUser);
  * @body { email, password }
  * @response { token, user }
  */
-authRouter.post("/login", loginUser);
+authRouter.post("/login", authLimiter, loginUser);
 
 /**
  * @route POST /auth/refresh
@@ -50,7 +71,7 @@ authRouter.post("/login", loginUser);
  * @cookie {string} refreshToken
  * @cookie {string} tokenFamily - Identificador de sesión
  * @response { token: "nuevo JWT" }
- * @important No requiere JWT en header. Las cookies son el "ticket" de acceso.
+ * @important No requiere JWT en header. Protegido solo por generalLimiter global.
  */
 authRouter.post("/refresh", refreshAccessToken);
 
@@ -58,11 +79,10 @@ authRouter.post("/refresh", refreshAccessToken);
  * @route POST /auth/logout
  * @description Cierra sesión revocando el refresh token y limpiando cookies.
  * @access Public (requiere cookie válida)
- * @cookie {string} refreshToken -Token a revocar
+ * @cookie {string} refreshToken - Token a revocar
  * @cookie {string} tokenFamily - Identificador de sesión
- * @returns {Promise<void>}
  */
-authRouter.post("/logout", logoutUser);
+authRouter.post("/logout",logoutUser);
 
 // ============================================================================
 // RUTAS PROTEGIDAS (requieren autenticación + rol admin)
@@ -74,16 +94,19 @@ authRouter.post("/logout", logoutUser);
  * @access Private (Admin only)
  * @security Requiere que el requester sea admin para crear otro admin
  * @body { name, email, password }
- * 
- * @important Este endpoint permite escalamiento de privilegios controlado.
- * Solo usuarios autenticados con rol "admin" pueden crear más admins.
  */
 authRouter.post(
   "/admin",
-  authMiddleware,      // Verificar JWT válido
-  requireRole("admin"), // Verificar que sea admin
+  authMiddleware,
+  requireRole("admin"),
   registerAdmin
 );
 
+/**
+ * @route POST /auth/logout-all
+ * @description Cierra sesión en todos los dispositivos del usuario.
+ * @access Private
+ */
 authRouter.post("/logout-all", authMiddleware, logoutAllDevices);
+
 export { authRouter };
