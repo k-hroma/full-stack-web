@@ -656,6 +656,7 @@ export default function AdminBooksManagementPage() {
                         {book.firstName} {book.lastName}
                       </p>
                       <p className="admin-book-card__isbn">ISBN: {book.isbn}</p>
+                      <p className="admin-book-card__author">${book.price} </p>
 
                       <div className="admin-book-card__badges">
                         {book.latestBook && <span className="badge badge--new">Novedad</span>}
