@@ -65,19 +65,21 @@
     "sourceMap": true,
 
     /**
+     * "declaration": true, 
      * Genera archivos .d.ts (declaraciones de tipos).
      * Necesario si este backend se publica como paquete npm o si otros
      * proyectos lo importan. Aunque no sea librería, ayuda al IDE a
      * inferir tipos cuando se importa desde dist/ en tests o scripts.
      */
-    "declaration": true,
+    "declaration": false,
 
     /**
+     * "declarationMap": false,
      * Genera .d.ts.map. Permite "Go to Definition" desde un archivo .d.ts
      * directo al .ts fuente. Mejora la experiencia de desarrollo cuando
      * se navega código compilado o dependencias con declarations.
      */
-    "declarationMap": true,
+    "declarationMap": false,
 
     // ============================================================================
     // STRICT TYPE CHECKING (Verificación estricta de tipos)
@@ -195,7 +197,8 @@
   /**
    * Patrón de archivos que TypeScript compila.
    * src = todos los .ts y .tsx dentro de src/ y subcarpetas.
-   * IMPORTANTE: no incluye tests, scripts de seed, ni archivos de config.
+   * Incluye src/scripts/ intencionalmente para que seedFirstAdmin.ts se compile.
+   * IMPORTANTE: no incluye tests, ni archivos de config.
    */
    
   "include": ["src/**/*"],
@@ -204,6 +207,13 @@
    * Archivos y carpetas excluidos de la compilación.
    * node_modules: nunca se compila (los tipos se leen vía @types).
    * dist: evita compilar el output sobre sí mismo si se ejecuta tsc dos veces.
+   * tests que usan globals de Vitest (describe, it, expect). 
+   * Se compilan con un tsconfig.test.json separado que extiende este base y agrega "types": ["vitest/globals"]
    */
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.spec.ts"]
 }
+
+// Por qué no usamos paths aliases:
+// nodenext requiere que los paths aliases se resuelvan también en runtime
+// (usando --experimental-specifier-resolution o un loader).
+// Para mantener el setup simple, usamos imports relativos con .js explícito.
