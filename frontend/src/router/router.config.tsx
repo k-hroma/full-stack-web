@@ -18,6 +18,7 @@ const HomePage = lazy(() => import('../pages/public/HomePage'));
 const AllLatestBooks = lazy(() => import('../pages/public/AllLatestBooks'));
 const CatalogPage = lazy(() => import('../pages/public/CatalogPage'));
 const ResultsPage = lazy(() => import('../pages/public/ResultsSearchPage'));
+const UsedBooks = lazy(() => import('../pages/public/UsedBooks'));
 const Fanzines = lazy(() => import('../pages/public/Fanzines'));
 const LoginPage = lazy(() => import('../pages/public/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/public/RegisterPage'));
@@ -90,6 +91,13 @@ export const routes: RouteObject[] = [
         element: (
           <PageWrapper>
             <Fanzines />
+          </PageWrapper>
+        ),
+      }, {
+        path: 'usados',
+        element: (
+          <PageWrapper>
+            <UsedBooks />
           </PageWrapper>
         ),
       }, {

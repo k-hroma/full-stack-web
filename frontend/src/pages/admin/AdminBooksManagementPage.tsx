@@ -17,6 +17,7 @@ type BookFormData = {
   editorial: string
   price: number | ''
   stock: number | ''
+  usado: boolean
   latestBook: boolean
   fanzine: boolean
   showInHome: boolean
@@ -25,7 +26,7 @@ type BookFormData = {
   url: string
 }
 
-type CategoryFilter = 'all' | 'latestBook' | 'fanzine' | 'showInHome' | 'viewAll';
+type CategoryFilter = 'all' | 'latestBook' | 'fanzine' | 'showInHome' | 'viewAll' | 'usado';
 
 const INITIAL_FORM_BOOK_DATA: BookFormData = {
   img: '',
@@ -36,6 +37,7 @@ const INITIAL_FORM_BOOK_DATA: BookFormData = {
   editorial: '',
   price: '',
   stock: '',
+  usado: false,
   latestBook: false,
   fanzine: false,
   showInHome: false,
@@ -62,6 +64,7 @@ const populateFormWithBook = (book: Book): BookFormData => ({
   editorial: book.editorial || '',
   price: book.price ?? '',
   stock: book.stock ?? '',
+  usado: book.usado || false,
   latestBook: book.latestBook || false,
   fanzine: book.fanzine || false,
   showInHome: book.showInHome || false,
@@ -73,7 +76,7 @@ const populateFormWithBook = (book: Book): BookFormData => ({
 export default function AdminBooksManagementPage() {
   const { formData, handleChange, resetForm, setFormData } = useForm<BookFormData>(INITIAL_FORM_BOOK_DATA);
 
-  const { img, isbn, title, firstName, lastName, editorial, price, stock, latestBook, fanzine, showInHome, homeOrder, description, url } = formData;
+  const { img, isbn, title, firstName, lastName, editorial, price, stock, usado, latestBook, fanzine, showInHome, homeOrder, description, url } = formData;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -454,6 +457,7 @@ export default function AdminBooksManagementPage() {
             <div className="admin-dashboard__section">
               <h2 className="admin-dashboard__section-title">Categorización</h2>
 
+
               <div className="admin-dashboard__checkboxes">
                 <label className="admin-dashboard__checkbox-label">
                   <input
@@ -461,6 +465,16 @@ export default function AdminBooksManagementPage() {
                     name="latestBook"
                     className="admin-dashboard__checkbox"
                     checked={latestBook}
+                    onChange={handleChange}
+                  />
+                  <span className="admin-dashboard__checkbox-text">Usado</span>
+                </label>
+                <label className="admin-dashboard__checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="usado"
+                    className="admin-dashboard__checkbox"
+                    checked={usado}
                     onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Novedad</span>
@@ -584,6 +598,12 @@ export default function AdminBooksManagementPage() {
                   📋 Ver todos
                 </button>
                 <button
+                  className={`admin-dashboard__category-btn ${activeCategory === 'usado' ? 'admin-dashboard__category-btn--active' : ''}`}
+                  onClick={() => handleCategorySearch('usado')}
+                >
+                  📚 Usados
+                </button>
+                <button
                   className={`admin-dashboard__category-btn ${activeCategory === 'latestBook' ? 'admin-dashboard__category-btn--active' : ''}`}
                   onClick={() => handleCategorySearch('latestBook')}
                 >
@@ -625,6 +645,7 @@ export default function AdminBooksManagementPage() {
                   {activeCategory === 'latestBook' && 'Novedades'}
                   {activeCategory === 'fanzine' && 'Fanzines'}
                   {activeCategory === 'showInHome' && 'Mostrar en Home'}
+                  {activeCategory === 'usado' && 'Usados'}
                 </strong>
                 <span> ({results.length} {results.length === 1 ? 'libro' : 'libros'})</span>
               </div>
@@ -662,6 +683,7 @@ export default function AdminBooksManagementPage() {
                         {book.latestBook && <span className="badge badge--new">Novedad</span>}
                         {book.fanzine && <span className="badge badge--fanzine">Fanzine</span>}
                         {book.showInHome && <span className="badge badge--home">Home</span>}
+                        {book.usado && <span className="badge badge--used">Usado</span>}
                       </div>
                     </div>
 

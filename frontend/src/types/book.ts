@@ -14,6 +14,7 @@ export interface Book {
   editorial: string;
   price: number;
   stock: number;
+  usado: boolean;
   latestBook: boolean;
   fanzine: boolean;
   showInHome: boolean; 
@@ -34,6 +35,7 @@ export interface CreateBookInput {
   editorial: string;
   price: number;
   stock: number;
+  usado: boolean;
   latestBook: boolean;
   fanzine: boolean;
   showInHome: boolean; 
@@ -61,6 +63,7 @@ export interface BookResponse {
 
 /** Filtros para GET /books */
 export interface BookFilters {
+  usado?: boolean;
   fanzine?: boolean;
   latestBook?: boolean;
   showInHome?: boolean;

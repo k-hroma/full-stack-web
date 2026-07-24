@@ -19,6 +19,7 @@ import { z } from "zod";
  * @property {string} editorial - Editorial
  * @property {number} price - Precio ≥ 0
  * @property {number} [stock=0] - Stock disponible (entero ≥ 0)
+ * @property {boolean} [usado=false] - Es libro usado
  * @property {boolean} [latestBook=false] - Es novedad
  * @property {boolean} [fanzine=false] - Es fanzine
  * @property {boolean} [showInHome=false] - Mostrar en Home
@@ -75,6 +76,7 @@ const AddBookSchema = z
       .int({ message: "Stock must be an integer" })
       .nonnegative({ message: "Stock must be 0 or more" })
       .default(0),
+    usado: z.boolean().default(false),
 
     latestBook: z.boolean().default(false),
 
@@ -157,6 +159,7 @@ const UpdateBookSchema = z
       .int({ message: "Stock must be an integer" })
       .nonnegative({ message: "Stock must be 0 or more" })
       .default(0),
+    usado: z.boolean().default(false),
 
     latestBook: z.boolean().default(false),
 

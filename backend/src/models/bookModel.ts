@@ -21,6 +21,7 @@ import type { IBook } from "../types/bookInterface.js";
  * @property {string} editorial - Editorial (requerido)
  * @property {number} price - Precio de venta (requerido, ≥ 0)
  * @property {number} stock - Inventario disponible (default 0)
+ * @property {boolean} usado - Indica si es un libro usado (default false)
  * @property {boolean} latestBook - Indica novedad reciente (default false)
  * @property {boolean} fanzine - Categoría fanzine (default false)
  * @property {boolean} showInHome - Indica si se quiere mostrar en la página principal (default false)
@@ -85,6 +86,11 @@ const bookSchema = new Schema<IBook>(
         validator: Number.isInteger,
         message: "Stock must be an integer",
       },
+    },
+    usado: {
+      type: Boolean,
+      default: false,
+      required: true,
     },
     latestBook: {
       type: Boolean,

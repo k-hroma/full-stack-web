@@ -61,7 +61,8 @@ export const getBooks = async (filters?: BookFilters): Promise<Book[]> => {
   const params = new URLSearchParams();
   if (filters?.fanzine    !== undefined) params.append('fanzine',     String(filters.fanzine));
   if (filters?.latestBook !== undefined) params.append('latestBook',  String(filters.latestBook));
-  if (filters?.showInHome !== undefined) params.append('showInHome',  String(filters.showInHome));
+  if (filters?.showInHome !== undefined) params.append('showInHome', String(filters.showInHome));
+  if (filters?.usado !== undefined) params.append('usado',  String(filters.usado));
 
   const query = params.toString() ? `?${params.toString()}` : '';
   const response = await httpClient<BooksResponse>(`/books${query}`);
@@ -108,7 +109,7 @@ export const getBooksByAuthor = async (
  * Delega a getBooks → hereda su caché.
  */
 export const getBooksByCategory = async (
-  category: 'latestBook' | 'fanzine' | 'showInHome' | 'all',
+  category: 'usado' |'latestBook' | 'fanzine' | 'showInHome' | 'all',
 ): Promise<Book[]> => {
   const filters: BookFilters = { [category]: true };
   return getBooks(filters);

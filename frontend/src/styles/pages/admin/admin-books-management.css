@@ -512,6 +512,11 @@
   color: white;
 }
 
+.badge--used {
+  background: #fae8f1;
+  color: rgb(199, 127, 187);
+}
+
 /* Acciones de la tarjeta */
 .admin-book-card__actions {
   display: flex;

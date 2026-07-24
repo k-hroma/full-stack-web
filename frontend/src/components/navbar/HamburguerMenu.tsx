@@ -89,6 +89,9 @@ const HamburguerMenu = ({
             </Link>
 
             <div className='hamburguer-menu__submenu'>
+              <Link className='hamburguer-menu__sublink' to='/usados' onClick={onClose}>
+                Usados
+              </Link>
               <Link className='hamburguer-menu__sublink' to='/novedades' onClick={onClose}>
                 Novedades
               </Link>

@@ -17,6 +17,7 @@ export function Footer() {
         {/* Columna izquierda - Links internos */}
         <nav className="left-content" aria-label="Navegación principal">
           <Link to="/catalogo" className="footer-main-txt">Impresos:</Link>
+          <Link to="/usados" className="footer-main-txt">Usados</Link>
           <Link to="/novedades" className="footer-main-txt">Novedades</Link>
           <Link to="/libros" className="footer-main-txt">Libros</Link>
           <Link to="/fanzines" className="footer-main-txt">Fanzines</Link>

@@ -36,19 +36,23 @@ const SEARCH_TIMEOUT_MS = 5000;
  * @async
  * @route GET /books
  * @access Public
+ * @query {boolean} [usado] - Filtrar solo libros usados
  * @query {boolean} [fanzine] - Filtrar solo fanzines
  * @query {boolean} [latestBook] - Filtrar solo novedades
  * @query {boolean} [showInHome] - Mostrar en Home
  * @returns {Promise<void>}
  */
 const getBooks = async (
-  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome?: string;}>,
+  req: Request<{}, {}, {}, { fanzine?: string; latestBook?: string; showInHome?: string; usado?: string }>,
   res: Response<QueryResponse>,
   next: NextFunction
 ): Promise<void> => {
   try {
     const filter: Record<string, boolean> = {};
-    
+
+    if (req.query.usado !== undefined) {
+      filter.usado = req.query.usado === "true";
+    }
     if (req.query.fanzine !== undefined) {
       filter.fanzine = req.query.fanzine === "true";
     }
