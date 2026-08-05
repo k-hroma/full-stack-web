@@ -462,9 +462,9 @@ export default function AdminBooksManagementPage() {
                 <label className="admin-dashboard__checkbox-label">
                   <input
                     type="checkbox"
-                    name="latestBook"
+                    name="usado"
                     className="admin-dashboard__checkbox"
-                    checked={latestBook}
+                    checked={usado}
                     onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Usado</span>
@@ -472,9 +472,9 @@ export default function AdminBooksManagementPage() {
                 <label className="admin-dashboard__checkbox-label">
                   <input
                     type="checkbox"
-                    name="usado"
+                    name="latestBook"
                     className="admin-dashboard__checkbox"
-                    checked={usado}
+                    checked={latestBook}
                     onChange={handleChange}
                   />
                   <span className="admin-dashboard__checkbox-text">Novedad</span>
